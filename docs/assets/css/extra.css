@@ -1,0 +1,9 @@
+.md-typeset h1 {
+    color: var(--md-text-color); 
+}
+
+.centered-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
