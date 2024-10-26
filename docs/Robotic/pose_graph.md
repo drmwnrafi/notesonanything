@@ -1,4 +1,4 @@
-# Pose Graph SLAM
+# **Pose Graph SLAM**
 $$
 e_{ij}(x) = z_{ij}-\hat{z}(x_i, x_j)
 $$
@@ -167,7 +167,7 @@ $$
 x\leftarrow x+\Delta x
 $$
 
-#### References :
+### **References**
 
 - [[SLAM][En] Errors and Jacobian Derivations for SLAM Part 1](https://alida.tistory.com/69#5.-relative-pose-error-pgo)
 

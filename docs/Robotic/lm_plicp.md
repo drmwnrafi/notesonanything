@@ -1,30 +1,30 @@
-# Levenberg Marquardt - Point to Line Iterative Closest Point (LM-PLICP)
+# **Levenberg Marquardt - Point to Line Iterative Closest Point (LM-PLICP)**
 
-### Gradient-Descent
+## **Gradient-Descent**
 
 $$
 x_{i+1} = x_i + \lambda\nabla_{f(x)}
 $$
 
-### Newton-Rapshon
+## **Newton-Rapshon**
 
 $$
 x_{i+1} = x_i + (\nabla^2_{f(x_i)})^{-1}\nabla_{f(x)}
 $$
 
-### Gauss-Newton
+## **Gauss-Newton**
 
 $$
 x_{i+1} = x_i + (J_{f(x)}^TJ_{f(x)})^{-1}\nabla_{f(x)}
 $$
 
-### Levenberg-Marquardt
+## **Levenberg-Marquardt**
 
 $$
 x_{i+1} = x_i + (\nabla^2_{f(x_i)}+\lambda \; \text{diag}(\nabla^2_{f(x_i)}))^{-1}\nabla_{f(x)}
 $$
 
-### Point to Line Iterative Closest Point
+## **Point to Line Iterative Closest Point**
 
 $$
 E = \underset{R,t} {\mathrm{argmin}} \sum_{i=1}^n \left||(y_i - Rx_i + t)n_{y,i} \right||^2
@@ -32,7 +32,7 @@ $$
 
 $n_{y,i}$ vektor normal pada point cloud reference dihitung dengan $\frac{-dy}{dx}$
 
-### Approximation Hessian $H=J^TJ$
+## **Approximation Hessian $H=J^TJ$**
 
 Fungsi loss $E$ merupakan fungsi non-linear *differentiable* dan smooth dikarenakan terdapat matriks rotasi $R$,  sehingga Taylor-Expansion valid untuk menyelesaikan fungsi non-linear $E$
 
@@ -101,7 +101,7 @@ $$
 \Delta s = (J^TJ)^{-1}J^Tr
 $$
 
-#### References :
+### **References** 
 
 - [METHODS FOR NON-LINEAR LEAST SQUARES PROBLEMS](https://www.researchgate.net/publication/261652064_Methods_for_Non-Linear_Least_Squares_Problems_2nd_ed)
 - [Nonlinear Least Squares](https://www.youtube.com/watch?v=8evmj2L-iCY)

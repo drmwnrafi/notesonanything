@@ -1,18 +1,13 @@
-# Kalman Filter
+# **Kalman Filter**
 
 Kalman FIlter berfungsi untuk melakukan prediksi dan estimasi pada *state* (keadaan) suatu sistem.
 
 Kalman filter membutuhkan 2 model, yaitu state model dan observation model
 
-1. State Model
+- **State Model** adalah  model yang merepresentasikan perubahan *state* pada sistem w.r.t waktu.
+- **Observation Model** adalah persaamaan/model yang merepresentasikan data yang diukur biasanya dengan sensor yang memberikan data eksternal robot dihubungkan dengan keadaan sistem.
 
-   State model adalah persamaan / model yang merepresentasikan perubahan *state* pada sistem w.r.t waktu.
-
-2. Observation Model
-
-   Observation model adalah persaamaan / model yang merepresentasikan data yang diukur biasanya dengan sensor yang memberikan data eksternal robot dihubungkan dengan keadaan sistem.
-
-### Multivariate Kalman Filter
+## **Multivariate Kalman Filter**
 
 State pada sistem
 
@@ -31,7 +26,7 @@ $$
 - $R_n$ : covariance matriks yang menggambarkan ketidakpastian pengukuran
 - $Q$ : covariance matriks untuk proses noise
 
-#### Covariance 
+## **Covariance** 
 
 Covariance mengukur seberapa korelasi antara 2 atau lebih variabel random
 
@@ -49,7 +44,7 @@ $$
 COV(X, Y) = \frac{1}{N-1}\sum_{i=1}^N(x_i - \mu_x)(y_i-\mu_y)
 $$
 
-#### Covariance Matrix
+## **Covariance Matrix**
 
 Coariance matrix adalah matriks persegi yang merepresentasikan covariance antar setiap element pada setiap state.
 
@@ -103,7 +98,7 @@ Note :
 
 $E(v)$ adalah ekspektasi, rata-rata dari variabel random
 
-#### Covariance Matrix Properties
+## **Covariance Matrix Properties**
 
 - $$
   \Sigma_{ii} = \sigma_{ii}^2
@@ -117,13 +112,13 @@ $E(v)$ adalah ekspektasi, rata-rata dari variabel random
   \Sigma = \Sigma^T
   $$
 
-### Multivariate Gaussian Distribution
+## **Multivariate Gaussian Distribution**
 
 $$
 p(x|\mu, \Sigma) = \frac{1}{\sqrt{(2\pi)|\Sigma|}}exp\left (-\frac{1}{2}(x-\mu)^T \Sigma^{-1}(x-\mu)\right )
 $$
 
-### State Equation
+## **State Equation**
 
 Befungsi untuk melakukan prediksi berdasarkan estimasi yang sudah ada.
 
@@ -143,7 +138,7 @@ $G$ : matrix kontrol (mapping efek $u_n$ ke variabel *state*)
 
 Persamaan state dapat diperoleh dengan *State Space Equations* dengan menganlisa dynamic dari sistem.
 
-### Covariance Equation
+## **Covariance Equation**
 
 Mengukur ketidakpastian dari prediksi  *State Equation*
 
@@ -167,7 +162,7 @@ P_{n+1,n} &= FP_{n,n}F^T
 \end{align*}
 $$
 
-#### Observation Model
+## **Observation Model**
 
 $z_n = Hx_n+v_n$
 
@@ -185,7 +180,7 @@ $z_n = [\frac{2}{c}]x_n + v_n$
 
 dengan $c$ merupakan kecepatan suara
 
-#### Observation Uncertainty
+## **Observation Uncertainty**
 
 $R_n = E(v_nv_n^T)$
 
@@ -193,7 +188,7 @@ $R_n$ : covariance matrix untuk obervasi
 
 $v_n$ : kesalahan observasi
 
-#### Process Uncertainty
+## **Process Uncertainty**
 
 $Q_n = E(w_nw_n^T)$
 
@@ -201,11 +196,11 @@ $Q_n$ : covariance matrix untuk proses noise
 
 $w_n$ : proses noise
 
-#### Summary
+## **Summary**
 
 ![The Kalman Filter Diagram](https://www.kalmanfilter.net/img/summary/KalmanFilterDiagram.png)
 
-#### Kalman Gain
+## **Kalman Gain**
 
 Kalman Gain merupakan bobot bagi *measurement model*, dengan kata lain *Kalman Gain* menentukan seberapa besar pengaruh *measurement model* terhadap estimasi *state*.
 
@@ -220,7 +215,7 @@ $$
 estimate_t = estimate_{t-1} + KG(measurement_t-estimate_{t-1})
 $$
 
-#### Error on Estimation
+## **Error on Estimation**
 
 $$
 E_{estimate_t} = [1-KG]E_{estimate_{t-1}}
@@ -234,7 +229,7 @@ Note :
 
 Saat varians pada estimasi mengecil, maka mendekati nilai sebenarnya
 
-#### References :
+### **References**
 
 - [kalmanfilter.com](https://www.kalmanfilter.net/)
 - [Michel van Biezen - Kalman Filter Playlist](https://www.youtube.com/playlist?list=PLX2gX-ftPVXU3oUFNATxGXY90AULiqnWT)

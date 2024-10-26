@@ -1,4 +1,4 @@
-# Singular Value Decomposition (SVD)
+# **Singular Value Decomposition (SVD)**
 
 Semua matriks dapat diuraikan menjadi 3 matriks baru,
 
@@ -10,7 +10,7 @@ U = \text{orthogonal matrix (m x m), left singular values} \\
 V = \text{orthogonal matrix (n x n), right singular values}
 $$
 
-### Orthogonal Matrix
+## **Orthogonal Matrix**
 
 Matrix yang kolom dan barisnya merupakan vektor orthonormals
 
@@ -31,13 +31,13 @@ $$
 
 Matriks rotasi merupakan orthogonal karena $RR^T = I$, dan $R^T = R^{-1}$
 
-### Singular Values
+## **Singular Values**
 
 Singular values pada dasarnya merupakan akar dari eigenvalues ($\lambda_1, \lambda_2, \lambda_3, ..., \lambda_n$) dari $A^TA$, maka singular valuesnya adalah $\sigma_1 = \sqrt\lambda_1, \sigma_2 = \sqrt\lambda_2, \sigma_3 = \sqrt\lambda_3, ..., \sigma_n = \sqrt\lambda_n $. Matriks $A^TA$ merupakan matriks symmetric $n\times n$.
 
 Matriks diagonal $\Sigma$, memiliki urutan $\sigma_n$ dari paling besar ke paling kecil dan $\geq 0$​.
 
-### Rank Matrix
+## **Rank Matrix**
 
 Rank matriks merupakan nilai kolom atau baris yang independen secara linear.
 
@@ -73,7 +73,7 @@ $$
 
 Maka, jumlah rank dari matriks $A$ adalah 2 (non-zeros baris atau kolom). 
 
-### How To 
+## **How To** 
 
 1. Hitung $A^TA$ adalah matriks simetrik, maka eigenvectornya orthogonal. Untuk mendapatkan matriks $V^T$
 2. Hitung eigenvalues ($\lambda$) dengan $\text{det}(A^TA-\lambda I)=0$, maka diperoleh eigenvalues $\lambda_1,\lambda_2, .., \lambda_n$

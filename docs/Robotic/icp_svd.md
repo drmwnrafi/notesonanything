@@ -1,4 +1,4 @@
-# Singular Value Decomposition - Iterative Closest Point (SVD-ICP)
+# **Singular Value Decomposition - Iterative Closest Point (SVD-ICP)**
 
 $$
 P = \left \{ p_1, p_2, p_3, ..., p_n \right \}\\
@@ -32,7 +32,7 @@ R = VU^T\\
 t = \mu_y-R\mu_x
 $$
 
-### Vektor Translasi $\left ( t = \mu_p-R\mu_x\right)$
+## **Vektor Translasi $\left ( t = \mu_p-R\mu_x\right)$**
 
 Turunkan $E$ terhadap $t$,
 
@@ -41,7 +41,7 @@ $$
 t = y_i-Rx_i
 $$
 
-### Matriks Rotasi $\left ( R = VU^T\right )$
+## **Matriks Rotasi $\left ( R = VU^T\right )$**
 
 Rotasi $R$ mencapai optimal jika translasi $t= 0$,
 
@@ -100,7 +100,7 @@ R^T = V^TU\\
 R = UV^T
 $$
 
-### References :
+### **References** 
 
 - Sorkine-Hornung, O., & Rabinovich, M. (2017). Least-squares rigid motion using svd. *Computing*, *1*(1), 1-5. https://igl.ethz.ch/projects/ARAP/svd_rot.pdf
 - Arun, K. S., Huang, T. S., & Blostein, S. D. (1987). Least-Squares fitting of two 3-D point sets. *IEEE Transactions on Pattern Analysis and Machine Intelligence*, *PAMI-9*(5), 698–700. https://doi.org/10.1109/tpami.1987.4767965

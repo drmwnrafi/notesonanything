@@ -1,6 +1,8 @@
 site_name: Notes on Anything
 theme:
   name : material
+  logo : assets/ziczac.png
+  favicon : assets/ziczac.png
   features:
     - navigation.tabs
     - navigation.sections
@@ -15,16 +17,18 @@ theme:
   palette:
     - scheme: default
       toggle:
-        icon: material/toggle-switch-off-outline 
+        icon: fontawesome/solid/moon 
         name: Switch to dark mode
-      primary: blue
-      accent: purple 
+      primary: white
+      accent: lime 
     - scheme: slate 
       toggle:
-        icon: material/toggle-switch
-        name: Switch mode    
-      primary: blue
+        icon: fontawesome/solid/sun 
+        name: Switch to light mode    
+      primary: black
       accent: lime
+  font:
+      text: Roboto Mono
 
 plugins:
   - social
@@ -52,10 +56,9 @@ markdown_extensions:
   - pymdownx.superfences
   - pymdownx.mark
   - attr_list
-#   - pymdownx.emoji:
-#       emoji_index: !!python/name:materialx.emoji.twemoji
-#       emoji_generator: !!python/name:materialx.emoji.to_svg
-
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 extra_javascript:
   # other extra java script

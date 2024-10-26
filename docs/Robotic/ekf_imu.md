@@ -1,12 +1,12 @@
-# Extended Kalman Filter
-## Hamilton's Quternions
+# **Extended Kalman Filter (EKF)**
+## **Hamilton's Quternions**
 
 Konsep Quaternion diperkenalkan oleh **Sir William Rowan Hamilton** (thanks to this genius man),
 
 $$
 i^2=j^2=k^2=ijk=-1
 $$
-### Complex Number
+### **Complex Number**
 
 Bilangan kompleks (*complex numbers*) merupakan konsep yang menggunakan bilangan imajiner. Imajiner digunakan untuk menyelesaikan persamaan yang tidak memiliki solusi.
 
@@ -34,9 +34,9 @@ Sifat Complex :
 
 Bilangan kompleks pada trigonometri di representasikan dengan $z = \cos(\theta)+ i \sin(\theta)$, dan pada representasi Euler $e^{i\theta} = \cos(\theta)+ i \sin(\theta)$.
 
-### Quaternions
+### **Quaternions**
 
-Quaternion dinotasikan dengan $\H$ (Hamilton), merupakan bilangan "kompleks" pada 3D-sphere  $S^3$ dengan menambahkan 2 bilangan imajiner , $j$ dan $k$.  Sehinga direpresentasikan dengan persamaan,
+Quaternion dinotasikan dengan $\mathbb{H}$ (Hamilton), merupakan bilangan "kompleks" pada 3D-sphere  $S^3$ dengan menambahkan 2 bilangan imajiner , $j$ dan $k$.  Sehinga direpresentasikan dengan persamaan,
 
 $$
 q = w+xi+yj+zk,\;\;\;w,x,y,z\in\mathbb{R}
@@ -90,7 +90,7 @@ q = [\cos(\theta), \sin(\theta)\textbf{v}]
 $$
 
 
-##### Note:
+#### **Note**
 
 - **Cross Product**  
 
@@ -104,16 +104,16 @@ $$
 
   ![dot product magnitudes and angle](https://www.mathsisfun.com/algebra/images/dot-product-1.svg)
 
-## Quaternion for 3D Rotation
+## **Quaternion for 3D Rotation**
 
-## Gyroscope
+## **Gyroscope**
 
 
 
-## Accelerometer
+## **Accelerometer**
 
-## Magnetometer
+## **Magnetometer**
 
-##### References
+### **References**
 
 - [Understanding Quaternions](https://www.3dgep.com/understanding-quaternions/)

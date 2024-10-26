@@ -1,7 +1,8 @@
-# Attentions Mechanism
+# **Attentions Mechanism**
 Attentions mechanism is a pivot of current deep learning models. Its allows the model to capture the relationships of input sequences. 
-> Desclimer : The snippet code is only a attention code, not the whole Encoder-Decoder code.  
-## Additive-Attention
+> Desclimer : The snippet code is only a attention code, not the whole Encoder-Decoder code. 
+
+## **Additive-Attention**
 As far as i know, [Bahdanau et. al](https://arxiv.org/pdf/1409.0473) is the first who introduce "Attention Mechanism".
 Neural Machine Translation (NMT) at that time based on RNN variants with fixed-length vector context is the background. It cann't translated "long sequences" token due to difficulties capturing the relationship of preciding tokens. So, they invented an dynamics vector context. 
 
@@ -61,7 +62,7 @@ class AdditiveAttention(nn.Module):
         context = torch.sum(weights * annotations, dim=1) # batch, embedding_size
         return context
 ```
-## Dot-Product Attention
+## **Dot-Product Attention**
 To the best of my knowledge, [Luong's](https://arxiv.org/abs/1508.04025) Dot-Product Attention or Multiplicative Attention is the first introduced Dot-Product Attention. Luong's Attention is a resambles of Bahdanau's Additive Attention. Luong's purposed 3 different alternatives alingment functions.
 
 |FN [$a_t(h_t, \hat{h}_s$)]|Content|
@@ -89,7 +90,7 @@ class MultiplicativeAttention(nn.Module):
         return context
 ```
 
-## Scaled Dot-Product Attention
+## **Scaled Dot-Product Attention**
 This method comes from a "Kang" paper, [Attention is All You Need](https://arxiv.org/pdf/1706.03762) by Vaswani et al. 
 
 We came at the most famous equation in last 5 years on DL fields.
@@ -117,9 +118,9 @@ def ScaleDotProduct(Q:torch.Tensor, K:torch.Tensor, V:torch.Tensor, mask:torch.B
     return scores
 ```
 
-## Multi-Head Attention (MHA)
+## **Multi-Head Attention (MHA)**
 
-## Mult-Query Attention (MQA)
+## **Mult-Query Attention (MQA)**
 
 ```py
 class MultiQueryAttention(nn.Module):
@@ -150,7 +151,7 @@ class MultiQueryAttention(nn.Module):
         return self.out_proj(output)
 ```
 
-## Group-Query Attention (GQA)
+## **Group-Query Attention (GQA)**
 
 [Group-Query Attention](https://arxiv.org/pdf/2305.13245) is a combination of multi head and multi query attention with one key and value heads of each sub-groups of query.
 
@@ -187,6 +188,6 @@ class GroupedQueryAttention(nn.Module):
         output = output.contiguous().view(batch, seq_len, -1)
         return self.out_proj(output)
 ```
-## Flash Attention
+## **Flash Attention**
 
-## Flash Attention-2
+## **Flash Attention-2**
