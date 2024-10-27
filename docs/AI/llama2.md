@@ -2,7 +2,43 @@
 
 Llama 2 is a decoder-only transformer model from Meta.
 
-<img src="/assets/media/llama2.png" width="300px" style="display: block; margin: auto;">
+<div class="result" markdown>
+```mermaid
+---
+title: Llama2 Architecture
+---
+flowchart LR
+    %% Define Nodes
+    input(Input Tokens)
+    embed(Input Embeddings)
+    
+    %% Connections
+    input --> embed --> rms1 & skip1
+    rms1 -.-> |K| rope_k -.-> attention
+    rms1 -.-> |Q| rope_v -.-> attention
+    rms1 -.-> |V| attention
+    attention --> skip1 --> rms2 & skip2
+    rms2 --> swiglu --> skip2 --> rmsFinal --> linear --> softmax --> output
+
+    %% Llama Layers
+    subgraph layers[" x N Layers"]
+        rope_k(("RoPE"))
+        rope_v(("RoPE"))
+        rms1(RMS Norm)
+        rms2(RMS Norm)
+        attention(Group Query Attention)
+        swiglu(SwiGLU)
+        skip1((＋))
+        skip2((＋))
+    end
+    
+    %% Output Nodes
+    rmsFinal(RMS Norm)
+    linear(Linear)
+    softmax(Softmax)
+    output(Output Tokens)
+```
+</div>
 
 ## **Rotary Positional Embeddings (RoPE)**
 The Self-Attention mechanism is inherently agnostic to the order of tokens in a sequence. So, [Vaswani et.al](https://arxiv.org/abs/1706.03762) used Absolute Positional Embeddings using a sinusoidal function or a learnable parameter. The disadvantage is that it doesn't capture relative positional information (e.g., the distance between two tokens). In natural language, the meaning of words often depends on their relative positions. For example, the first word in a sentence can relate to the last word.
@@ -60,7 +96,7 @@ Now, we can see from the equation above that it handles relative position, shown
 ## **Root Mean Square Normalization (RMS Norm)**
 The Vanilla Transformers Model (Encoder-Decoder) uses Layer Norm for normalization. LayerNorm normalizes the activations across the features dimension for each individual input (instead of across the batch, as in BatchNorm). We use normalization because we don’t want our network learning in one direction due to large gradients between layers.
 
-<img src="/assets/media/layer_batch_norm.png" width="500px" style="display: block; margin: auto;">
+<img src="../../assets/media/layer_batch_norm.png" width="500px" style="display: block; margin: auto;">
 
 LayerNorm takes the means and variances of each individual input, re-centering and re-scaling the input. LayerNorm can be determined by:
 
@@ -79,7 +115,7 @@ $$n_{groups} = \frac{n_{Q heads}}{n_{{KV heads}}}$$
 
 Multi-Head Attention (MHA) slows during inference due to the large memory bandwidth cost when loading keys and values [N. Shazeer (2019)](https://arxiv.org/pdf/1911.02150). As explained by [Umar Jamil](https://www.youtube.com/watch?v=Mn_9W1nCFLo), GPU calculations are faster than memory bandwidth (the speed at which the GPU can access data in VRAM). It’s better to (1) perform the same operations on the same tensor N times than (2) perform the same operations on different tensors N times because, in case (1), the tensor is only traveled once. This is the rationale behind Multi-Query Attention (MQA); MQA uses one set of keys and values shared across all queries, requiring less KV cache than MHA and speeding up decoder inference. [J. Ainslie (2023)](https://arxiv.org/pdf/2305.13245) stated that MQA can lead to quality degradation and training instability, so they proposed Grouped Query Attention (GQA), which balances quality and speed during training and inference.
 
-<img src="/assets/media/gqa.png" width="500px" style="display: block; margin: auto;">
+<img src="../../assets/media/gqa.png" width="500px" style="display: block; margin: auto;">
 
 In the graphic above, when KV heads = 1 ($n_{groups} = n_{Q heads}$), it’s more like MHA, and when KV heads = Q heads ($n_{groups} = 1$), it’s more like MQA.
 
@@ -122,4 +158,4 @@ In the paper, the authors reduce the second dimension of matrices $\bf{W}$ and $
 
 However, the exact reason why SwiGLU outperforms other activation functions is not explicitly defined in the paper.
 
-<img src="/assets/media/swiglu_paper.png" alt="image" width="700px" style="display: block; margin: auto;"/>
+<img src="../../assets/media/swiglu_paper.png" alt="image" width="700px" style="display: block; margin: auto;"/>
