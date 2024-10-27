@@ -2,7 +2,6 @@
 
 Llama 2 is a decoder-only transformer model from Meta.
 
-<div class="result" markdown>
 ```mermaid
 ---
 title: Llama2 Architecture
@@ -38,7 +37,6 @@ flowchart LR
     softmax(Softmax)
     output(Output Tokens)
 ```
-</div>
 
 ## **Rotary Positional Embeddings (RoPE)**
 The Self-Attention mechanism is inherently agnostic to the order of tokens in a sequence. So, [Vaswani et.al](https://arxiv.org/abs/1706.03762) used Absolute Positional Embeddings using a sinusoidal function or a learnable parameter. The disadvantage is that it doesn't capture relative positional information (e.g., the distance between two tokens). In natural language, the meaning of words often depends on their relative positions. For example, the first word in a sentence can relate to the last word.
