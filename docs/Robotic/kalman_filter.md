@@ -208,8 +208,8 @@ $$
 KG = \frac{error_{estimate}}{error_{estimate} + error_{measurement}}
 $$
 
-- $error_{estimate} > error_{measurement} $ :  $KG \rightarrow 1$
-- $error_{estimate} < error_{measurement} $ :  $KG \rightarrow 0$
+- $error_{estimate} > error_{measurement}$ :  $KG \rightarrow 1$
+- $error_{estimate} < error_{measurement}$ :  $KG \rightarrow 0$
 
 $$
 estimate_t = estimate_{t-1} + KG(measurement_t-estimate_{t-1})
@@ -222,7 +222,8 @@ E_{estimate_t} = [1-KG]E_{estimate_{t-1}}
 $$
 
 - $KG\rightarrow1$, maka  error pada estimasinya besar, sehingga persamaan diatas akan menghasilkan $E_{estimate}$ yang kecil 
-- $KG\rightarrow0$, maka  error pada estimasinya kecil, sehingga persamaan diatas akan mempertahankan error estimasi dari waktu $t-1$ 
+- $KG\rightarrow0$, maka  error pada estimasinya kecil, sehingga persamaan diatas akan mempertahankan error estimasi dari waktu $t-1$
+
 - $E_{estimate_t} < E_{estimate_{t-1}}$  
 
 Note :

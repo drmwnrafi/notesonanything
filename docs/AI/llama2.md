@@ -85,7 +85,8 @@ In the graphic above, when KV heads = 1 ($n_{groups} = n_{Q heads}$), it’s mor
 
 ### **KV Cache**
 Basic decoder-only inference computes the dot product of key and value tensors for all tokens with quadratic time complexity, making the model slow during inference. KV cache is a mechanism that stores keys and values tensors of processed previous tokens in VRAM, so we only compute current queries to cached keys and values tensor.
-![kvcache.gif](https://media.licdn.com/dms/image/v2/D5622AQEd3w_266T-cg/feedshare-shrink_800/feedshare-shrink_800/0/1708872867819?e=1732147200&v=beta&t=y_--zaTSK0UrwN43qziiGKoXOL8e7iDyv_5RdlA58ck)
+
+<img src="https://media.licdn.com/dms/image/v2/D5622AQEd3w_266T-cg/feedshare-shrink_800/feedshare-shrink_800/0/1708872867819?e=1732147200&v=beta&t=y_--zaTSK0UrwN43qziiGKoXOL8e7iDyv_5RdlA58ck" style="display: block; margin: auto;">
 
 As you can see, KV-Cache only works with the last query and doesn't involve the previous query, making the dot product calculation more efficient (note that its dimension is mostly 1).
 
