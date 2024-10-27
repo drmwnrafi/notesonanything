@@ -78,7 +78,6 @@ markdown_extensions:
           format: !!python/name:mermaid2.fence_mermaid_custom
 
 extra_javascript:
-  # other extra java script
   - assets/js/mathjax-config.js
   - assets/js/card.js
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
