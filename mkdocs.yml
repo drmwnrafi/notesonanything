@@ -38,8 +38,7 @@ theme:
 plugins:
   - social
   - search
-  - mermaid2:
-      securityLevel: "sandbox"
+  - mermaid2
   - panzoom:
       mermaid: true
       full_screen: True
