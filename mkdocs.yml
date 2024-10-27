@@ -82,7 +82,6 @@ extra_javascript:
   # other extra java script
   - assets/js/mathjax-config.js
   - assets/js/card.js
-  - https://cdnjs.cloudflare.com/ajax/libs/mermaid/8.0.0/mermaid.min.js
   - https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML
 
 extra_css:
