@@ -1,4 +1,5 @@
 site_name: Notes on Anything
+site_url: https://drmwnrafi.github.io/notesonanything/
 theme:
   name : material
   logo : assets/media/notesx.png
