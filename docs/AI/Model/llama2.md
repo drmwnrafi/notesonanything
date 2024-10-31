@@ -1,5 +1,10 @@
 # **LLAMA-2**
 
+---
+Paper PDF : [https://arxiv.org/pdf/2307.09288](https://arxiv.org/pdf/2307.09288)
+
+---
+
 Llama 2 is a decoder-only transformer model from Meta.
 
 ```mermaid
@@ -94,7 +99,7 @@ Now, we can see from the equation above that it handles relative position, shown
 ## **Root Mean Square Normalization (RMS Norm)**
 The Vanilla Transformers Model (Encoder-Decoder) uses Layer Norm for normalization. LayerNorm normalizes the activations across the features dimension for each individual input (instead of across the batch, as in BatchNorm). We use normalization because we don’t want our network learning in one direction due to large gradients between layers.
 
-<img src="../../assets/media/layer_batch_norm.png" width="500px" style="display: block; margin: auto;">
+<img src="../../../assets/media/layer_batch_norm.png" width="500px" style="display: block; margin: auto;">
 
 LayerNorm takes the means and variances of each individual input, re-centering and re-scaling the input. LayerNorm can be determined by:
 
@@ -113,7 +118,7 @@ $$n_{groups} = \frac{n_{Q heads}}{n_{{KV heads}}}$$
 
 Multi-Head Attention (MHA) slows during inference due to the large memory bandwidth cost when loading keys and values [N. Shazeer (2019)](https://arxiv.org/pdf/1911.02150). As explained by [Umar Jamil](https://www.youtube.com/watch?v=Mn_9W1nCFLo), GPU calculations are faster than memory bandwidth (the speed at which the GPU can access data in VRAM). It’s better to (1) perform the same operations on the same tensor N times than (2) perform the same operations on different tensors N times because, in case (1), the tensor is only traveled once. This is the rationale behind Multi-Query Attention (MQA); MQA uses one set of keys and values shared across all queries, requiring less KV cache than MHA and speeding up decoder inference. [J. Ainslie (2023)](https://arxiv.org/pdf/2305.13245) stated that MQA can lead to quality degradation and training instability, so they proposed Grouped Query Attention (GQA), which balances quality and speed during training and inference.
 
-<img src="../../assets/media/gqa.png" width="500px" style="display: block; margin: auto;">
+<img src="../../../../assets/media/gqa.png" width="500px" style="display: block; margin: auto;">
 
 In the graphic above, when KV heads = 1 ($n_{groups} = n_{Q heads}$), it’s more like MHA, and when KV heads = Q heads ($n_{groups} = 1$), it’s more like MQA.
 
@@ -156,4 +161,178 @@ In the paper, the authors reduce the second dimension of matrices $\bf{W}$ and $
 
 However, the exact reason why SwiGLU outperforms other activation functions is not explicitly defined in the paper.
 
-<img src="../../assets/media/swiglu_paper.png" alt="image" width="700px" style="display: block; margin: auto;"/>
+<img src="../../../assets/media/swiglu_paper.png" alt="image" width="700px" style="display: block; margin: auto;"/>
+
+## **Appendix**
+
+### RMSNorm Code
+
+```py
+class RMSNorm(nn.Module):
+    def __init__(self, config):
+        super(RMSNorm, self).__init__()
+        self.eps = config.rms_norm_eps
+        self.weight = nn.Parameter(torch.ones(config.embedding_size))
+
+    def forward(self, x: torch.Tensor):
+        denom = torch.sqrt(x.pow(2).mean(-1, keepdim=True) + self.eps)
+        return ((self.weight * x) / denom).type_as(x)
+```
+
+### RoPE
+```py
+class RoPE(nn.Module):
+    def __init__(self, head_dim:int, config):
+        super(RoPE, self).__init__()
+        assert head_dim % 2 == 0, "Dimension must be even (divisible by 2)"
+        theta = 1 / config.rope_theta ** (torch.arange(0, head_dim, 2).float() / head_dim)
+        self.register_buffer("theta", theta)
+
+    @torch.no_grad()
+    def forward(self, x: torch.Tensor):
+        device = x.device
+        self.theta = self.theta.to(device)
+        m = torch.arange(x.size(1), device=device)
+        frequencies = torch.outer(m, self.theta)
+        frq_complex = torch.exp(1j * frequencies)
+        x_complex = torch.view_as_complex(x.reshape(*x.shape[:-1], -1, 2))
+        freq = frq_complex.unsqueeze(0).unsqueeze(2)
+        x_rotated = x_complex * freq
+        x_rope = torch.stack((x_rotated.real, x_rotated.imag), dim=-1)
+        x_rope = torch.flatten(x_rope, start_dim=-2)
+        return x_rope.type_as(x)
+```
+### Scaled-dot Product
+```py
+def ScaledDotProduct(Q: torch.Tensor, K: torch.Tensor, V: torch.Tensor, mask: torch.Tensor = None):
+    scores = torch.matmul(Q, K.transpose(-2, -1)) / (Q.size(-1) ** 0.5)
+    if mask is not None:
+        mask = mask.unsqueeze(1)
+        scores = scores.masked_fill(mask == 0, -torch.inf)
+    scores = F.softmax(scores, dim=-1)
+    scores = torch.matmul(scores, V)
+    return scores
+```
+
+### Grouped Query Attention
+
+```py
+class GroupedQuery(nn.Module):
+    def __init__(self, config):
+        super(GroupedQuery, self).__init__()
+        assert config.n_q_heads % config.n_kv_heads == 0, (
+            f"{RED}Query heads ({config.n_q_heads}) is not divisible by key and value heads ({config.n_kv_heads}), "
+            f"which will result in a non-integer number of groups. {END}"
+        )
+        self.n_q_heads = config.n_q_heads
+        self.n_kv_heads = config.n_kv_heads
+        self.n_groups = config.n_q_heads // config.n_kv_heads
+        self.head_dim = config.embedding_size // self.n_q_heads
+        
+        self.q_proj = nn.Linear(config.embedding_size, self.n_q_heads * self.head_dim, bias=config.bias)
+        self.k_proj = nn.Linear(config.embedding_size, self.n_kv_heads * self.head_dim, bias=config.bias)
+        self.v_proj = nn.Linear(config.embedding_size, self.n_kv_heads * self.head_dim, bias=config.bias)
+        self.out_proj = nn.Linear(self.head_dim* self.n_q_heads, config.embedding_size, bias=config.bias_out)
+        
+        self.cache_k = torch.zeros(config.max_batch, config.max_seq_len, self.n_kv_heads, self.head_dim)
+        self.cache_v = torch.zeros(config.max_batch, config.max_seq_len, self.n_kv_heads, self.head_dim)
+        
+        self.rope = RoPE(self.head_dim, config)
+        
+    def forward(self, x: torch.Tensor, mask: torch.Tensor = None, start_pos:int = 0, use_rope:bool=True,):
+        batch, seq_len, _ = x.size()
+
+        K = self.k_proj(x).view(batch, seq_len, self.n_kv_heads, self.head_dim).transpose(1,2)
+        V = self.v_proj(x).view(batch, seq_len, self.n_kv_heads, self.head_dim).transpose(1,2)
+        Q = self.q_proj(x).view(batch, seq_len, self.n_q_heads, self.head_dim).transpose(1,2)
+        
+        if use_rope:
+            K = self.rope(K)
+            Q = self.rope(Q)
+            
+        if use_cache and start_pos is not None:
+            self.cache_k[:batch, start_pos:start_pos+seq_len] = K
+            self.cache_v[:batch, start_pos:start_pos+seq_len] = Q
+            
+            K = self.cache_k[:batch_size, 0:start_pos+seq_len]
+            V = self.cache_v[:batch_size, 0:start_pos+seq_len]
+            
+        K = torch.repeat_interleave(K, self.n_groups, dim=1)
+        V = torch.repeat_interleave(V, self.n_groups, dim=1)
+
+        attn = ScaledDotProduct(Q, K, V, mask).transpose(1,2)
+        output = attn.contiguous().view(batch, seq_len, -1)
+        return self.out_proj(output)
+```
+
+### SwiGLU
+
+```py
+class SwiGLU(nn.Module):
+    def __init__(self, config):
+        super(SwiGLU, self).__init__()
+
+    def sigmoid(self, x: torch.Tensor):
+        return 1 / (1 + torch.exp(-x * 1))
+
+    def forward(self, x: torch.Tensor):
+        return x * self.sigmoid(x)
+```
+
+### Feed Forward
+```py
+class FeedForward(nn.Module):
+    def __init__(self, config):
+        super(FeedForward, self).__init__()
+        self.fc1 = nn.Linear(config.embedding_size, config.intermediate_dim, bias=config.bias_out)
+        self.fc2 = nn.Linear(config.embedding_size, config.intermediate_dim, bias=config.bias_out)
+        self.fc3 = nn.Linear(config.intermediate_dim, config.embedding_size, bias=config.bias_out)
+        self.silu = nn.SiLU()
+
+    def forward(self, x: torch.Tensor):
+        x1 = self.silu(self.fc1(x))
+        x2 = self.fc2(x)
+        x = x1 * x2
+        return self.fc3(x)
+```
+
+### Decoder
+```py
+class Decoder(nn.Module):
+    def __init__(self, config):
+        super(Decoder, self).__init__()
+        self.RMSNorm = RMSNorm(config)
+        self.GQA = GroupedQuery(config)
+        self.FFN = FeedForward(config)
+
+    def forward(self, x: torch.Tensor, mask: torch.Tensor, pos_emb:bool = True):
+        x1 = x
+        x = self.RMSNorm(x)
+        x = self.GQA(x, mask, pos_emb)
+
+        x2 = x1 + x
+        x = self.RMSNorm(x2)
+        x = self.FFN(x)
+
+        return x2 + x
+```
+
+### LLAMA-2
+```py
+class Model(nn.Module):
+    def __init__(self, config):
+        super(Model, self).__init__()
+        self.token_embedding = nn.Embedding(config.vocab_size, config.embedding_size)
+        self.layers = nn.ModuleList([
+            Decoder(config) for _ in range(config.n_layers)
+        ])
+        self.RMSNorm = RMSNorm(config)
+        self.fc_out = nn.Linear(config.embedding_size, config.vocab_size, bias=config.bias_out)
+
+    def forward(self, tokens, mask: torch.Tensor = None):
+        x = self.token_embedding(tokens)
+        for layer in self.layers:
+            x = layer(x, mask, False)
+        x = self.RMSNorm(x)
+        return self.fc_out(x)
+```

@@ -28,3 +28,10 @@ div.mermaid {
   .scale250 .mermaid:hover svg {
           max-width: 250%
   }
+
+  .center-table {
+    text-align: center;
+  }
+  .md-typeset .center-table :is(td,th):not([align]) {
+    text-align: initial; /* Reset alignment for table cells */
+  }
