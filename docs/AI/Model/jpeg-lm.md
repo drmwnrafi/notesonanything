@@ -30,21 +30,6 @@ Then, training proceeds like a typical autoregressive model.
 ## **JPEG Codec**
 JPEG stands for Joint Photographic Experts Group and is used to compress images with adjustable quality settings. JPEG-LM uses the JPEG codec to generate a string-basisd prompt, which is then tokenized with Byte Pair Encoding (BPE). An autoregressive model (a decode-only transformer) works only for discrete data, so since images are continuous data, they must first be discretized.
 
-```mermaid
----
-title : JPEG Compression
----
-graph LR
-    original(Original Image)
-    transform(Color Space Transform)
-    dct(Discrete Cosine Transform)
-    quant(Quantization)
-    list(Re-listing)
-    rle(Run Length Encoding)
-    huffman(Huffman Encoding)
-
-    original --> transform --> |YCrCb| dct --> quant --> list --> rle --> huffman
-```
 ### **Color Space Transformation**
 
 In this step, the RGB image is converted to YCbCr, where Y represents luminance, and Cb & Cr represent chrominance. Luminance captures brightness, while chrominance captures color information. To convert RGB to YCbCr, we use the following equations:
