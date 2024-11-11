@@ -2,12 +2,13 @@
 hide:
   - navigation
   - toc
+  - footer
 ---
 
 <div class="flex-container">
   <div class="text-content">
     <div class="centered-text">
-      <h1><b>Welcome to Notes on Anything!!</b></h1>
+      <h1><b>Welcome to Notes on Anything !!!</b></h1>
     </div>
 
     <div class="centered-text">
@@ -21,7 +22,7 @@ hide:
   </div>
 </div>
 
-!!! tip "Goals"
+!!! tip "Next Goals"
     **Artificial Inteligences**
 
     - Neural Net Scaling Laws by [Kaplan et al.](https://arxiv.org/abs/2001.08361)
@@ -29,6 +30,7 @@ hide:
     
     **Mathematics**
     
+    - Add examples and proof in each probability section 
     - Lie Group
     - Hamilton's Quaternion 
     

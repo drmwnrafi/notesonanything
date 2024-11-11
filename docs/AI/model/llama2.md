@@ -7,6 +7,8 @@ Paper PDF : [https://arxiv.org/pdf/2307.09288](https://arxiv.org/pdf/2307.09288)
 
 Llama 2 is a decoder-only transformer model from Meta.
 
+<img src="../../../assets/media/llama2.png" width="200px" style="display: block; margin: auto;" alt="LLaMA 2 Architecture">
+
 
 ## **Rotary Positional Embeddings (RoPE)**
 The Self-Attention mechanism is inherently agnostic to the order of tokens in a sequence. So, [Vaswani et.al](https://arxiv.org/abs/1706.03762) used Absolute Positional Embeddings using a sinusoidal function or a learnable parameter. The disadvantage is that it doesn't capture relative positional information (e.g., the distance between two tokens). In natural language, the meaning of words often depends on their relative positions. For example, the first word in a sentence can relate to the last word.
@@ -83,7 +85,7 @@ $$n_{groups} = \frac{n_{Q heads}}{n_{{KV heads}}}$$
 
 Multi-Head Attention (MHA) slows during inference due to the large memory bandwidth cost when loading keys and values [N. Shazeer (2019)](https://arxiv.org/pdf/1911.02150). As explained by [Umar Jamil](https://www.youtube.com/watch?v=Mn_9W1nCFLo), GPU calculations are faster than memory bandwidth (the speed at which the GPU can access data in VRAM). It’s better to (1) perform the same operations on the same tensor N times than (2) perform the same operations on different tensors N times because, in case (1), the tensor is only traveled once. This is the rationale behind Multi-Query Attention (MQA); MQA uses one set of keys and values shared across all queries, requiring less KV cache than MHA and speeding up decoder inference. [J. Ainslie (2023)](https://arxiv.org/pdf/2305.13245) stated that MQA can lead to quality degradation and training instability, so they proposed Grouped Query Attention (GQA), which balances quality and speed during training and inference.
 
-<img src="../../../../assets/media/gqa.png" width="500px" style="display: block; margin: auto;">
+<img src="../../../assets/media/gqa.png" width="400px" style="display: block; margin: auto;" alt="GQA representation">
 
 In the graphic above, when KV heads = 1 ($n_{groups} = n_{Q heads}$), it’s more like MHA, and when KV heads = Q heads ($n_{groups} = 1$), it’s more like MQA.
 

@@ -1,11 +1,5 @@
 # **Introduction to Nonlinear Systems**
 
-This notebook is my notes from <a href = "https://www.amazon.com/Applied-Nonlinear-Control-Jean-Jacques-Slotine/dp/0130408905">Applied Nonlinear Systems by Jean-Jacques Slotine and Weiping Li </a>, <code>Chapter 1 : Introduction</code>.
-
-<center><img style="float:center; max-height:400px" src="https://m.media-amazon.com/images/I/51A8IlJL1zL._SL1360_.jpg"></center>
-
---------------------
-
 Nonlinear control often involves an iterative process in the analysis and design of its systems.
 
 ## **Why Nonlinear Control?**
@@ -393,7 +387,11 @@ In this example, even a small difference in the initial conditions ($x_1$ and $x
 
 In the graph, it is evident that the plot of the initial condition $x_1$ over time and the initial condition $x_2$ over time exhibit only slight differences in the values of $x$ for $t<\pm21 \;s$. However, for $t>\pm 21\;s$, the system displays chaotic behavior, and the values of $x(t)$ for both initial conditions diverge significantly.
 
-## **Appendix**
+!!! info
+    Most of this section are my notes from <a href = "https://www.amazon.com/Applied-Nonlinear-Control-Jean-Jacques-Slotine/dp/0130408905">Applied Nonlinear Systems by Jean-Jacques Slotine and Weiping Li </a>.
+
+
+### **Appendix**
 
 1. **Underwater Vehicle Model Python Code**
 ```py

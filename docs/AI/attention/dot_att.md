@@ -1,6 +1,3 @@
-FORMAT: 1A
-HOST: http://www.google.com
-
 # **Dot-Product Attention**
 To the best of my knowledge, [Luong's](https://arxiv.org/abs/1508.04025) Dot-Product Attention or Multiplicative Attention is the first introduced Dot-Product Attention. Luong's Attention is a resambles of Bahdanau's Additive Attention. Luong's purposed 3 different alternatives alingment functions.
 

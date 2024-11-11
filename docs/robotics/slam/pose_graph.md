@@ -18,12 +18,12 @@ x^*=\text{argmax }p(x) = \underset{x}{\text{argmin }}e_{ij}^T\Omega_{ij}e_{ij}
 $$
 
 Dikarenakan adanya kumulatif error pada trajectory, yang merupakan error bukan hanya pada 1 pose melainkan terdapat kemungkinan error terjadi lebih dari 1 pose. Sehingga fungsi error merupakan jumlah dari setiap error pada setiap pose,
-$$
 
+$$
 F(x) = e_{ij}^T\Omega_ie_{ij}\\
 x^*=\underset{x}{\text{argmin }} \sum_{i,j}F(x_{ij})
-
 $$
+
 Persamaan tersebut tidak memiliki solusi pasti dikarenakan terdapat matriks rotasi yang mengindikasikan persamaan non-linear. Permasalahan dapat diselesaikan dengan menggunakan optimisasi dan dilinearkan menggunakan Taylor-Expansion.
 
 $$

@@ -6,11 +6,16 @@ theme:
   name : material
   logo : assets/media/notesx.png
   favicon : assets/media/ziczac.png
+  custom_dir: overrides
   features:
+    - announce.dismiss
+    - header.autohide
     - navigation.tabs
     - navigation.sections
-    - toc.integrate
     - navigation.top
+    - navigation.tracking
+    - navigation.indexes
+    - navigation.footer
     - search.suggest
     - search.highlight
     - content.tabs.link
@@ -33,16 +38,11 @@ theme:
       primary: black
       accent: lime
   font:
-      text: Roboto Mono
+      text: Montserrat
 
 plugins:
   - social
   - search
-  - mermaid2
-  - panzoom:
-      mermaid: true
-      full_screen: True
-      key: "none"
 
 extra:
   extra_shadow_root_css:
@@ -54,8 +54,11 @@ extra:
       link: https://www.kaggle.com/drmwnnrafi
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/in/drmwnnrafi/
+  # generator: false
 
 markdown_extensions:
+  - toc:
+      permalink: true
   - pymdownx.highlight:
       anchor_linenums: true
   - pymdownx.inlinehilite
@@ -79,8 +82,7 @@ markdown_extensions:
         # - name: mermaid
         #   class: mermaid
         #   format: !!python/name:mermaid2.fence_mermaid_custom
-  
-      
+
 extra_javascript:
   - assets/js/mathjax-config.js
   - assets/js/card.js
@@ -90,3 +92,73 @@ extra_css:
   - assets/css/extra.css
   - assets/css/card.css
   - https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css
+
+nav :
+  - index.md
+  - Mathematics : 
+    - Preface : maths/preface.md
+    - Probability :
+      - Intro to Probability : maths/probability/intro_probs.md
+      - Set Theory : maths/probability/set_theory.md
+      - Binomial and Multinomial Distribution : maths/probability/binom_dist.md
+      - Conditional Distribution : maths/probability/conditional_probs.md
+      - Laws of Total Probability : maths/probability/total_probs.md
+      - Bayes' Theorem : maths/probability/bayes_theorem.md
+      - Independence : maths/probability/independence.md
+      - Random Variabels : maths/probability/random_var.md
+      - Bernouli Distribution : maths/probability/bernouli.md
+      - Binomial to Normal Distribution : maths/probability/binomial_normal.md
+      - Binomial to Poisson Distribution : maths/probability/binomial_poisson.md
+      - Geometric Distribution : maths/probability/geo_dist.md
+      - Exponential Distribution : maths/probability/exp_dist.md
+      - Poisson Proccess : maths/probability/poisson_proccess.md
+      - Gamma Distribution : maths/probability/gamma_dist.md
+      - Function of Random Variables : maths/probability/func_random.md
+      - Joint Distribution : maths/probability/joint_dist.md
+      - Theory of Expectation : maths/probability/expected.md
+      - Variance and Standart Deviation : maths/probability/var_std.md
+      - Markov's Inequality : maths/probability/markov_ieq.md
+      - Chebyshev Inequality : maths/probability/chebyshev_ieq.md
+      - Laws of Large Number : maths/probability/large_num.md
+      - Moment Generating Function : maths/probability/moment_func.md
+      - Lebesgue Measure : maths/probability/lebesgue.md
+      - Covariance and Correlation : maths/probability/cov_corr.md
+      - Tail Sum : maths/probability/tail_sum.md
+      - Central Limit Theorem : maths/probability/clf.md
+    - Linear Algebra:
+      - Singular Value Decomposition : maths/linalg/svd.md
+    - Lie Theory :
+      - Lie Theory for Robotics : maths/lie_theory/for_robotics.md
+  
+  - Artificial Intelligences :
+    - Preface : AI/preface.md
+    - Attention Mechanism :
+      - Additive Attention :  AI/attention/add_att.md
+      - Dot Product Attention : AI/attention/dot_att.md
+      - Scaled-Dot Product Attention : AI/attention/scaled_dot_att.md
+      - Multi Head Attention : AI/attention/mha.md
+      - Multi Query Attention : AI/attention/mqa.md
+      - Grouped Query Attention : AI/attention/gqa.md
+    - Models :
+      - Large Language Models :
+        - LLAMA-2 : AI/model/llama2.md
+        - JPEG-LM : AI/model/jpeg-lm.md
+      - Computer Vision :
+        - U-Net : AI/model/u_net.md
+        - U2-Net : AI/model/u2_net.md
+    - Tokenizers :
+        - Byte-Pair Encoding : AI/tokenizer/bpe.md
+
+
+  - Robotics :
+    - Preface : robotics/preface.md
+    - Nonlinear Control :
+      - Introduction to Nonlinear Systems: robotics/nonlinear_control/intro.md
+      - Phase Plane Analysis : robotics/nonlinear_control/phase_plane.md
+    - Sensor Fusion :
+      - Kalman Filter : robotics/sensor_fusion/kf.md
+      - Extended Kalman Filter : robotics/sensor_fusion/ekf.md
+    - SLAM:
+      - Point to Point Iterative Closest Point : robotics/slam/icp_svd.md
+      - Point to Line Iterative Closest Point : robotics/slam/lm_plicp.md
+      - Pose-Graph : robotics/slam/pose_graph.md 
