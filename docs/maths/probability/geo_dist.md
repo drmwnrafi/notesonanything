@@ -1,12 +1,12 @@
 # **Geometric Distribution**
 
-Geometric distribution tells how likely first event success given $n$ trials sequance of independent Bernoulli event with probability $p$. Then, the formula for Probability Mass FUnction (PMF) of random variabel $\mathbf{X}$.
+The geometric distribution tells us how likely the first success is given a sequence of $n$ trials of independent Bernoulli events with probability $p$. he formula for the Probability Mass Function (PMF) of the random variable $\mathbf{X}$ is :
 
 $$
 \mathbf{X} \sim \text{Geometric}(p)
 $$
 
-Because its calculate the probability of first success at $n^th$ trial, so the previous trails before $n^th$ suppose to be failure.Then, by independence, the probability of this event is,
+Since this calculates the probability of the first success occurring on the $n^th$ trials, the previous trials (before the $n^th$) must be failures. By the independence of the trials, the probability of this event is:
 
 $$
 \begin{align*}

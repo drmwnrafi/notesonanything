@@ -1,27 +1,26 @@
 # **Random Variables**
 
-Random variable ($\mathbf{X}$) is a function that assigns a numerical value to each outcome of an event in a sample space, quantifying a specific characteristic of the outcomes.
+A random variable ($\mathbf{X}$) is a function that assigns a numerical value to each outcome of an event in a sample space, quantifying a specific characteristic of the outcomes.
 
 $$
 \mathbf{X} : \Omega \rightarrow \mathbb{R}
 $$
 
-Read by : function $\mathbf{X}$ maps outcomes from sample space $\Omega$ to real number $\mathbb{R}$, where each outcome $\omega \in \Omega$ in $\Omega$ donated by $\omega$.
+This is read as: the function $\mathbf{X}$ maps outcomes from the sample space $\Omega$ to real numbers $\mathbb{R}$, where each outcome $\omega \in \Omega$ is represented by $\omega$.
 
-- **Continuous Random Variables** : possible value range in continuous (countable number), e.g lifetime of transistors
-- **Discrete Random Variables** : possible value range in discrete (countable number), e.g. n coin flips
+- **Continuous Random Variables**: Take values within a continuous range (uncountably infinite), e.g., the lifetime of a transistor.
+- **Discrete Random Variables**: Take values within a discrete (countable) range, e.g., the number of coin flips resulting in heads.
 
 ## **Probability of Random Variables**
 
-Probability of random variables $P(\mathbf{X})$ is a function to determine the distribution associated with the random variable. Probability Mass Function (PMF) for discrete and Probability Density Fuction (PDF) for continuous. To that, we need :
+The probability of a random variable $P(\mathbf{X})$ is a function that defines the distribution associated with the random variable. For this, we use the Probability Mass Function (PMF) for discrete variables and the Probability Density Function (PDF) for continuous variables. To calculate probabilities, we need:
 
-1. Particular value or falling within a certain range $\mathbf{X}$
-2. Probability of each value over $\mathbf{X}$ 
+1. Specific values or ranges for $\mathbf{X}$.
+2. The probability of each value or range for $\mathbf{X}$.
 
 ## **The Importance of Random Variables**
 
-1. Summary of the probabilities with function of $P(\mathbf{X})$, without counting probability from each n-trails one by one
-2. PDF can modeled a random process, because we can modeled the distribution so it's allowed us to test hypothesis
-3. More ease to visualize and compute certain value in PDF
-4. Build new function on $\mathbf{X}$, e.g. $\mathbf{X}^2$, $E(\mathbf{X})$, $Var(\mathbf{X})$ 
-
+1. Summarize probabilities through $P(\mathbf{X})$ without calculating the probability of each outcome in an $n$-trial experiment individually.
+2. Model random processes with the PDF, enabling us to hypothesize about the distribution.
+3. Simplify visualization and computation for values within the PDF.
+4. Construct new functions based on $\mathbf{X}$, such as $\mathbf{X}^2$, $E(\mathbf{X})$ (expected value), and $Var(\mathbf{X})$ (variance).

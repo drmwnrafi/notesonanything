@@ -1,14 +1,14 @@
 # **Function of Random Variables**
 
-Random variabels $\mathbf{X}$ with function for random variables $g(\cdot)$ and output new random variables $\mathbf{Y} = g(\mathbf{X})$. PDF of a distribution can not applied directly to $g(\cdot)$, but have to apply with CDF than result in CDF too.
+A random variabel $\mathbf{X}$ with a function $g(\cdot)$ applied to it results in a new random variable $\mathbf{Y} = g(\mathbf{X})$. The probability density function (PDF) of the distribution cannot be applied directly to $g(\cdot)$, instead, it must be derived using the cumulative distribution function (CDF), which results in a new CDF.
 
-Given random variable $\mathbf{X}$ with normal distribution $\mathbf{X} \sim \mathcal{N}(\mu, \sigma^2)$, and function $g(\mathbf{X}) = a\mathbf{X}+b$. So,
+Given random variable $\mathbf{X}$ with normal distribution $\mathbf{X} \sim \mathcal{N}(\mu, \sigma^2)$, and a function $g(\mathbf{X}) = a\mathbf{X}+b$. We have:
 
 $$
 \mathbf{Y} = a\mathbf{X}+b \\
 $$
 
-Then, the CDF $F_\mathbf{Y}$:
+The CDF of $\mathbf{Y}$, donated by $F_\mathbf{Y}$:
 
 $$
 \begin{align*}
@@ -18,7 +18,7 @@ F_\mathbf{Y}(y) = P(\mathbf{Y} < y) &= P(a\mathbf{X}+b)\\
 \end{align*}
 $$
 
-Then, take the derivatives to convert CDF to PDF :
+To obtain the PDF, take the derivative of the CDF:
 
 $$
 \begin{align*}
@@ -27,7 +27,7 @@ f_\mathbf{y}(y) &= \frac{d}{dy} F_\mathbf{X}\left(\frac{y-b}{a}\right)\\
 \end{align*}
 $$ 
 
-So,
+Thus,
 
 $$
 \mathbf{Y} \sim \mathcal{N}(a\mu+b, a^2\sigma^2)
@@ -35,7 +35,7 @@ $$
 
 Example :
 
-Given random variable $\mathbf{X}$ with standart normal distribution $\mathbf{X} \sim \mathcal{N}(0, 1)$, and function $g(\mathbf{X}) = \mathbf{X}^2$. So, the CDF of $\mathbf{Y}$ :
+Given a random variable $\mathbf{X}$ with standart normal distribution $\mathbf{X} \sim \mathcal{N}(0, 1)$, and the function $g(\mathbf{X}) = \mathbf{X}^2$. The CDF of $\mathbf{Y}$ is:
 
 $$
 \begin{align*}
@@ -45,7 +45,7 @@ F_\mathbf{Y}(y)=P(\mathbf{Y} < y)&=P(\mathbf{X}^2 < y)\\
 \end{align*}
 $$
 
-Then, the PDF of $\mathbf{Y}$
+Then, the PDF of $\mathbf{Y}$ is:
 
 $$
 \begin{align*}

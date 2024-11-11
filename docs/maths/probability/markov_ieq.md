@@ -1,18 +1,24 @@
 # **Markov's Inequality**
 
-Markov's inequality used to check $\mathbf{X}$ is non-negative random variable.
-If $\mathbf{X} \ge 0$ then  
+Markov's inequality is used to check if $\mathbf{X}$ is a non-negative random variable. If $\mathbf{X} \geq 0 \), then:
 
 $$
-P(\mathbf{X}\ge a) \leq \frac{E(P(\mathbf{X}\ge a))}{a}
+P(\mathbf{X} \geq a) \leq \frac{E(\mathbf{X})}{a}
 $$
 
-Let $\mathbf{X}$ be any positive discrete random variable, so we can write
+Let $\mathbf{X}$ be any positive discrete random variable, so we can write:
 
 $$
-\begin{align*}
-E(\mathbf{X}) =\sum_x xP(\mathbf{X}=x) &\ge \sum_{x\ge a} xP(\mathbf{X}=x)\\
-&\ge \sum_{x\ge a} aP(\mathbf{X}=x)\\
-&= aP(\mathbf{X}\ge a)
-\end{align*}
+\begin{aligned}
+E(\mathbf{X}) &= \sum_x x P(\mathbf{X} = x) \\
+&\geq \sum_{x \geq a} x P(\mathbf{X} = x) \\
+&\geq \sum_{x \geq a} a P(\mathbf{X} = x) \\
+&= a P(\mathbf{X} \geq a)
+\end{aligned}
+$$
+
+Thus, Markov's inequality gives us the result:
+
+$$
+P(\mathbf{X} \geq a) \leq \frac{E(\mathbf{X})}{a}
 $$

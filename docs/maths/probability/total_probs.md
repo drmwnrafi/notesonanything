@@ -1,6 +1,6 @@
 # **Law of Total Probability**
 
-Given $B_1, B_2, B_3, \cdots$ are partition of $\Omega$, thus $\Omega = \bigcup_{i=1}^n B_i$. Let $P(A)$ is a total probability. The solution to find total probability same as summed all areas of province then the area of whole country covered.
+Given $B_1, B_2, B_3, \cdots$ be a partition of $\Omega$, so that $\Omega = \bigcup_{i=1}^n B_i$. The total probability of an event $A$, donated by $P(A)$, can be found by summing the probabilities over each part of the partition. This is analogous to finding the total area of a country by summing the areas of its provinces.
 
 $$
 P(A) = \sum_{i=1}^n P(A \cap B_i) = \sum_{i=1}^n P(A|B_i)P(B_i)
@@ -8,7 +8,7 @@ $$
 
 {++Proof++}
 
-$B_i$ is a partition of $\Omega$, so
+Since $B_i$ is a partition of $\Omega$, we have
 
 $$
 \Omega = \bigcup_{i=1}^n B_i \\
@@ -19,7 +19,7 @@ A &= A \cap \Omega\\
 \end{align*}
 $$
 
-Then by using the third axioms of probability, 
+By the third axiom of probability (additivity),
 
 $$
 \begin{align*}
@@ -29,24 +29,20 @@ P(A) &= P\left(\bigcup_i(A \cap B_i)\right) \\
 \end{align*}\\
 $$
 
-To make it more ease to understand, I use illustration on Steve's video.
+To make this more intuitive, let’s consider an illustration from Steve's video.
 
 <img src="../../../assets/media/total_probs.png" width="300px" style="display: block; margin: auto;">
 
-Based on the illustration, 
+Based on the illustration, we have
 
 $$
 P(A) = P(A \cap B) + P(A \cap B^c)
 $$
 
-By using definition of conditional distribution, we can change the equation into
+Using the definition of conditional probability, this equation becomes
 
 $$
 P(A) = P(A|B)P(B) + P(A|B^c)P(B^c)
 $$
 
-It is more easy intuitively, since A overlap with $B_1$ and $B_2$, it means $A \cap B$. Where the entire left area of $B$ is $B^c$, so the total area of left area is $A \cap B^c$.
-
-
-!!! info
-    Most of this section refered to [Review of Probability Theory by Maleki and Do](https://cs229.stanford.edu/section/cs229-prob.pdf), [A First Course in Probability by Sheldon Ross](https://www.cs.utexas.edu/~abdonm/SDS%20321/a_first_course_in_probability.pdf), and [Probability Bootcamp by Steve Bruton](https://www.youtube.com/watch?v=sQqniayndb4&list=PLMrJAkhIeNNR3sNYvfgiKgcStwuPSts9V)
+This is easier to understand intuitively. Since $A$ overlap with $B_1$ and $B_2$, it means $A \cap B$. Where the entire left area of $B$ is $B^c$, so the total area of left area is $A \cap B^c$.

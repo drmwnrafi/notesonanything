@@ -1,6 +1,6 @@
 # **Moment Generating Function**
 
-Moment generating function $m(t)$ has same characteristic with Tylor Series, it tells the characteristic of the distribution with $n$-order. Moment generating functions uniquely determine the CDF by using :
+The moment generating function (MGF), denoted as $m(t)$, provides insight into the characteristics of a distribution and has a similar form to a Taylor series. It captures the distribution's properties up to the $n$-order. The MGF uniquely determines the cumulative distribution function (CDF) of a random variable $\mathbf{X}$. For a random variable $\mathbf{X}$, the MGF is given by:
 
 $$
 m(t) = 
@@ -11,7 +11,8 @@ m(t) =
 \end{cases}
 $$
 
-The moment generating functions of distribution :
+## **Moments of a Distribution**
+The $n$-th moment of a distribution can be derived from the derivatives of the MGF evaluated at $t=0$:
 
 $$
 \begin{matrix}
@@ -21,13 +22,13 @@ n-\text{order} & \text{Moment} & \text{Expression}\\
 3-\text{th} & \text{Skweness} & E\left[\left(\frac{\mathbf{X}-\mu}{\sigma}\right)^3\right]\\
 4-\text{th} & \text{Kurtosis} & E\left[\left(\frac{\mathbf{X}-\mu}{\sigma}\right)^4\right] = \frac{E(\mathbf{X}^4)}{\sigma}\\
 \vdots & \vdots & \vdots \\
-n-th & \text{"moments"} & E(\mathbf{X}^n)
+n-th & \text{"n-th moments"} & E(\mathbf{X}^n)
 \end{matrix}
 $$
 
-Properties of $m(t)$ :
+## **Properties of the Moment Generating Function**
 
-Let $\mathbf{X}$ and $\mathbf{X}$ be independent random variables, and corresponding moment generating functions are $m_\mathbf{X}$ and $m_\mathbf{Y}$.
+Let $\mathbf{X}$ and $\mathbf{X}$ be independent random variables, and corresponding moment generating functions $m_\mathbf{X}$ and $m_\mathbf{Y}$.
 
 Define $\mathbf{Z} = \mathbf{X} +\mathbf{Y}$, then
 
@@ -40,7 +41,7 @@ Proof with aim $m_\mathbf{Z}(t) = m_\mathbf{X}(t) + \mathbf{Y}(t)$,
 $$
 \begin{align*}
 m_\mathbf{z}(t) &= E(e^{t\mathbf{Z}})=E(E^{t(\mathbf{X}+\mathbf{y})})\\
-&= E(e^{t\mathbf{X}})e^{t\mathbf{Y}})\\
+&= E(e^{t\mathbf{X}})e^{t\mathbf{Y}}\\
 &= E(e^{t\mathbf{X}})E(e^{t\mathbf{Y}})\\
 &= m_\mathbf{X}(t) m_\mathbf{Y}(t)
 \end{align*}
@@ -49,13 +50,13 @@ $$
 
 Example :
 
-$m(t)$ of Poisson distribution $\mathbf{X}\sim \text{Poisson}(\lambda)$ with discrete random variable $\mathbf{X}$,
+The probability mass function (PMF) of a random variable $\mathbf{X}\sim \text{Poisson}(\lambda)$ with discrete random variable $\mathbf{X}$,
 
 $$
 P(\mathbf{X}=x) = \frac{\lambda^xe^{-\lambda}}{x!}
 $$
 
-then, 
+then, the $m(t)$ is :
 
 $$
 \begin{align*}
@@ -66,7 +67,7 @@ m(t)&=\sum_x e^{tx}\frac{\lambda^xe^{-\lambda}}{x!}\\
 \end{align*}
 $$
 
-Compute $E(\mathbf{X}), E(\mathbf{X}^2),\cdots ,E(\mathbf{X}^n)$ by take derivatis of $m(t)$,
+Compute $E(\mathbf{X}), E(\mathbf{X}^2),\cdots ,E(\mathbf{X}^n)$ by take differentiating $m(t)$,
 
 $$
 \begin{align*}
@@ -76,7 +77,7 @@ m''(t)&= e^{\lambda\left(e^t-1\right)} (\lambda e^t)^2 + e^{\lambda\left(e^t-1\r
 \end{align*}
 $$
 
-then, to take $E(\mathbf{X}^n)$ set $t=0$ to $\frac{d^n}{d^nt}m(t)$,
+To calculate $E(\mathbf{X}^n)$, set $t=0$ in the $n$-th derivative of $m(t)$,
 
 $$
 \begin{align*}
@@ -85,7 +86,7 @@ E(\mathbf{X}^2) &= m''(0) = \lambda^2 + \lambda \\
 \end{align*}
 $$
 
-then we can calculate variance by using $E(\mathbf{X})$ and $E(\mathbf{X}^2)$
+The variance is given by:
 
 $$
 \begin{align*}
@@ -99,7 +100,7 @@ $$
 
 Proof Goals : aim to show $E(\mathbf{X}^n) = \frac{d^n}{d^nt}m(t)$
 
-Take $m(t)$ of $\mathbf{X}$ continous,
+For continuous random variables, the moment generating function is:
 
 $$
 \begin{align*}
@@ -107,7 +108,7 @@ m(t) &= \int_{-\infty}^\infty e^{tx} f(x) \; dx \\
 \end{align*}
 $$
 
-then take the derivatives of $m(t)$
+The derivatives of of $m(t)$ are :
 
 $$
 \begin{align*}
@@ -118,7 +119,7 @@ m''(t) &= \int_{-\infty}^\infty x^2 e^{tx} f(x) \; dx \\
 \end{align*}
 $$
 
-Subtite $t=0$ to derivatives of $m(t)$,
+Substituting $t=0$ into these derivatives, we get the moments:
 
 $$
 \begin{align*}
@@ -129,3 +130,4 @@ m''(0) &= \int_{-\infty}^\infty x^2 f(x) \; dx = E(\mathbf{X}^2)\\
 \end{align*}
 $$
 
+This concludes the proof for the moments of a continuous random variable.

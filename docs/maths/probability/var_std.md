@@ -1,117 +1,120 @@
-# **Variance and Standart Deviation**
+# **Variance and Standard Deviation**
 
-Means $\mu$ is defined as center of mass of distribution, variance $\sigma^2$ is the average of square differences from mean $\mu$, and standart deviation $\sigma$ tells how spread the distribution. 
+The mean $\mu$ is defined as the center of mass of the distribution, the variance $\sigma^2$ is the average of squared differences from the mean $\mu$, and the standard deviation $\sigma$ tells us how spread out the distribution is.
 
-If we applied function $g(\cdot)$ to $\mathbf{X}$, with $g(\mathbf{X})=\mathbf{X}^2$, then
-
-$$
-\begin{align*}
-\mathbf{Y} &= \mathbf{X}^2\\
-E(\mathbf{Y}) &= \int_{-\infty}^{\infty}x^2f(x) \; dx
-\end{align*}
-$$
-
-If $\mathbf{X}$ and $\mathbf{Y}$ are independent, then
+If we apply a function $g(\cdot)$ to $\mathbf{X}$, with $g(\mathbf{X}) = \mathbf{X}^2$, then:
 
 $$
-\text{Var}(\mathbf{X}+\mathbf{Y}) = \text{Var}(\mathbf{X})+\text{Var}(\mathbf{Y})
+\begin{aligned}
+\mathbf{Y} &= \mathbf{X}^2 \\
+E(\mathbf{Y}) &= \int_{-\infty}^{\infty} x^2 f(x) \, dx
+\end{aligned}
 $$
 
-Let random variable $\mathbf{X}$ is normal distribution,
+If $\mathbf{X}$ and $\mathbf{Y}$ are independent, then:
 
 $$
-\mathbf{X}\sim \mathcal(\mu, \sigma^2)
+\text{Var}(\mathbf{X} + \mathbf{Y}) = \text{Var}(\mathbf{X}) + \text{Var}(\mathbf{Y})
 $$
 
-Then, the PDF of normal distribution
+Let the random variable $\mathbf{X}$ follow a normal distribution:
 
 $$
-f(x) = \frac{1}{\sqrt{2\pi}\sigma}e^{\frac{-(x-\mu)^2}{2\sigma^2}}
+\mathbf{X} \sim \mathcal{N}(\mu, \sigma^2)
 $$
 
-where $\mu$ is $E(\mathbf{X})$ and $\sigma^2$ is variance of $\sigma^2$.
-
-How to compute $\text{Var}(\mathbf{X})$
+Then, the PDF of the normal distribution is:
 
 $$
-\begin{align*}
-\text{Var}(\mathbf{X}) &= E((\mathbf{X}-\mu)^2)\\
-&= E(\mathbf{X}^2)-[E(x)]^2
-\end{align*}
+f(x) = \frac{1}{\sqrt{2\pi} \sigma} e^{-\frac{(x - \mu)^2}{2 \sigma^2}}
 $$
 
-{++Proof++}
+where $\mu$ is $E(\mathbf{X})$ and $\sigma^2$ is the variance of $\mathbf{X}$.
+
+To compute $\text{Var}(\mathbf{X})$, we have:
 
 $$
-\begin{align*}
-\text{Var}(\mathbf{X}) &= E((\mathbf{X}-\mu)^2)\\
-&= E(\mathbf{X}^2-2\mu\mathbf{X}+\mu^2)\\
-&= E(\mathbf{X}^2)-E(2\mu\mathbf{X})+E(\mu^2)\\
-&= E(\mathbf{X}^2)-E(2\mu^2)+E(\mu^2)\\
-&= E(\mathbf{X}^2-\mu^2)\\
-\end{align*}
+\begin{aligned}
+\text{Var}(\mathbf{X}) &= E((\mathbf{X} - \mu)^2) \\
+&= E(\mathbf{X}^2) - [E(\mathbf{X})]^2
+\end{aligned}
 $$
 
-Example :
-
-Given $T\sim \text{Exp}(\lambda)$ where the PDF $f(t) = \lambda e^{\lambda t}$,
-
-Means : 
+**Proof:**
 
 $$
-\begin{align*}
-E(T)&= \int_0^\infty tf(t) \; dt\\
-&= \int_0^\infty t\;\lambda e^{-\lambda t} \; dt\\
-&=\Biggr[-te^{-\lambda t}\Biggr]_0^\infty + \int_0^\infty e^{-\lambda t}\\
-&= 0 -\frac{1}{\lambda} e^{-\lambda t}\Biggr]_0^\infty\\
-&= \frac{1}{\lambda}\\
-\end{align*}
+\begin{aligned}
+\text{Var}(\mathbf{X}) &= E((\mathbf{X} - \mu)^2) \\
+&= E(\mathbf{X}^2 - 2\mu \mathbf{X} + \mu^2) \\
+&= E(\mathbf{X}^2) - E(2\mu \mathbf{X}) + E(\mu^2) \\
+&= E(\mathbf{X}^2) - 2\mu E(\mathbf{X}) + \mu^2 \\
+&= E(\mathbf{X}^2) - \mu^2
+\end{aligned}
 $$
 
-Variance :
+### Example:
+
+Given $T \sim \text{Exp}(\lambda)$, where the PDF is $f(t) = \lambda e^{-\lambda t}$, the mean is:
 
 $$
-\begin{align*}
-\text{Var}(T)&= E(T^2)-[E(T)]^2\\
-\end{align*}
+\begin{aligned}
+E(T) &= \int_0^\infty t f(t) \, dt \\
+&= \int_0^\infty t \lambda e^{-\lambda t} \, dt \\
+&= \left[ -t e^{-\lambda t} \right]_0^\infty + \int_0^\infty e^{-\lambda t} \, dt \\
+&= 0 - \frac{1}{\lambda} \left[ e^{-\lambda t} \right]_0^\infty \\
+&= \frac{1}{\lambda}
+\end{aligned}
 $$
 
-where $E(T^2)$ :
+Variance:
 
 $$
-\begin{align*}
-E(T^2) &= \int_0^{\infty} t^2 \lambda e^{-\lambda t} \; dt\\
+\begin{aligned}
+\text{Var}(T) &= E(T^2) - [E(T)]^2
+\end{aligned}
+$$
+
+To compute $E(T^2)$, we have:
+
+$$
+\begin{aligned}
+E(T^2) &= \int_0^\infty t^2 \lambda e^{-\lambda t} \, dt \\
 &= \frac{2}{\lambda^2}
-\end{align*}
+\end{aligned}
 $$
 
-then, 
+Then:
 
 $$
-\begin{align*}
-\text{Var}(T)&= E(T^2)-[E(T)]^2\\
-&= \frac{2}{\lambda^2} -\frac{1}{\lambda^2}\\
+\begin{aligned}
+\text{Var}(T) &= \frac{2}{\lambda^2} - \frac{1}{\lambda^2} \\
 &= \frac{1}{\lambda^2}
-\end{align*}
+\end{aligned}
 $$
 
-Standart Deviation :
+Standard Deviation:
 
 $$
-\sigma(T) = \sqrt{\frac{1}{\lambda^2}} = \frac{1}{\lambda} 
+\sigma(T) = \sqrt{\frac{1}{\lambda^2}} = \frac{1}{\lambda}
 $$
 
-Median :
+Median:
 
 $$
-\begin{align*}
-F(t)&=\int_0^tf(t) \;dt\\
-&=1-e^{-\lambda t} = \frac{1}{2}
-\end{align*}
+\begin{aligned}
+F(t) &= \int_0^t f(t) \, dt \\
+&= 1 - e^{-\lambda t} = \frac{1}{2}
+\end{aligned}
 $$
 
-then, we can get $e^{-\lambda t} =\frac{1}{2}$ and $t=\frac{ln(2)}{\lambda}$, so
+Then, we solve $e^{-\lambda t} = \frac{1}{2}$, which gives:
 
 $$
-\text{Median}(T) = \frac{ln(2)}{\lambda}
+t = \frac{\ln(2)}{\lambda}
+$$
+
+Thus, the median is:
+
+$$
+\text{Median}(T) = \frac{\ln(2)}{\lambda}
 $$

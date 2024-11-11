@@ -1,6 +1,6 @@
 # **Exponential Distribution**
 
-Exponential distribution is a dsitribution of interval time $t$ between events. The exponential distribution is commonly used to model lifetimes. Given random variable $\mathbf{T}$ being the time.
+The exponential distribution describes the interval time $t$ between events. It is commonly used to model lifetimes. Given the random variable $\mathbf{T}$ as the time, we have:
 
 $$
 \mathbf{T} \sim \text{Exp}(\lambda)
@@ -12,7 +12,7 @@ $$
 f(x) = \lambda e^{-\lambda x}
 $$
 
-then, to compute probability by using CDF of exponential distribution,
+To compute the probability using the CDF of the exponential distribution, we get:
 
 $$
 \begin{align*}
@@ -38,9 +38,9 @@ P(\mathbf{T}>t+s | \mathbf{T}>s) &= \frac{P(\mathbf{T}>s+t \cap \mathbf{T}>t)}{P
 \end{align*}
 $$
 
-This property means that the probability of an event occurring in future do not depend on any past information. But, in the real world scenario, the probability in the future depends on past information, e.g. the lifetimes of bulbs if lifetimes approach approx avg. liftimes it is not "forgets" the past time counting.
+This property means that the probability of an event occurring in the future does not depend on any past information. However, in real-world scenarios, the probability in the future may depend on past information. For example, the lifetimes of bulbs may not "forget" past times, and as the lifetimes approach the average, the past information still has an influence.
 
-Thus, tackles that problems by using {==Hazard Rate==}. Hazard or failure rate is defined for non repairable populations with instaneous time.
+To address this, we use the {==Hazard Rate==}. The hazard or failure rate is defined for non-repairable populations with instantaneous time.
 
 $$
 \begin{align*}
