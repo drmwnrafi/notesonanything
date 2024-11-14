@@ -10,16 +10,16 @@ I know this model from [Hu-Po's stream](https://www.youtube.com/watch?v=SkvyrgSz
 !!! quote 
     We use conventional LLM architectures (autoregressive transformers) without any vision-specific modifications (no convolutions, no 2D positional embeddings) to maximize the models’ generality. - [X. Han, et.al (2024)](https://arxiv.org/pdf/2408.08459)
 
-## Pre-processing
+## **Pre-processing**
 !!! info
     For this blog, I only discuss image generation (the JPEG-LM paper also covers video generation). 
 
 JPEG-LM treats image generation like "text generation." Since LLAMA-2 is an autoregressive model, the input should be in discrete tokens. There are many techniques to discretize image data (images are continuous data), such as VQ-VAE, ViT, ImageGPT, etc. This model converts images to bytes using JPEG and AVC/H.264 codecs for images and videos, respectively. You can see how JPEG codecs look by opening a .jpg file in a text editor.
 
-Since the output of JPEG is in bytes, we can apply Byte-Pair Encoding (like encoding text in UTF-8, which also uses a byte representation). See [this blog post](https://drmwnrafi.github.io//notesonanything/AI/Tokenizer/bpe/) for more on BPE.
+Since the output of JPEG is in bytes, we can apply Byte-Pair Encoding (like encoding text in UTF-8, which also uses a byte representation). See [this blog post](../../tokenizer/bpe/) for more on BPE.
 
-## Training
-JPEG-LM is pre-trained with LLAMA-2 7B from scratch. You can check my explanation about LLAMA-2 [here](https://drmwnrafi.github.io/notesonanything/notesonanything/AI/Model/llama2/).
+## **Training**
+JPEG-LM is pre-trained with LLAMA-2 7B from scratch. You can check my explanation about LLAMA-2 [here](../llama2/).
 
 Pre-training on LLAMA-2 is a good idea since JPEG-LM and LLAMA-2 differ in domains. As you can see in the image above, the JPEG codec is unreadable by humans and meaningless in terms of human language.
 

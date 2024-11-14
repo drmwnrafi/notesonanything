@@ -11,6 +11,6 @@ This section focuses on the fundamentals of robotics, covering nonlinear control
 - Sensor Fusion
     - [Kalman Filter](../robotics/sensor_fusion/kf.md)
     - [Extended Kalman Filter](../robotics/sensor_fusion/ekf.md)
-    - [Point-to-Point Iterative Closest Point](../robotics/slam/icp_svd.md)
-    - [Point-to-Line Iterative Closest Point](../robotics/slam/lm_plicp.md)
+    - [Point-to-Point Iterative Closest Point](../robotics/slam/icp.md)
+    - [Point-to-Line Iterative Closest Point](../robotics/slam/plicp.md)
     - [Pose-Graph](../robotics/slam/pose_graph.md)

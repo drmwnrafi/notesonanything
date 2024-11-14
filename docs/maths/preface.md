@@ -32,5 +32,14 @@ Explore mathematical foundations essential for artificial intelligence and robot
     - [Proof of Central Limit Theorem](../maths/probability/proof_clt.md)  
 - Linear Algebra
     - [Singular Value Decomposition](../maths/linalg/svd.md)
+- Optimization
+    - [Least Squares](../maths/optimization/lsqrt.md)
+    - [Non-Linear Least Squares](../maths/optimization/non_lsqrt.md)
+    - [Approximation of Hessian](../maths/optimization/approx_hessian.md)
+    - Optimization Procedure
+        - [Gradient-Descent](../maths/optimization/grad_descent.md)
+        - [Newton-Rapshon](../maths/optimization/newt_rapshon.md)
+        - [Gauss-Newton](../maths/optimization/gauss_newt.md)
+        - [Levenberg Marquardt](../maths/optimization/lm.md)
 - Lie Theory
     - [Lie Theory for Robotics](../maths/lie_theory/for_robotics.md)

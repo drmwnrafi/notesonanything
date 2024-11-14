@@ -29,7 +29,7 @@ theme:
         icon: fontawesome/solid/moon 
         name: Switch to dark mode
       primary: white
-      accent: lime 
+      accent: deep orange
     - media: "(prefers-color-scheme: dark)"
       scheme: slate 
       toggle:
@@ -91,7 +91,7 @@ extra_javascript:
 extra_css:
   - assets/css/extra.css
   - assets/css/card.css
-  - https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css
+#   - https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css
 
 nav :
   - index.md
@@ -127,6 +127,15 @@ nav :
       - Central Limit Theorem : maths/probability/clf.md
     - Linear Algebra:
       - Singular Value Decomposition : maths/linalg/svd.md
+    - Optimization :
+      - Least Squares : maths/optimization/lsqrt.md
+      - Non-Linear Least Squares : maths/optimization/non_lsqrt.md
+      - Approximation of Hessian : maths/optimization/approx_hessian.md
+      - Optimization Procedure :
+        - Gradient-Descent : maths/optimization/grad_descent.md
+        - Newton-Rapshon : maths/optimization/newt_rapshon.md
+        - Gauss-Newton : maths/optimization/gauss_newt.md
+        - Levenberg Marquardt : maths/optimization/lm.md
     - Lie Theory :
       - Lie Theory for Robotics : maths/lie_theory/for_robotics.md
   
@@ -149,7 +158,6 @@ nav :
     - Tokenizers :
         - Byte-Pair Encoding : AI/tokenizer/bpe.md
 
-
   - Robotics :
     - Preface : robotics/preface.md
     - Nonlinear Control :
@@ -159,6 +167,6 @@ nav :
       - Kalman Filter : robotics/sensor_fusion/kf.md
       - Extended Kalman Filter : robotics/sensor_fusion/ekf.md
     - SLAM:
-      - Point to Point Iterative Closest Point : robotics/slam/icp_svd.md
-      - Point to Line Iterative Closest Point : robotics/slam/lm_plicp.md
+      - Point to Point Iterative Closest Point : robotics/slam/icp.md
+      - Point to Line Iterative Closest Point : robotics/slam/plicp.md
       - Pose-Graph : robotics/slam/pose_graph.md 

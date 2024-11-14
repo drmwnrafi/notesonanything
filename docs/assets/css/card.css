@@ -112,11 +112,6 @@
 	background: linear-gradient(135deg, rgba(255,255,255,.25) 0%,rgba(255,255,255,0) 60%);
 }
 
-html, body {
-    height: 100%;
-    width: 100%;
-}
-
 .flex-container {
     display: flex;
     flex-direction: row;
