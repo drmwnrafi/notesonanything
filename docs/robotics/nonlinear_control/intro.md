@@ -81,8 +81,12 @@ y_{i} = \text{output at time}\;i \\
 f(t_i, y_i) = \text{function determining the rate of change of y w.r.t t}
 $$
 
-<img src="../../../assets/media/underwater_1.png" width="800px" style="display: block; margin: auto;">
-<img src="../../../assets/media/underwater_2.png" width="800px" style="display: block; margin: auto;">
+<figure markdown="span">
+![](../media/underwater_1.png){width="800"}
+</figure>
+<figure markdown="span">
+![](../media/underwater_2.png){width="800"}
+</figure>
 
 In both graphs above, the system demonstrates that at high velocities, the coefficient of the "drag effect" produced by $|v|$ becomes larger, causing the system to reach equilibrium faster compared to when no thrust *u* is applied (or when $t > 5\;s$), which takes longer to reach a velocity of 0.
 
@@ -158,7 +162,9 @@ so,
 
 $$x(t) = x_0e^{-t}$$
 
-<img src="../../../assets/media/multiple_equil.gif" width="800px" style="display: block; margin: auto;">
+<figure markdown="span">
+![](../media/multiple_equil.gif){width="800"}
+</figure>
 
 If we directly use the response from the equation $\dot x = -x+x^2$, then:
 
@@ -188,7 +194,9 @@ thus obtained,
 
 $$x(t)=\frac{x_0e^{-t}}{1-x_0+x_0e^{-t}}$$
 
-<img src="../../../assets/media/multiple_equil_2.gif" width="800px" style="display: block; margin: auto;">
+<figure markdown="span">
+![](../media/multiple_equil_2.gif){width="800"}
+</figure>
 
 In the graph of the linearized system $x(t)=x_0e^{-t}$, regardless of its initial conditions, the system will eventually reach a stable state ($x = 0$) over time.
 
@@ -265,7 +273,9 @@ $$\dot x = y\\
 
 The *state space system* equation is visualized in the code below.
 
-<img src="../../../assets/media/van_der_pol.gif" width="800px" style="display: block; margin: auto;">
+<figure markdown="span">
+![](../media/van_der_pol.gif){width="800"}
+</figure>
 
 In the animation of the Van der Pol equation, there are **limit cycles** surrounding the origin point (0, 0) (equilibrium point).
 
@@ -367,7 +377,9 @@ $$
 p_1(0,0)\text{ stable for }a<0\text{ and unstable for }a>0\\
 p_{2,3} \left( \pm\sqrt{-\alpha}, 0 \right)\text{ unstable for }a<0$$
 
-<img src="../../../assets/media/bifurcations.png" width="800px" style="display: block; margin: auto;">
+<figure markdown="span">
+![](../media/bifurcations.png){width="800"}
+</figure>
 
 ## **Chaos**
 
@@ -383,245 +395,11 @@ With initial conditions:
 
 In this example, even a small difference in the initial conditions ($x_1$ and $x_2$) leads to vastly different trajectories over time. This illustrates the sensitivity of chaotic systems to initial conditions, where tiny differences can lead to divergent behaviors.
 
-<img src="../../../assets/media/chaos.png" width="800px" style="display: block; margin: auto;">
+<figure markdown="span">
+![](../media/chaos.png){width="800"}
+</figure>
 
 In the graph, it is evident that the plot of the initial condition $x_1$ over time and the initial condition $x_2$ over time exhibit only slight differences in the values of $x$ for $t<\pm21 \;s$. However, for $t>\pm 21\;s$, the system displays chaotic behavior, and the values of $x(t)$ for both initial conditions diverge significantly.
 
 !!! info
     Most of this section are my notes from <a href = "https://www.amazon.com/Applied-Nonlinear-Control-Jean-Jacques-Slotine/dp/0130408905">Applied Nonlinear Systems by Jean-Jacques Slotine and Weiping Li </a>.
-
-
-### **Appendix**
-
-1. **Underwater Vehicle Model Python Code**
-```py
-import matplotlib.pyplot as plt
-
-def euler_method(v0, u, delta_t, T):
-    # Initialization
-    t_values = [0]
-    v_values = [v0]
-    u_values = [u]
-
-    # Iterate using Euler Method
-    while t_values[-1] < T:
-        t = t_values[-1]
-        v = v_values[-1]
-
-        if 0 <= t <= 5:
-            u = u
-        elif 5 < t <= 10:
-            u = u-u
-
-        dv_dt = u - abs(v) * v
-        v_new = v + delta_t * dv_dt
-
-        t_values.append(t + delta_t)
-        v_values.append(v_new)
-        u_values.append(u)
-    return t_values, v_values, u_values
-
-def plot_(t_values, v_values, u_values, title):
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 6), width_ratios=[2, 3])
-    fig.suptitle(title)
-    ax1.plot(t_values, u_values, label = 'Thrust $\it{u}$')
-    ax1.set(xlabel='Time (s)', ylabel = 'Thrust $\it{u}$')
-    ax1.grid(True)
-    plt.subplots_adjust(wspace=0.3)
-    ax2.plot(t_values, v_values, label='Speed $\it{v}$')
-    ax2.set(xlabel='Time (s)', ylabel='Speed $\it{v}$')
-    ax2.legend()
-    ax2.grid(True)
-
-v0 = 0
-delta_t = 0.01
-T = 10
-
-u = 1 # External Control
-t_attempt_1, v_attempt_1, u_attempt_1 = euler_method(v0, u, delta_t, T)
-title_1 = f"Max Speed (thrust = 1 unit step): {max(v_attempt_1)}"
-plot_(t_attempt_1, v_attempt_1, u_attempt_1, title_1)
-plt.show()
-
-u = 10 # External Control
-t_attempt_2, v_attempt_2, u_attempt_2 = euler_method(v0, u, delta_t, T)
-title_2 = f"Max Speed (thrust = 10 unit step): {max(v_attempt_2)}"
-plot_(t_attempt_2, v_attempt_2, u_attempt_2, title_2)
-plt.show()
-```
-2. **Multiple Equilibrium Point 1**
-```py
-import numpy as np
-import matplotlib.pyplot as plt
-from ipywidgets import interact, widgets
-
-def solve_and_plot(initial_conditions, end_time):
-    t_values = np.linspace(0, end_time, 100)
-    plt.figure(figsize=(8, 6))
-
-    for x0 in initial_conditions:
-        # solution from linear funstion dx/dt = -x
-        x_values = x0 * np.exp(-t_values)
-        plt.plot(t_values, x_values, label=f'x(0) = {x0}')
-
-    plt.title('Solution to dx/dt = -x')
-    plt.xlabel('Time (t)')
-    plt.ylabel('x(t)')
-    plt.legend()
-    plt.grid(True)
-    plt.show()
-
-initial_conditions = [1, 2, 5, -1, -2]
-
-max_time = 6
-print(f"{blue} === {red} USE SLIDING BAR FOR VARIATION IN TIME (MAX = {blk}{max_time}) {blue} ===")
-
-interact(solve_and_plot, initial_conditions=widgets.fixed(initial_conditions), end_time=(0, max_time, 1))
-```
-
-3. **Multi Equilibrium Point 2**
-```py
-import numpy as np
-import matplotlib.pyplot as plt
-from ipywidgets import interact, widgets
-
-def solve_and_plot(initial_conditions, end_time):
-    t_values = np.linspace(0, end_time, 100)
-    plt.figure(figsize=(8, 6))
-
-    for x0 in initial_conditions:
-        x_values = (x0 * np.exp(-t_values))/(1 - x0 + (x0 * np.exp(-t_values)))
-        plt.plot(t_values, x_values, label=f'x(0) = {x0}')
-    
-    plt.xlabel('Time (t)')
-    plt.ylabel('x(t)')
-    plt.legend()
-    plt.grid(True)
-
-initial_conditions = [0.3, 0.5, -0.8, 1, 1.5]
-
-max_time = 6
-print(f"{blue} === {red} USE SLIDING BAR FOR VARIATION IN TIME (MAX = {blk}{max_time}) {blue} ===")
-interact(solve_and_plot, initial_conditions=widgets.fixed(initial_conditions), end_time=(0, max_time, 1))
-```
-
-4. Van der Pol Oscillator
-```py
-%%capture
-
-import numpy as np
-from scipy.integrate import solve_ivp
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-from IPython.display import HTML, display
-from matplotlib import animation, rc
-rc('animation', html='jshtml')
-
-plt.rcParams['animation.embed_limit'] = 2**128
-
-# Van der Pol oscillator differential equation
-def van_der_pol(t, z, mu):
-    x, y = z
-    dxdt = y
-    dydt =  - x + mu * (1 - x**2) * y
-    return [dxdt, dydt]
-
-def update_plot(frame, t, solutions, lines, markers):
-    for i in range(len(lines)):
-        lines[i].set_data(solutions[i].y[0, :frame], solutions[i].y[1, :frame])
-        markers[i].set_data([solutions[i].y[0, frame]], [solutions[i].y[1, frame]])
-    return lines + markers
-
-mu = 1.0 # Change this value to see the nature of limit cycles on Van der Pol oscillator
-
-initial_conditions_list = [[0.0, 0.0],
-                           [1.0, -3.0],
-                           [-1.7, 1.9],
-                           [1.0, 1.0],
-                           [2.5, 2.7],
-                           [-3.0 ,-3.0]]
-t_span = (0, 30)
-num_frames = 500
-
-solutions = []
-for initial_conditions in initial_conditions_list:
-    solution = solve_ivp(van_der_pol, t_span, initial_conditions, args=(mu,), t_eval=np.linspace(t_span[0], t_span[1], num_frames), method='RK45')
-    solutions.append(solution)
-
-fig, ax = plt.subplots(figsize=(8, 6))
-ax.set_xlim(-4, 4.5)
-ax.set_ylim(-4.5, 4)
-ax.set_xlabel('x(t)')
-ax.set_ylabel("x'(t)")
-ax.set_title('Van der Pol Oscillator Animation')
-
-colors = ['blue', 'green', 'red', 'cyan', 'lime', 'magenta']
-
-lines = [ax.plot([], [], lw=0.5, color=colors[_])[0] for _ in range(len(initial_conditions_list))]
-markers = [ax.plot([], [], 'o', color=colors[_])[0] for _ in range(len(initial_conditions_list))]
-
-fig.tight_layout()
-
-animation = FuncAnimation(fig, update_plot, frames=num_frames, fargs=(solutions[0].t, solutions, lines, markers), interval=50, blit=True)
-```
-
-5. **Bifurcations**
-```py
-import numpy as np
-import matplotlib.pyplot as plt
-
-a_values = np.linspace(-10, 10, 10000)
-
-x_e_0 = np.zeros_like(a_values)
-x_e_sqrt_a = []
-x_e_min_sqrt_a = []
-
-for i, a in enumerate(a_values):
-    if a > 0:
-        x_e_0[i] = 0
-    elif a == 0:
-        x_e_0[i] = 0
-    elif a < 0:
-        x_e_sqrt_a.append(np.sqrt(-a))
-        x_e_min_sqrt_a.append(-np.sqrt(-a))
-
-plt.figure(figsize=(8, 6))
-plt.plot(a_values[a_values <= 0], x_e_0[a_values <= 0], label="$x_1 = 0$ (Stable)", color='blue')
-plt.plot(a_values[a_values > 0], x_e_0[a_values > 0], label="$x_1 = 0$ (Unstable)", color='blue', linestyle='--')
-plt.plot(a_values[a_values < 0], x_e_sqrt_a, label="$x_2 = \\sqrt{-\\alpha}$ (Unstable)", color='red', linestyle='--')
-plt.plot(a_values[a_values < 0], x_e_min_sqrt_a, label="$x_3 = -\\sqrt{-\\alpha}$ (Unstable)", color='green', linestyle='--')
-plt.title("Equilibrium Points vs $\\alpha$ Values")
-plt.xlabel("$\\alpha$")
-plt.ylabel("$x_e$")
-plt.legend(loc='upper right')
-plt.grid(True)
-plt.show()
-```
-
-4. **Chaos**
-```py
-import numpy as np
-from scipy.integrate import solve_ivp
-import matplotlib.pyplot as plt
-
-def equation(t, y):
-    x, x_dot = y
-    return [x_dot, 6*np.sin(t) - 0.1*x_dot - x**5]
-
-t_span = (0, 50)
-t_eval = np.linspace(*t_span, 1000)
-
-sol1 = solve_ivp(equation, t_span, [2, 3], t_eval=t_eval, method='RK45')
-
-sol2 = solve_ivp(equation, t_span, [2.01, 3.01], t_eval=t_eval, method='RK45')
-
-plt.figure(figsize=(10, 5))
-plt.plot(sol1.t, sol1.y[0], label='$x_1$')
-plt.plot(sol2.t, sol2.y[0], label='$x_2$')
-plt.xlabel('Time (s)')
-plt.ylabel('x(t)')
-plt.title('Graph of $\ddot x + 0.1\dot x + x^5 = 6 \; sin \;t$')
-plt.legend()
-plt.grid(True)
-plt.show()
-```

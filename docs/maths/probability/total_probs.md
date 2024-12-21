@@ -30,9 +30,9 @@ P(A) &= P\left(\bigcup_i(A \cap B_i)\right) \\
 $$
 
 To make this more intuitive, let’s consider an illustration from Steve's video.
-
-<img src="../../../assets/media/total_probs.png" width="300px" style="display: block; margin: auto;">
-
+<figure markdown="span">
+![](../media/total_probs.png){width="300"}
+</figure>
 Based on the illustration, we have
 
 $$

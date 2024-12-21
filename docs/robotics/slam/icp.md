@@ -1,4 +1,4 @@
-# **Singular Value Decomposition - Iterative Closest Point**
+# **Point to Point Iterative Closest Point**
 
 Given two point clouds, $P$ and $Q$:
 
@@ -15,7 +15,10 @@ $$
 
 where $E$ is the loss function, $P$ is the set of source points, and $Q$ is the set of reference points. The objective of ICP is to determine the best transformation $(R, t)$ that aligns point cloud $P$ to point cloud $Q$.
 
-The centroids (center of mass) of point clouds $P$ and $Q$ are defined as:
+
+## **Closed-form Solution**
+
+Point to point ICP can solved by using {==Singular Value Decomposition==}. First, the centroids (center of mass) of point clouds $P$ and $Q$ are defined as:
 
 $$
 \mu_p = \frac{1}{N_Q} \sum_{n=1}^{N_Q} q_i\\
@@ -125,6 +128,8 @@ M = I = V^TRU\\
 R^T = V^TU\\
 R = UV^T
 $$
+
+## **Optimization Solution**
 
 ### **References** 
 

@@ -8,6 +8,7 @@ This section focuses on the fundamentals of robotics, covering nonlinear control
 - Nonlinear Control
     - [Introduction to Nonlinear Systems](../robotics/nonlinear_control/intro.md)
     - [Phase Plane Analysis](../robotics/nonlinear_control/phase_plane.md)
+    - [Geometric Control on SE(3)](../robotics/nonlinear_control/geom_quadcopter.md)
 - Sensor Fusion
     - [Kalman Filter](../robotics/sensor_fusion/kf.md)
     - [Extended Kalman Filter](../robotics/sensor_fusion/ekf.md)

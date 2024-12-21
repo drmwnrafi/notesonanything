@@ -43,6 +43,7 @@ theme:
 plugins:
   - social
   - search
+  - autorefs
 
 extra:
   extra_shadow_root_css:
@@ -73,6 +74,8 @@ markdown_extensions:
   - pymdownx.mark
   - pymdownx.tilde
   - pymdownx.caret
+  - pymdownx.blocks.caption
+  - md_in_html
   - attr_list
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
@@ -125,8 +128,6 @@ nav :
       - Covariance and Correlation : maths/probability/cov_corr.md
       - Tail Sum : maths/probability/tail_sum.md
       - Central Limit Theorem : maths/probability/clf.md
-    - Linear Algebra:
-      - Singular Value Decomposition : maths/linalg/svd.md
     - Optimization :
       - Least Squares : maths/optimization/lsqrt.md
       - Non-Linear Least Squares : maths/optimization/non_lsqrt.md
@@ -136,9 +137,15 @@ nav :
         - Newton-Rapshon : maths/optimization/newt_rapshon.md
         - Gauss-Newton : maths/optimization/gauss_newt.md
         - Levenberg Marquardt : maths/optimization/lm.md
+    - Algebra :
+      - Singular Value Decomposition : maths/algebra/svd.md
+      - Frobenius Inner Product : maths/algebra/frobenius_inner.md
     - Lie Theory :
-      - Lie Theory for Robotics : maths/lie_theory/for_robotics.md
-  
+      - Preface : maths/lie_theory/preface.md
+      - Lie Groups : maths/lie_theory/lie_groups.md
+      - Lie Algebra : maths/lie_theory/lie_algebra.md
+      - Adjoint : maths/lie_theory/adjoint.md
+
   - Artificial Intelligences :
     - Preface : AI/preface.md
     - Attention Mechanism :
@@ -160,13 +167,17 @@ nav :
 
   - Robotics :
     - Preface : robotics/preface.md
+    - Equations of Motion :
+      - Quadcopter Dynamics: robotics/models_sys/quadcopter.md
     - Nonlinear Control :
-      - Introduction to Nonlinear Systems: robotics/nonlinear_control/intro.md
-      - Phase Plane Analysis : robotics/nonlinear_control/phase_plane.md
+      - Applied Nonlinear Control :
+        - Introduction to Nonlinear Systems: robotics/nonlinear_control/intro.md
+        - Phase Plane Analysis : robotics/nonlinear_control/phase_plane.md
+      - Geometric Control on SE(3) : robotics/nonlinear_control/geom_quadcopter.md
     - Sensor Fusion :
       - Kalman Filter : robotics/sensor_fusion/kf.md
       - Extended Kalman Filter : robotics/sensor_fusion/ekf.md
     - SLAM:
       - Point to Point Iterative Closest Point : robotics/slam/icp.md
       - Point to Line Iterative Closest Point : robotics/slam/plicp.md
-      - Pose-Graph : robotics/slam/pose_graph.md 
+      - Pose-Graph : robotics/slam/pose_graph.md
