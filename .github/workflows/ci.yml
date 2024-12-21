@@ -21,6 +21,7 @@ jobs:
       - run: pip install mkdocs-material
       - run: pip install "mkdocs-material[imaging]" 
       - run: pip install pillow cairosvg
-      - run: pip install mkdocs-mermaid2-plugin
-      - run: pip install mkdocs-panzoom-plugin
+      - run: pip install mkdocs-autorefs
+      # - run: pip install mkdocs-mermaid2-plugin
+      # - run: pip install mkdocs-panzoom-plugin
       - run: mkdocs gh-deploy --force
