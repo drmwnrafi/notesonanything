@@ -1,4 +1,6 @@
-# **Geometric Control on SE(3)**
+# **Geometric Control of Quadrotor on SE(3)**
+
+!!! warning "This Page is under construction"
 
 Nonlinear dynamics naturally evolve on non-flat spaces, and controlling them using flat-space representations often introduces singularities and global instability. For systems like quadcopters, whose dynamics lie on the manifold $SE(3)$, geometric control offers a framework to design controllers that intrinsically respect the manifold’s structure. 
 
@@ -38,7 +40,7 @@ where :
 
     Lie Theory for robotics explain more [here](../../../maths/lie_theory/preface/).
 
-## **The Tracking Controls**
+## **The Error Functions**
 
 [Lee, et. al](#ref1) use multiple controller to achieve asymptotic output tracking of both attitude and position; attitude control, position control, and velocity control. 
 Complex flight maneuver can be defined by specifying a concatenation of flight modes together with conditions for switching between them.
@@ -48,11 +50,11 @@ Complex flight maneuver can be defined by specifying a concatenation of flight m
 This type of control mode requires desired attitude $R_d(t) \in SO(3)$ and current attitude $R(t) \in SO(3)$ are function of time, where represented as $R_d$ and $R$ for simplified the derivation. Then, they choose the error function on $SO(3) \times SO(3)$ as follows :
 
 $$
-\Psi(R, R_d) = \frac{1}{2}\mathrm{tr} \left[I_3-R_d^TR \right] \tag{5}
+\Gamma(R, R_d) = \frac{1}{2}\mathrm{tr} \left[I_3-R_d^TR \right] \tag{5}
 $$
 
 $R_d^TR$ is relative attitude that transforms a vector from the current frame to the desired frame. 
-If current attitude $R$ align to $R_d$ it makes $R_d^TR$ equals the identity matrix $I$, and the error function $\Psi(R, R_d)$ becomes zero. 
+If current attitude $R$ align to $R_d$ it makes $R_d^TR$ equals the identity matrix $I$, and the error function $\Gamma(R, R_d)$ becomes zero. 
 
 ??? question "How $R_d^TR=I$?"
     This follows from the fundamental axiom of groups, which states that the product of an element and its inverse is the identity element: 
@@ -73,41 +75,41 @@ Analyze **Eq. (5)**,
 
 $$
 \begin{align}
-\Psi(R, R_d) &= \frac{1}{2}\left[\mathrm{tr}(I_3)-\mathrm{tr}(R_d^TR)\right]\tag{6}\\
+\Gamma(R, R_d) &= \frac{1}{2}\left[\mathrm{tr}(I_3)-\mathrm{tr}(R_d^TR)\right]\tag{6}\\
 &= \frac{1}{2}\left[ 3-1-2\cos(\theta) \right]\tag{7}\\
 &= 1-\cos(\theta)\tag{8}\\
 \end{align}
 $$
 
-where $\theta$ is angle of rotation. The function $\Psi$ is locally positive definite $(\Psi \ge 0)$ when relative angle less than $180^\circ$. 
+where $\theta$ is angle of rotation. The function $\Gamma$ is locally positive definite $(\Gamma \ge 0)$ when relative angle less than $180^\circ$. 
 
 - The $\cos(\theta) \in [−1, 1]$ for $\theta \in [0, \pi]$.
-- $\Psi(R, R_d)=0$, if $\theta=0^\circ$. 
-- $\Psi(R, R_d) > 0$, for $0^\circ < \theta < 180^\circ$.
+- $\Gamma(R, R_d)=0$, if $\theta=0^\circ$. 
+- $\Gamma(R, R_d) > 0$, for $0^\circ < \theta < 180^\circ$.
 
 ??? question "Why exclude $\theta = 180^\circ$?"
 
 
-Based on [[2] (Chapter 11)](#ref2), we can take attitude error $e_R$ by take derivative of error function $\Psi \in SO(3) \times SO(3)$ 
+Based on [[2] (Chapter 11)](#ref2), we can take attitude error $e_R$ by take derivative of error function $\Gamma \in SO(3) \times SO(3)$ 
 with variation of rotation matrix expressed as $\partial R = R\hat{\omega}$ for $\omega \in \mathbb{R}^3$.
 Then, the variational derivative when dealing with variation of rotation expressed as follows :
 
 $$
-D_R\Psi(R, R_d) \cdot \partial R \tag{9}
+D_R\Gamma(R, R_d) \cdot \partial R \tag{9}
 $$
 
 By using $\frac{\partial}{\partial X} \mathrm{tr}(XA) = A^T$ [[3]](#ref3)
 
 $$
-D_R \Psi(R, R_d) = \frac{\partial \Psi (R, R_d)}{\partial R} = -\frac{1}{2}R_d \tag{10}
+D_R \Gamma(R, R_d) = \frac{\partial \Gamma (R, R_d)}{\partial R} = -\frac{1}{2}R_d \tag{10}
 $$
 
-Then, apply [Frobenius inner product](../../../maths/) for both $D_R \Psi$ and $\partial R$ 
+Then, apply [Frobenius inner product](../../../maths/) for both $D_R \Gamma$ and $\partial R$ 
 , $\left< A, B \right> = \mathrm{tr}(A^TB)$
 
 $$
 \begin{align}
-\left< D_R\Psi(R, R_d), \partial R \right> &= \mathrm{tr}\left(\left( -\frac{1}{2}R_d \right)^T \partial R \right) \tag{11}\\
+\left< D_R\Gamma(R, R_d), \partial R \right> &= \mathrm{tr}\left(\left( -\frac{1}{2}R_d \right)^T \partial R \right) \tag{11}\\
 &= \mathrm{tr}\left(-\frac{1}{2}R_d^T \partial R \right) \tag{12}\\
 &= -\frac{1}{2} \mathrm{tr}\left(R_d^T \partial R \right) \tag{13}\\
 &= -\frac{1}{2} \mathrm{tr}\left(R_d^T R\hat{\omega} \right) \tag{14}\\
@@ -119,7 +121,7 @@ To construct the skew-symmetric, we can use $\hat{a} = \frac{1}{2}(A-A^T)$ for $
 
 $$
 \begin{align}
-\left< D_R\Psi(R, R_d), \partial R \right> &= -\frac{1}{2}\cdot \frac{1}{2} \mathrm{tr}\left(\left(R_d^T R \right)\hat{\omega} \right) \tag{15}\\
+\left< D_R\Gamma(R, R_d), \partial R \right> &= -\frac{1}{2}\cdot \frac{1}{2} \mathrm{tr}\left(\left(R_d^T R \right)\hat{\omega} \right) \tag{15}\\
 &= -\frac{1}{2} \cdot \frac{1}{2}\mathrm{tr}\left(\left(R_d^T R - \left(R_d^T R\right)^T \right)\hat{\omega} \right) \tag{16}\\
 &= \frac{1}{2} \left( -\frac{1}{2} \mathrm{tr}\left(\left[R_d^T R - R^TR_d\right]\hat{\omega}\right) \right) \tag{17}\\
 &= \frac{1}{2}\left(R_d^T R - R^TR_d\right)^\vee \cdot \omega \tag{18}\\
@@ -200,7 +202,7 @@ e_\Omega = \Omega - R^TR_d{\Omega}_d \tag{39}
 $$
 
 ??? info "Angular Velocity Error $e_\Omega$ from Lie Groups Adjoint Action"
-    Since tangent $\dot{R}\in \mathsf{T}_RSO(3)$ and $\dot{R}_d \mathsf{T}_{R_d}SO(3)$ are "live" on different tangent spaces, so we need "transform" one of them. Thanks to adjoint action that distinguished operator on Lie algebra to provide that "transformation".
+    Since tangent $\dot{R}\in \mathsf{T}_RSO(3)$ and $\dot{R}_d \mathsf{T}_{R_d}SO(3)$ are "live" on different tangent spaces, so we need "transform" one of them. Thanks to [adjoint action](../../../maths/lie_theory/adjoint/), a distinguished operator on the Lie algebra, this transformation can be achieved.
 
     We have to "transform" $\dot{R}_d$ to $\mathsf{T}_RSO(3)$. The relative rotation $R_{rel}$ of it expressed as $R^TR_d$ to rotate the vector from $R_d$-frame to $R$-frame. Where $R_{rel}$ is an element of $SO(3)$, then
 
@@ -224,10 +226,26 @@ $$
     e_\Omega = \Omega - R^TR_d\Omega_d
     $$
 
-### **Position Control**
+### **Position and Velocity Control**
 
+Error on position control $e_p$ pretty straightforward, we need desired position $p_d \in \mathbb{R}^3$, current position $p_d \in \mathbb{R}^3$, desired linear velocity $\dot{p}_d \in \mathbb{R}^3$, and current velocity $v \in \mathbb{R}^3$. 
 
-### **Velocity Control**
+$$
+\begin{align}
+e_p = p - p_d \tag{40}\\
+e_v = v - \dot{p}_d \tag{41}
+\end{align}
+$$
+
+## **Differential Flatness**
+
+We applied differential flatness approach from Mellinger et. al [[7]](#ref7) for the controller. Differentially flat systems are those in which all states can be defined by using the outputs and its derivatives. Mellinger et. al [[7]](#ref7) use 4-th derivatives of positions (snap) and 2-nd derivatives of orientation (yaw) to determined all quadcopter states.
+
+$$
+\sigma = \left[ x, y, z, \psi \right]^T
+$$
+
+We donated position of CoG as $p = [x, y, z]$ and orientation w.r.t z-axis as $\psi$.
 
 
 #### References
@@ -249,3 +267,6 @@ $$
 
 <a id="ref6">[6] [A micro Lie theory for state estimation in robotics
 ](https://arxiv.org/pdf/1812.01537)</a>
+
+<a id="ref7">[6] [Minimum snap trajectory generation and control for quadrotors
+](https://ieeexplore.ieee.org/document/5980409)</a>
