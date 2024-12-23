@@ -1,6 +1,6 @@
 # **Geometric Control of Quadrotor on SE(3)**
 
-!!! warning "This Page is under construction"
+!!! warning "This page is under construction"
 
 Nonlinear dynamics naturally evolve on non-flat spaces, and controlling them using flat-space representations often introduces singularities and global instability. For systems like quadcopters, whose dynamics lie on the manifold $SE(3)$, geometric control offers a framework to design controllers that intrinsically respect the manifold’s structure. 
 
@@ -12,27 +12,29 @@ Although quadcopters are underactuated systems with four inputs and six degrees 
     This page focuses on derivation of the error equations from [[1]](#ref1) and providing some intuition behind them. We don't explain the dynamics of quadcopters here; for that, you can refer to [Quadcopter Dynamics](../../models_sys/quadcopter/) for details on quadcopter equations of motion.
 
 Quadcopters equations of motion in short, 
+<a id="eq1234"></a>
 
 $$
 \begin{gather}
 \dot{x} = v \tag{1}\\
-m \dot{v} = mge_3-fRe_3 \tag{2}\\
+\dot{v} = gz_W-\frac{f}{m}Rz_B \tag{2}\\
 \dot{R} = R \hat{\Omega} \tag{3}\\
-J\dot{\Omega} + \Omega \times J \Omega = M \tag{4}\\
+J\dot{\Omega} + \Omega \times J \Omega = \tau \tag{4}\\
 \end{gather}
 $$
 
 where :
 
-- $m \in \mathbb{R}$ is the total mass.  
-- $J \in \mathbb{R}^{3 \times 3}$ is the inertia matrix with respect to the body-fixed frame.  
-- $R \in SO(3)$ is the rotation matrix from the body frame to the inertial frame.  
-- $\dot{x}$ is the position derivative (velocity) in the inertial frame.  
-- $\dot{v}$ is the acceleration in the inertial frame.  
+- $m \in \mathbb{R}$ is the total mass  
+- $J \in \mathbb{R}^{3 \times 3}$ is the inertia matrix with respect to the body-fixed frame  
+- $R \in SO(3)$ is the rotation matrix from the body frame to the inertial frame
+- $\dot{x}$ is the position derivative (velocity) in the inertial frame
+- $\dot{v}$ is the acceleration in the inertial frame
 - $\hat{\Omega}$ is the skew-symmetric matrix of angular velocity $\Omega$  
-- $f$ is the total thrust force.  
-- $M$ is the moment vector applied to the body.
-- $e_3$ is z-axis in inertial reference frame.
+- $f$ is the total thrust force
+- $\tau$ is the moment vector applied to the body-fixed frame
+- $z_W$ is z-axis in inertial reference frame
+- $z_B$ is z-axis in body frame
 
 ??? note "Lie Algebra $\mathfrak{g}$ $\leftrightharpoons$ Euclidean Space $\mathbb{R}$"
     - *Hat map* $(\hat{\cdot}) : \mathbb{R}^3 \rightarrow \mathfrak{so}(3)$ for mapping vector in $\mathbb{R}^3$ to lie algebra of $SO(3)$.
@@ -45,7 +47,7 @@ where :
 [Lee, et. al](#ref1) use multiple controller to achieve asymptotic output tracking of both attitude and position; attitude control, position control, and velocity control. 
 Complex flight maneuver can be defined by specifying a concatenation of flight modes together with conditions for switching between them.
 
-### **Attitude Control**
+### **Attitude Error**
 
 This type of control mode requires desired attitude $R_d(t) \in SO(3)$ and current attitude $R(t) \in SO(3)$ are function of time, where represented as $R_d$ and $R$ for simplified the derivation. Then, they choose the error function on $SO(3) \times SO(3)$ as follows :
 
@@ -196,6 +198,7 @@ $$
 $$
 
 In vector space $e_\Omega \in \mathbb{R}^3$,
+<a id="eq39"></a>
 
 $$
 e_\Omega = \Omega - R^TR_d{\Omega}_d \tag{39}
@@ -226,9 +229,10 @@ $$
     e_\Omega = \Omega - R^TR_d\Omega_d
     $$
 
-### **Position and Velocity Control**
+### **Position and Velocity Errors**
 
-Error on position control $e_p$ pretty straightforward, we need desired position $p_d \in \mathbb{R}^3$, current position $p_d \in \mathbb{R}^3$, desired linear velocity $\dot{p}_d \in \mathbb{R}^3$, and current velocity $v \in \mathbb{R}^3$. 
+Error on position control $e_p$ pretty straightforward, we need desired position $p_d \in \mathbb{R}^3$, current position $p_d \in \mathbb{R}^3$, 
+desired linear velocity $\dot{p}_d \in \mathbb{R}^3$, and current velocity $v \in \mathbb{R}^3$. 
 
 $$
 \begin{align}
@@ -237,16 +241,65 @@ e_v = v - \dot{p}_d \tag{41}
 \end{align}
 $$
 
-## **Differential Flatness**
+## **Control Law**
 
-We applied differential flatness approach from Mellinger et. al [[7]](#ref7) for the controller. Differentially flat systems are those in which all states can be defined by using the outputs and its derivatives. Mellinger et. al [[7]](#ref7) use 4-th derivatives of positions (snap) and 2-nd derivatives of orientation (yaw) to determined all quadcopter states.
+Three different types of control modes derive different control law. 
+We derived thrust $f$ and torque $\tau$ control law by using Eq.[(2)](#eq1234) and Eq.[(3)](#eq1234), respectively. 
+To recall those,
 
 $$
-\sigma = \left[ x, y, z, \psi \right]^T
+\dot{v} = gz_W-\frac{f}{m}Rz_B\\
+J\dot{\Omega} + \Omega \times J \Omega = \tau\\
 $$
 
-We donated position of CoG as $p = [x, y, z]$ and orientation w.r.t z-axis as $\psi$.
 
+### **Attitude Control**
+
+In this mode, it is possible to neglected translation equation of motion [Eq. (2)](#eq1234).
+Then, we need to define gain $k_R \in \mathbb{R}^{3}_+$ for rotation and $k_\Omega \in \mathbb{R}^3_+$ for angular velocity.
+Chosen $f$ and $\tau$ input control : 
+<a id="eq42"></a>
+
+$$
+\tau = -k_Re_R -k_\Omega e_\Omega + \Omega \times J\Omega - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) \tag{42}
+$$
+
+
+Take derivative of time of angular velocity error [$\dot{e}_\Omega$](#eq39) to get moments for quadcopter $\tau$.
+<a id="eq4346"></a>
+
+$$
+\begin{align}
+\dot{e}_\Omega &= \frac{d}{dt} \Omega-R^TR_d\Omega_d \tag{43}\\
+&= \dot{\Omega}-\dot{R}^TR_d\Omega_d - R^T\dot{R}_d\Omega_d - RR_d^T\dot{\Omega}_d \tag{44} \\ 
+&= \dot{\Omega}-(R\hat{\Omega})^TR_d\Omega_d - R^T(R_d\hat{\Omega}_d)\Omega_d - RR_d^T\dot{\Omega}_d \tag{45}\\ 
+&= \dot{\Omega}+\hat{\Omega}R^TR_d\Omega_d - RR_d^T\dot{\Omega}_d \tag{46}\\ 
+\end{align}
+$$
+
+Note that $\hat{\Omega}^T=-\hat{\Omega}$, $\dot{R}=R\hat{\Omega}$ and $\hat{x}x = 0$. Subtitute [Eq. (42)](#eq42) to [Eq. (4)](#eq1234) 
+<a id="eq4748"></a>
+
+$$
+\require{cancel}
+\begin{align}
+J\dot{\Omega} + \cancel{\Omega \times J \Omega} &= -k_Re_R -k_\Omega e_\Omega + \cancel{\Omega \times J \Omega} - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) \tag{47}\\
+J\dot{\Omega} &= -k_Re_R -k_\Omega e_\Omega - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) \tag{48}
+\end{align}
+$$
+
+Subtitute [Eq. (48)](#eq4748) to [Eq. (46)](#eq4346). It leads to,
+
+$$
+\begin{align}
+J\dot{e}_\Omega &= J\dot{\Omega}+J \left(\hat{\Omega}R^TR_d\Omega_d - RR_d^T\dot{\Omega}_d\right) \tag{49}  \\
+J\dot{e}_\Omega &= -k_Re_R -k_\Omega e_\Omega - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) + J(\hat{\Omega}R^TR_d\Omega_d - R^TR_d\dot{\Omega}_d) \tag{50}  \\
+J\dot{e}_\Omega &= -k_Re_R -k_\Omega e_\Omega \tag{51}  \\
+\end{align}
+$$
+
+### **Position Control**
+### **Velocity Control**
 
 #### References
 
@@ -268,5 +321,5 @@ We donated position of CoG as $p = [x, y, z]$ and orientation w.r.t z-axis as $\
 <a id="ref6">[6] [A micro Lie theory for state estimation in robotics
 ](https://arxiv.org/pdf/1812.01537)</a>
 
-<a id="ref7">[6] [Minimum snap trajectory generation and control for quadrotors
+<a id="ref7">[7] [Minimum snap trajectory generation and control for quadrotors
 ](https://ieeexplore.ieee.org/document/5980409)</a>

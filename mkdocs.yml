@@ -181,3 +181,5 @@ nav :
       - Point to Point Iterative Closest Point : robotics/slam/icp.md
       - Point to Line Iterative Closest Point : robotics/slam/plicp.md
       - Pose-Graph : robotics/slam/pose_graph.md
+    - System Identification:
+      - WyNDA : robotics/sys_iden/wynda.md
