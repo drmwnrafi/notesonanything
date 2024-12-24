@@ -129,8 +129,6 @@ R^T = V^TU\\
 R = UV^T
 $$
 
-## **Optimization Solution**
-
 ### **References** 
 
 - Sorkine-Hornung, O., & Rabinovich, M. (2017). Least-squares rigid motion using svd. *Computing*, *1*(1), 1-5. https://igl.ethz.ch/projects/ARAP/svd_rot.pdf

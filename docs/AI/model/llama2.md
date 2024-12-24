@@ -7,7 +7,7 @@ Paper PDF : [https://arxiv.org/pdf/2307.09288](https://arxiv.org/pdf/2307.09288)
 
 Llama 2 is a decoder-only transformer model from Meta.
 
-<img src="../../../assets/media/llama2.png" width="200px" style="display: block; margin: auto;" alt="LLaMA 2 Architecture">
+<img src="../../media/llama2.png" width="200px" style="display: block; margin: auto;" alt="LLaMA 2 Architecture">
 
 
 ## **Rotary Positional Embeddings (RoPE)**
@@ -66,7 +66,7 @@ Now, we can see from the equation above that it handles relative position, shown
 ## **Root Mean Square Normalization (RMS Norm)**
 The Vanilla Transformers Model (Encoder-Decoder) uses Layer Norm for normalization. LayerNorm normalizes the activations across the features dimension for each individual input (instead of across the batch, as in BatchNorm). We use normalization because we don’t want our network learning in one direction due to large gradients between layers.
 
-<img src="../../../assets/media/layer_batch_norm.png" width="500px" style="display: block; margin: auto;">
+<img src="../../media/layer_batch_norm.png" width="500px" style="display: block; margin: auto;">
 
 LayerNorm takes the means and variances of each individual input, re-centering and re-scaling the input. LayerNorm can be determined by:
 
@@ -85,7 +85,7 @@ $$n_{groups} = \frac{n_{Q heads}}{n_{{KV heads}}}$$
 
 Multi-Head Attention (MHA) slows during inference due to the large memory bandwidth cost when loading keys and values [N. Shazeer (2019)](https://arxiv.org/pdf/1911.02150). As explained by [Umar Jamil](https://www.youtube.com/watch?v=Mn_9W1nCFLo), GPU calculations are faster than memory bandwidth (the speed at which the GPU can access data in VRAM). It’s better to (1) perform the same operations on the same tensor N times than (2) perform the same operations on different tensors N times because, in case (1), the tensor is only traveled once. This is the rationale behind Multi-Query Attention (MQA); MQA uses one set of keys and values shared across all queries, requiring less KV cache than MHA and speeding up decoder inference. [J. Ainslie (2023)](https://arxiv.org/pdf/2305.13245) stated that MQA can lead to quality degradation and training instability, so they proposed Grouped Query Attention (GQA), which balances quality and speed during training and inference.
 
-<img src="../../../assets/media/gqa.png" width="400px" style="display: block; margin: auto;" alt="GQA representation">
+<img src="../../media/gqa.png" width="400px" style="display: block; margin: auto;" alt="GQA representation">
 
 In the graphic above, when KV heads = 1 ($n_{groups} = n_{Q heads}$), it’s more like MHA, and when KV heads = Q heads ($n_{groups} = 1$), it’s more like MQA.
 
@@ -128,7 +128,7 @@ In the paper, the authors reduce the second dimension of matrices $\bf{W}$ and $
 
 However, the exact reason why SwiGLU outperforms other activation functions is not explicitly defined in the paper.
 
-<img src="../../../assets/media/swiglu_paper.png" alt="image" width="700px" style="display: block; margin: auto;"/>
+<img src="../../media/swiglu_paper.png" alt="image" width="700px" style="display: block; margin: auto;"/>
 
 ## **Appendix**
 

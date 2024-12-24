@@ -164,11 +164,12 @@ nav :
         - U2-Net : AI/model/u2_net.md
     - Tokenizers :
         - Byte-Pair Encoding : AI/tokenizer/bpe.md
+    - SpinalNet : AI/spinal.md
 
   - Robotics :
     - Preface : robotics/preface.md
     - Equations of Motion :
-      - Quadcopter Dynamics: robotics/models_sys/quadcopter.md
+      - Quadcopter: robotics/eq_of_motion/quadcopter.md
     - Nonlinear Control :
       - Applied Nonlinear Control :
         - Introduction to Nonlinear Systems: robotics/nonlinear_control/intro.md

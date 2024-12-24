@@ -4,14 +4,19 @@ This section focuses on the fundamentals of robotics, covering nonlinear control
 
 ## **Table of Contents**
 
-- [Preface](../robotics/preface.md)
+- [Preface](../preface/)
+- Equation of Motion
+    - [Quadcopter](../eq_of_motion/quadcopter/)
 - Nonlinear Control
-    - [Introduction to Nonlinear Systems](../robotics/nonlinear_control/intro.md)
-    - [Phase Plane Analysis](../robotics/nonlinear_control/phase_plane.md)
-    - [Geometric Control on SE(3)](../robotics/nonlinear_control/geom_quadcopter.md)
+    - [Introduction to Nonlinear Systems](../nonlinear_control/intro/)
+    - [Phase Plane Analysis](../nonlinear_control/phase_plane/)
+    - [Geometric Control on SE(3)](../nonlinear_control/geom_quadcopter/)
 - Sensor Fusion
-    - [Kalman Filter](../robotics/sensor_fusion/kf.md)
-    - [Extended Kalman Filter](../robotics/sensor_fusion/ekf.md)
-    - [Point-to-Point Iterative Closest Point](../robotics/slam/icp.md)
-    - [Point-to-Line Iterative Closest Point](../robotics/slam/plicp.md)
-    - [Pose-Graph](../robotics/slam/pose_graph.md)
+    - [Kalman Filter](../sensor_fusion/kf/)
+    - [Extended Kalman Filter](../sensor_fusion/ekf/)
+- SLAM
+    - [Point-to-Point Iterative Closest Point](../slam/icp/)
+    - [Point-to-Line Iterative Closest Point](../slam/plicp/)
+    - [Pose-Graph](../slam/pose_graph/)
+- system Indentification
+    - [WyNDA](../sys_iden/wynda/)

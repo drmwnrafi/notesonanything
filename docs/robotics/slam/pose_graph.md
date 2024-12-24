@@ -169,7 +169,7 @@ $$
 
 ### **References**
 
-- [[SLAM][En] Errors and Jacobian Derivations for SLAM Part 1](https://alida.tistory.com/69#5.-relative-pose-error-pgo)
+- [[SLAM]Errors and Jacobian Derivations for SLAM Part 1](https://alida.tistory.com/69#5.-relative-pose-error-pgo)
 
 - [A Technical Walkthrough of the SLAM Back-end](https://www.youtube.com/watch?v=FhwFyA0NQkE&t=4639s)
 

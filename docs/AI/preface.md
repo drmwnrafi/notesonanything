@@ -4,20 +4,21 @@ This section covers foundational concepts and advanced techniques in artificial 
 
 ## **Table of Contents**
 
-- [Preface](../AI/preface.md)
+- [Preface](../preface/)
 - Attention Mechanism
-    - [Additive Attention](../AI/attention/add_att.md)
-    - [Dot Product Attention](../AI/attention/dot_att.md)
-    - [Scaled-Dot Product Attention](../AI/attention/scaled_dot_att.md)
-    - [Multi-Head Attention](../AI/attention/mha.md)
-    - [Multi-Query Attention](../AI/attention/mqa.md)
-    - [Grouped Query Attention](../AI/attention/gqa.md)
+    - [Additive Attention](../attention/add_att/)
+    - [Dot Product Attention](../attention/dot_att/)
+    - [Scaled-Dot Product Attention](../attention/scaled_dot_att/)
+    - [Multi-Head Attention](../attention/mha/)
+    - [Multi-Query Attention](../attention/mqa/)
+    - [Grouped Query Attention](../attention/gqa/)
 - Models
     - Large Language Models
-        - [JPEG-LM](../AI/model/jpeg-lm.md)
-        - [LLAMA-2](../AI/model/llama2.md)
+        - [JPEG-LM](../model/jpeg-lm/)
+        - [LLAMA-2](../model/llama2/)
     - Computer Vision
-        - [U-Net](../AI/model/u_net.md)
-        - [U2-Net](../AI/model/u2_net.md)
+        - [U-Net](../model/u_net/)
+        - [U2-Net](../model/u2_net/)
 - Tokenizers
-    - [Byte-Pair Encoding](../AI/tokenizer/bpe.md)
+    - [Byte-Pair Encoding](../tokenizer/bpe/)
+- [SpinalNet](../spina/)

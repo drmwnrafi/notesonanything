@@ -62,7 +62,7 @@ $$
 
 Each coordinate determines how much each of the 64 basis cosine functions influences the block. The Discrete Cosine Transform (DCT) converts spatial-domain data to frequency-domain data, helping to determine which pixels can be removed.
 
-<img src ="../../../assets/media/dct.png" width = 350px style="display: block; margin: auto;">
+<img src ="../../media/dct.png" width = 350px style="display: block; margin: auto;">
 <div align="center">64 basis cosine patterns</div>
 
 These 64 basis cosines are the same for all images.
@@ -93,7 +93,7 @@ $$
 
 Each quantized 8x8 block is organized in a zigzag pattern, followed by run-length encoding and then Huffman encoding for further compression.
 
-<img src="../../../assets/media/zz_list.png" width = 350px style="display: block; margin: auto;">
+<img src="../../media/zz_list.png" width = 350px style="display: block; margin: auto;">
 
 ### **Run-Length Encoding**
 
