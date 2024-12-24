@@ -1,45 +1,58 @@
 # **Pose Graph SLAM**
+
+Given error function $e_{ij}(x)$, which represent the error from node-$i$ to node-$j$,
+
 $$
+\begin{align}
 e_{ij}(x) = z_{ij}-\hat{z}(x_i, x_j)
+\end{align}
 $$
 
-$e_{ij}(x)$ adalah fungsi error, $z$ berdasarkan measurement model, $\hat{z}$ berdasarkan 
-
-model matematika, dan $x$ merupakan state.  Diasumsikan error pada data sensor memiliki distribusi Gaussian,
+Where $z$ is the value from the measurement model (such as [PLICP](../plicp/) or [ICP](../icp/)), $\hat{z}$ is the predicted value from the math model, and $x$ represents the states. Assume the uncertainty on the sensor follows a Gaussian distribution.
 
 $$
+\begin{align}
 p(x)=\frac{1}{\sqrt{2\pi^n|\Sigma|}}\exp\left(-\frac{1}{2}(x-\mu)^T\Omega(x-\mu)\right)\sim \mathcal{N}(\mu, \Sigma)
+\end{align}
 $$
 
-$\Omega = \Sigma^{-1}$ merupakan information matrix, sehingga error merupakan multivariate normal distribution dengan $\mu=\hat{z}$ dan varians $\Sigma$. Dengan menerapkan log-likelihood pada $p(x)$, state optimal $x^*$ dapat diperoleh dengan Maximum Likelihood Estimization, $x$ optimal apabila $\text{ln}(p(x))$ mencapai nilai maksimum.
+$\Omega = \Sigma^{-1}$ is the information matrix, so the error follows a multivariate normal distribution with mean $\mu = \hat{z}$ and variance $\Sigma$. By applying the log-likelihood to $p(x)$, the optimal state $x^*$ can be obtained through Maximum Likelihood Estimation. The optimal $x$ occurs when $\text{ln}(p(x))$ reaches its maximum value.
 
 $$
+\begin{align}
 x^*=\text{argmax }p(x) = \underset{x}{\text{argmin }}e_{ij}^T\Omega_{ij}e_{ij}
+\end{align}
 $$
 
-Dikarenakan adanya kumulatif error pada trajectory, yang merupakan error bukan hanya pada 1 pose melainkan terdapat kemungkinan error terjadi lebih dari 1 pose. Sehingga fungsi error merupakan jumlah dari setiap error pada setiap pose,
+Due to the cumulative error in the trajectory, which is not just an error at a single pose but rather a possibility that the error occurs at multiple poses, the error function is the sum of the errors at each pose.
 
 $$
+\begin{align}
 F(x) = e_{ij}^T\Omega_ie_{ij}\\
 x^*=\underset{x}{\text{argmin }} \sum_{i,j}F(x_{ij})
+\end{align}
 $$
 
-Persamaan tersebut tidak memiliki solusi pasti dikarenakan terdapat matriks rotasi yang mengindikasikan persamaan non-linear. Permasalahan dapat diselesaikan dengan menggunakan optimisasi dan dilinearkan menggunakan Taylor-Expansion.
+The equation does not have a definitive solution due to the presence of a rotation matrix, which indicates a nonlinear equation. The problem can be solved using optimization and linearized using Taylor expansion.
 
 $$
+\begin{align}
 F_{ij}(x+\Delta x)=e_{ij}(x+\Delta x)^T\Omega_{ij} e_{ij}(x+\Delta x)^T
+\end{align}
 $$
 
-Dengan menggunakan **First-Order Taylor Expansion**,
+By using the **First-Order Taylor Expansion**,
 
 $$
+\begin{align}
 e_{ij}(x+\Delta x) = e_{ij}+J_{ij}\Delta x
+\end{align}
 $$
 
-Subtitusikan ke $F_{ij}(x+\Delta x)$,
+Substitute into $F_{ij}(x + \Delta x)$,
 
 $$
-\begin{align*}
+\begin{align}
 F_{ij}(x+\Delta x) &= (e_{ij}+J_{ij}\Delta x)^T \Omega_{ij}(e_{ij}+J_{ij}\Delta x)\\
 &= (e_{ij}^T+(J_{ij}\Delta x)^T)+(\Omega_{ij}e_{ij}+\Omega_{ij}J_{ij}\Delta x)(\\
 &= (e_{ij}^T+\Delta x^TJ_{ij}^T)(\Omega_{ij}e_{ij}+\Omega_{ij}J_{ij}\Delta x)\\
@@ -50,42 +63,52 @@ F_{ij}(x+\Delta x) &= (e_{ij}+J_{ij}\Delta x)^T \Omega_{ij}(e_{ij}+J_{ij}\Delta 
 &= e_{ij}^T\Omega_{ij}e_{ij}+e_{ij}^T\Omega_{ij}J_{ij}\Delta x +
 e_{ij}^T\Omega_{ij}^TJ_{ij}\Delta x+
 \Delta{x}^TJ_{ij}^T\Omega_{ij}J_{ij}\Delta x\\
-\end{align*}
+\end{align}
 $$
 
-Dikarenakan $\Omega_{ij}$ adalah metriks simetrik, maka $\Omega_{ij}=\Omega_{ij}^T$
+Since $\Omega_{ij}$ is a symmetric matrix, it follows that $\Omega_{ij} = \Omega_{ij}^T$.
 
 $$
+\begin{align}
 F_{ij}(x+\Delta x) = 
 \underbrace{e_{ij}^T\Omega_{ij}e_{ij}}_{c}+
 2\underbrace{e_{ij}^T\Omega_{ij}J_{ij}}_{b}\Delta x +
 \Delta{x}^T\underbrace{J_{ij}^T\Omega_{ij}J_{ij}}_{H}\Delta x
+\end{align}
 $$
 
-Dapat diperoleh turunan pertama dari $F_{ij}(x+\Delta x)$,
+The first derivative of $F_{ij}(x + \Delta x)$ can be obtained,
 
 $$
-\frac{\partial{F_{ij}(x+\Delta x)}}{\partial\Delta x}\approx 2b+2H\Delta x = 0\\
-\Delta x = -H^{-1}b\\
-x\leftarrow x+\Delta x
+\begin{align}
+\frac{\partial{F_{ij}(x+\Delta x)}}{\partial\Delta x} &\approx 2b+2H\Delta x = 0\\
+\Delta x &= -H^{-1}b\\
+x &\leftarrow x+\Delta x
+\end{align}
 $$
 
-$\hat{z}_{ij}$ dihitung dengan *inverse pose composition*,
+$\hat{z}_{ij}$ is calculated using *inverse pose composition*,
 
 $$
-T \in SE(n)\\
-R \in SO(n)\\
-T_i^{-1}=
+\begin{align}
+T_i^{-1} &=
 \begin{bmatrix}
 R_i^T & -R_i^Tt_i\\
 0 & 1
 \end{bmatrix}\\
-T_j=
+T_j &=
 \begin{bmatrix}
 R_j & t_j\\
 0 & 1
-\end{bmatrix}\\\\\
-\hat{z}_{ij}= T_i^{-1}\cdot T_j\\
+\end{bmatrix}\\
+\hat{z}_{ij} &= T_i^{-1}\cdot T_j\\
+\end{align}
+$$
+
+Where $T \in SE(n)$ and $R \in SO(n)$.
+
+$$
+\begin{align}
 \hat{z}_{ij}= 
 \begin{bmatrix}
 R_i^TR_j & R_i^T(t_j-t_i)\\
@@ -95,76 +118,84 @@ R_i^TR_j & R_i^T(t_j-t_i)\\
 \begin{bmatrix}
 R_i^T(t_j-t_i)\\
 \theta_j - \theta_i
-\end{bmatrix}\rightarrow\text{vector space}\\\\
-\text{vector space}=
+\end{bmatrix} = 
 \begin{bmatrix}
 \Delta t\\
 \Delta \theta
 \end{bmatrix}
+\end{align}
 $$
 
-Nilai $e_{ij}$ diperoleh dengan cara yang sama seperti $\hat{z}_{ij}$, Sehingga $e_{ij}=z_{ij}^{-1}T_i^{-1}T_j$
+$\triangleq$ represented in vector space. 
+The value of $e_{ij}$ is obtained in the same way as $\hat{z}_{ij}$. Therefore, $e_{ij} = z_{ij}^{-1} T_i^{-1} T_j$.
 
 $$
-e_{ij}= \begin{bmatrix}
+\begin{align}
+e_{ij} \triangleq \begin{bmatrix}
 R_{ij}^T(R_i^T(t_j-t_i)-t_{ij})\\
 \theta_j - \theta_i - \theta_{ij} 
-\end{bmatrix} \rightarrow \text{vector space}
+\end{bmatrix}
+\end{align}
 $$
 
-Tentukan turunan parsial $e_{ij}$ terhadap $x_i$ dan $x_j$,
+Determine the partial derivatives of $e_{ij}$ with respect to $x_i$ and $x_j$,
 
 $$
-x_i =\begin{bmatrix}
-t_i\\
+\begin{align}
+x_i &= \begin{bmatrix}
+t_i \\
 \theta_i
-\end{bmatrix};\;
-x_j =\begin{bmatrix}
-t_j\\
+\end{bmatrix} \\
+x_j &= \begin{bmatrix}
+t_j \\
 \theta_j
-\end{bmatrix}\\
-\frac{\partial e_{ij}}{\partial x_i} =
+\end{bmatrix} \\
+\frac{\partial e_{ij}}{\partial x_i} &= 
 \begin{bmatrix}
-\frac{\partial \Delta t}{\partial t_i} & \frac{\partial \Delta t}{\partial \theta_i}\\
+\frac{\partial \Delta t}{\partial t_i} & \frac{\partial \Delta t}{\partial \theta_i} \\
 \frac{\partial \Delta \theta}{\partial t_i} & \frac{\partial \Delta \theta}{\partial \theta_i}
-\end{bmatrix} ,\;
-\frac{\partial e_{ij}}{\partial x_i} =
+\end{bmatrix} \\
+\frac{\partial e_{ij}}{\partial x_j} &= 
 \begin{bmatrix}
-\frac{\partial \Delta t}{\partial t_j} & \frac{\partial \Delta t}{\partial \theta_j}\\
+\frac{\partial \Delta t}{\partial t_j} & \frac{\partial \Delta t}{\partial \theta_j} \\
 \frac{\partial \Delta \theta}{\partial t_j} & \frac{\partial \Delta \theta}{\partial \theta_j}
-\end{bmatrix}\\
-\frac{\partial e_{ij}}{\partial x_i} =
+\end{bmatrix} \\
+\frac{\partial e_{ij}}{\partial x_i} &= 
 \begin{bmatrix}
--R_{ij}^TR_i^T & R_{ij}^T\frac{\partial R_i^T}{\partial \theta_i}(t_j-t_i)\\
+-R_{ij}^T R_i^T & R_{ij}^T \frac{\partial R_i^T}{\partial \theta_i}(t_j - t_i) \\
 0 & -1
-\end{bmatrix}\\
-\frac{\partial e_{ij}}{\partial x_j} =
+\end{bmatrix} \\
+\frac{\partial e_{ij}}{\partial x_j} &= 
 \begin{bmatrix}
-R_{ij}^TR_i^T & 0\\
+R_{ij}^T R_i^T & 0 \\
 0 & 1
 \end{bmatrix}
+\end{align}
 $$
 
-Jacobian matriks $J_{ij}$ hanya berisikan nilai $\frac{\partial e_{ij}}{\partial x_i}$ pada baris ke-$i$, $\frac{\partial e_{ij} 
-}{\partial x_j}$ pada baris ke-$j$​, dan yang lainnya bernilai 0 
+The Jacobian matrix $J_{ij}$ contains only the value $\frac{\partial e_{ij}}{\partial x_i}$ in the $i$-th row, $\frac{\partial e_{ij}}{\partial x_j}$ in the $j$-th row, and the other elements are 0.
 
 $$
-J_{ij} =
+\begin{align}
+J_{ij} &=
 \begin{bmatrix}
 0&0&0&...&\frac{\partial e_{ij}}{\partial x_i}&...&\frac{\partial e_{ij}}{\partial x_j}&...&0&0&0
-\end{bmatrix}\\\\
-\nabla_{ij}=J_{ij}^T\Omega_{ij}e_{ij}\\
-H_{ij}=J_{ij}^T\Omega_{ij}J_{ij}\\\\
-\nabla=\sum_{i,j}J_{ij}^T\Omega_{ij}e_{ij}\\
-H=\sum_{i,j}J_{ij}^T\Omega_{ij}J_{ij}
+\end{bmatrix}\\
+\nabla_{ij} &=J_{ij}^T\Omega_{ij}e_{ij}\\
+H_{ij} &=J_{ij}^T\Omega_{ij}J_{ij}\\
+\nabla &=\sum_{i,j}J_{ij}^T\Omega_{ij}e_{ij}\\
+H &=\sum_{i,j}J_{ij}^T\Omega_{ij}J_{ij}
+\end{align}
 $$
 
-Setelah $\nabla$ dan $H$ dapat diperoleh, permasalahan Non-Linear Least Square dapat diselesaikan dengan iterasi proses optimisasi menggunakan Gauss-Newton atau Levenberg-Marquardt hingga $\Delta F(x) < \text{tolerance}$.
+After $\nabla$ and $H$ are obtained, the Non-Linear Least Squares problem can be solved by iterating the optimization process using Gauss-Newton or Levenberg-Marquardt until $\Delta F(x) < \text{tolerance}$.
 
 $$
-\text{(GN) } \Delta x = -H^{-1}\nabla\\
-\text{(LM) } \Delta x = -(H+\lambda \text{ diag}(H))^{-1}\nabla\\
-x\leftarrow x+\Delta x
+\begin{align}
+\text{(GN) } \Delta x &= -H^{-1}\nabla\\
+\text{(LM) } \Delta x &= -(H+\lambda \text{ diag}(H))^{-1}\nabla\\
+x&\leftarrow x+\Delta x
+\end{align}
 $$
 
 ### **References**

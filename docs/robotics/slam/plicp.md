@@ -1,6 +1,6 @@
 # **Point to Line Iterative Closest Point**
 
-Iterative Closest Point aims to align two point  clouds  P and Q  by finding a rigid-body transformation $(R, t)$ applied to point  cloud P and iteratively minimizes the error metric. Point to Point distance of vanilla ICP [[1]](#ref1) uses Euclidean distance between cor-respondences points. Point to Line Iterative Closest Point (PLICP) is a variant of ICP with a difference in error metric. PLICP computes error metric by projecting distances of correspondence points to the normal vector of the target point cloud [[2]](#ref2). PLICP can be solved by an optimization process such as Gauss-Newton and Levenberg-Marquardt methods [[3](#ref3), [4](#ref4)]. 
+Iterative Closest Point aims to align two point clouds $P$ and $Q$ by finding a rigid-body transformation $(R, t)$ applied to point cloud $P$ and iteratively minimizes the error metric. Point to Point distance of vanilla ICP [[1]](#ref1) uses Euclidean distance between correspondences points. Point to Line Iterative Closest Point (PLICP) is a variant of ICP with a difference in error metric. PLICP computes error metric by projecting distances of correspondence points to the normal vector of the target point cloud [[2]](#ref2). PLICP can be solved by an optimization process such as Gauss-Newton and Levenberg-Marquardt methods [[3](#ref3), [4](#ref4)]. 
 
 ## **Error Metric**
 
@@ -103,7 +103,7 @@ $$
 \end{align}
 $$
 
-### References 
+### **References**
 
 <a id="ref1">[1][ Method for registration of 3-D shapes
 ](https://graphics.stanford.edu/courses/cs164-09-spring/Handouts/paper_icp.pdf)</a>
