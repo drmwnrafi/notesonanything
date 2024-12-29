@@ -414,7 +414,7 @@ $$
 Assume $R^TR_d = \exp{\hat{x}} \in SO(3)$ by using Rodrigues formuka for $x \in \mathbb{R}^3$. Then, $\|C(R^TR)\|_2 \leq 1$ it occurs from eigenvalues of $\left(C(\exp{\hat{x}})\right)^T C(\exp{\hat{x}})$. It eigenvalues is $\cos^2(\|x\|), \frac{1}{2}(1+\cos(\|x\|))$, and $\frac{1}{2}(1+\cos(\|x\|))$ [[1]](#ref1), which the three of them are less or equal to 1.
 
 
-??? question "How the eigenvalues to be like that?"
+??? question "How are the eigenvalues like that?"
     I’m not entirely sure how they compute the eigenvalues of $\left(C(\exp{\hat{x}})\right)^T C(\exp{\hat{x}})$. So, it still a open question for me.
 
 ### **Position Control**
