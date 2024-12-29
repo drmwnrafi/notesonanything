@@ -8,6 +8,10 @@
     align-items: center;
 }
 
+p {
+  text-align: justify;
+}
+
 div.mermaid {
     text-align: center;
 }
