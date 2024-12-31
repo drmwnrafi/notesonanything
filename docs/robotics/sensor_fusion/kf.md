@@ -1,15 +1,14 @@
 # **Kalman Filter**
 
-Kalman FIlter berfungsi untuk melakukan prediksi dan estimasi pada *state* (keadaan) suatu sistem.
+The Kalman Filter is used for prediction and estimation of the state of a system.
+The Kalman filter requires two models: the state model and the observation model.
 
-Kalman filter membutuhkan 2 model, yaitu state model dan observation model
-
-- **State Model** adalah  model yang merepresentasikan perubahan *state* pada sistem w.r.t waktu.
-- **Observation Model** adalah persaamaan/model yang merepresentasikan data yang diukur biasanya dengan sensor yang memberikan data eksternal robot dihubungkan dengan keadaan sistem.
+- **State Model** : A model that represents changes in the state of the system with respect to time.
+- **Observation Model** : An equation/model that represents data measured, usually by sensors, providing external data about the robot and linking it to the system's state.
 
 ## **Multivariate Kalman Filter**
 
-State pada sistem
+The system state is represented as:
 
 $$
 \textbf{x} = \begin{bmatrix}
@@ -17,28 +16,27 @@ x \\ y
 \end{bmatrix}
 $$
 
-*Multivariate* Kalman Filter memberikan output berupa **multivariate random variabel** dan **covariance matrix** merupakan matriks persegi sebesar jumlah state ketidakpastian.
+Multivariate Kalman Filter produces outputs in the form of **multivariate random variables** and a **covariance matrix**, which is a square matrix representing the uncertainty of the states.
+The Covariance matrix in the Kalman Filter includes:
 
-*Covariance matrix* pada **Kalman Filter** meliputi :
-
-- $P_{n,n}$ : covariance matriks pada estimasi
-- $P_{n+1,n}$ : covariance matriks pada prediksi
-- $R_n$ : covariance matriks yang menggambarkan ketidakpastian pengukuran
-- $Q$ : covariance matriks untuk proses noise
+- $P_{n,n}$: covariance matrix for estimation
+- $P_{n+1,n}$: covariance matrix for prediction
+- $R_n$: covariance matrix representing measurement uncertainty
+- $Q$: covariance matrix for process noise
 
 ## **Covariance** 
 
-Covariance mengukur seberapa korelasi antara 2 atau lebih variabel random
+Covariance measures the correlation between two or more random variables.
 
 ![Object on the x-y plane](https://www.kalmanfilter.net/img/BB2/xyPlane.png)
 
-Covaraince antara populasi $X$ dan populasi $Y$ dengan banyak data $N$:
+Covariance between population $X$ and $Y$, with $N$ data points:
 
 $$
 COV(X, Y) = \frac{1}{N}\sum_{i=1}^N(x_i - \mu_x)(y_i-\mu_y)
 $$
 
-Jika menggunakan sample:
+For a sample:
 
 $$
 COV(X, Y) = \frac{1}{N-1}\sum_{i=1}^N(x_i - \mu_x)(y_i-\mu_y)
@@ -46,7 +44,7 @@ $$
 
 ## **Covariance Matrix**
 
-Coariance matrix adalah matriks persegi yang merepresentasikan covariance antar setiap element pada setiap state.
+The covariance matrix is a square matrix representing the covariance between each element of each state.
 
 $$
 \Sigma = \begin{bmatrix} 
@@ -63,9 +61,9 @@ COV(y,x) & VAR(y)
 \end{bmatrix}
 $$
 
-Jika $x$ dan $y$ tidak berkolerasi maka bagian dari matriks $\Sigma$ yang bukan diagonal bernilai 0
+If $x$ and $y$ are uncorrelated, the off-diagonal elements of the matrix $\Sigma$ are zero.
 
-Jika memiliki *state* $x$ dengan dimensi $1 \times k$,
+For a state $x$ of dimension $1 \times k$:
 
 $$
 COV(x) = E((x-\mu_x)(x-\mu_x)^T)
@@ -80,37 +78,33 @@ COV(x) &= E \left( \begin{bmatrix}
 (x_2-\mu_{x_2})(x_1 -\mu_{x1}) & (x_2-\mu_{x_2})^2 & \cdots &(x_2-\mu_{x_1})(x_k-\mu_{x_k})\\
 \vdots & \vdots & \ddots & \vdots \\
 (x_k-\mu_{x_k})(x_1 -\mu_{x1}) & (x_k-\mu_{x_k})(x_2-\mu_{x_2}) & \cdots &(x_k-\mu_{x_k})^2\\
-\end{bmatrix} \right )\\
+\end{bmatrix} \right)\\
 &= E \left( \begin{bmatrix}
 (x_1 -\mu_{x_1})\\
 (x_2-\mu_{x_2})\\
 \vdots \\
 (x_k-\mu_{x_k})
 \end{bmatrix} 
-\begin{bmatrix} [ (x_1 -\mu_{x_1})&(x_2-\mu_{x_2})&\cdots & (x_k-\mu_{x_k})
+\begin{bmatrix}(x_1 -\mu_{x_1})&(x_2-\mu_{x_2})&\cdots & (x_k-\mu_{x_k})
 \end{bmatrix}
-\right )\\
+\right)\\
 & = E((x_{1:k}-\mu_{x_{i:k}})(x_{1:k}-\mu_{x_{i:k}})^T)
 \end{align*}
 $$
 
 Note :
 
-$E(v)$ adalah ekspektasi, rata-rata dari variabel random
+$E(v)$ is the expectation or mean of the random variable.
+
 
 ## **Covariance Matrix Properties**
-
-- $$
-  \Sigma_{ii} = \sigma_{ii}^2
-  $$
-
-- $$
-  tr(\Sigma) = \sum _{i=1}^n \Sigma_{ii}\geq 0
-  $$
-
-- $$
-  \Sigma = \Sigma^T
-  $$
+$$
+\begin{align}
+\Sigma_{ii} = \sigma_{ii}^2\\
+tr(\Sigma) = \sum _{i=1}^n \Sigma_{ii}\geq 0\\
+\Sigma = \Sigma^T\\
+\end{align}
+$$
 
 ## **Multivariate Gaussian Distribution**
 
@@ -120,81 +114,76 @@ $$
 
 ## **State Equation**
 
-Befungsi untuk melakukan prediksi berdasarkan estimasi yang sudah ada.
+**State Equation** Used to make predictions based on existing estimates.
 
 $\hat{x}_{n+1,n} = F\hat{x}_{n,n} + G\hat{u}_{n,n} +w_n$
 
-$\hat{x}_{n+1,n}$ : prediksi state pada $n+1$
-
-$\hat{x}_{n,n}$ : prediksi state pada $n$
-
-$u_n$ : variabel kontrol *input* terukur ke dalam sistem
-
-$w_n$ : noise, *input* tidak terukur ke dalam sistem (disebut proses noise)
-
-$F$ : matrix transisi
-
-$G$ : matrix kontrol (mapping efek $u_n$ ke variabel *state*)
-
-Persamaan state dapat diperoleh dengan *State Space Equations* dengan menganlisa dynamic dari sistem.
+- $\hat{x}_{n+1,n}$ : predicted state at $n+1$
+- $\hat{x}_{n,n}$ : predicted state at $n$
+- $u_n$ : control input measured into the system
+- $w_n$ : noise, unmeasured input (called process noise)
+- $F$ : transition matrix 
+- $G$ : control matrix (mapping the effect of $u_n$ to the state variables)
 
 ## **Covariance Equation**
 
-Mengukur ketidakpastian dari prediksi  *State Equation*
+Measures the uncertainty of predictions made by the *State Equation*
 
 $P_{n+1,n} = FP_{n,n}F^T + Q$
 
-Proof :
+**Proof** :
 
-dengan $COV(x) = E((x_{1:k}-\mu_{x_{i:k}})(x_{1:k}-\mu_{x_{i:k}})^T)$, maka
+Using $COV(x) = E((x_{1:k}-\mu_{x_{i:k}})(x_{1:k}-\mu_{x_{i:k}})^T)$, then
+$P_{n,n} = E((\hat{x}_{n,n}-\mu_{\hat{x}_{n,n}})(\hat{x}_{n,n}-\mu_{\hat{x}_{n,n}})^T)$
 
-$P_{n,n} = E((\hat{x}_{n,n}-\mu_{\hat{x}_{n,n}})(\hat{x}_{n,n}-\mu_{\hat{x}_{n,n}})^T)$ , dengan menggunakan *state equation* dapat diperoleh $P_{n+1, n}$
+From the state equation, $P_{n+1,n}$ is derived as:
 
 $$
-\begin{align*}
+\begin{align}
 P_{n+1,n} &= E((\hat{x}_{n+1,n}-\mu_{\hat{x}_{n+1,n}})(\hat{x}_{n+1,n}-\mu_{\hat{x}_{+1,n}})^T)\\
 &= E \left ( (F\hat{x}_{n,n} + G\hat{u}_{n,n} - F\hat{\mu_x}_{n,n} + G\hat{u}_{n,n}) (F\hat{x}_{n,n} + G\hat{u}_{n,n} - F\hat{\mu_x}_{n,n} + G\hat{u}_{n,n})^T \right )\\
-&=E \left ( F(\hat{x}_{n,n} - \mu_{x_{n,n}}) (F(\hat{x}_{n,n} - \mu_{x_{n,n}}))^T\right)\\
-&=E \left ( F(\hat{x}_{n,n} - \mu_{x_{n,n}}) (\hat{x}_{n,n} - \mu_{x_{n,n}})^T F^T\right)\\
-&=FE \left (\hat{x}_{n,n} - \mu_{x_{n,n}}) (\hat{x}_{n,n} - \mu_{x_{n,n}})^T\right)F^T\\
-\text{sehingga,}\\
+&=E \left(F(\hat{x}_{n,n} - \mu_{x_{n,n}}) (F(\hat{x}_{n,n} - \mu_{x_{n,n}}))^T\right)\\
+&=E \left(F(\hat{x}_{n,n} - \mu_{x_{n,n}}) (\hat{x}_{n,n} - \mu_{x_{n,n}})^T F^T\right)\\
+&=FE \left[(\hat{x}_{n,n} - \mu_{x_{n,n}}) (\hat{x}_{n,n} - \mu_{x_{n,n}})^T\right]F^T\\
+\end{align}
+$$
+
+Thus, 
+
+$$
+\begin{align}
 P_{n+1,n} &= FP_{n,n}F^T
-\end{align*}
+\end{align}
 $$
 
 ## **Observation Model**
 
 $z_n = Hx_n+v_n$
 
-$z_n$ : vektor observasi
+- $z_n$ : observation vector
+- $H$ : observation matrix
+- $x_n$ : true state
+- $v_n$ : random noise (called observation noise)
 
-$H$ : matriks observasi
-
-$x_n$ : state sebenarnya
-
-$v_n$ : random noise (disebut noise observasi)
-
-Contoh pada kasus sensor jarak ultrasonik, state dari sistem adalah jarak $x_n$, output dari sensor merupakan ToF yang terukur $z_n$, maka *obeservation model*-nya :
+For example, in the case of an ultrasonic distance sensor, where the system state is the distance $x_n$ and the sensor output is the measured ToF $z_n$::
 
 $z_n = [\frac{2}{c}]x_n + v_n$
 
-dengan $c$ merupakan kecepatan suara
+Where $c$ is the speed of sound.
 
 ## **Observation Uncertainty**
 
 $R_n = E(v_nv_n^T)$
 
-$R_n$ : covariance matrix untuk obervasi
-
-$v_n$ : kesalahan observasi
+- $R_n$: covariance matrix for observation 
+- $v_n$: observation error
 
 ## **Process Uncertainty**
 
 $Q_n = E(w_nw_n^T)$
 
-$Q_n$ : covariance matrix untuk proses noise
-
-$w_n$ : proses noise
+- $Q_n$: covariance matrix for process noise 
+- $w_n$: process noise
 
 ## **Summary**
 
@@ -202,14 +191,14 @@ $w_n$ : proses noise
 
 ## **Kalman Gain**
 
-Kalman Gain merupakan bobot bagi *measurement model*, dengan kata lain *Kalman Gain* menentukan seberapa besar pengaruh *measurement model* terhadap estimasi *state*.
+Kalman Gain determines the weighting for the *measurement model*. It defines the influence of the *measurement model* on state estimation:
 
 $$
 KG = \frac{error_{estimate}}{error_{estimate} + error_{measurement}}
 $$
 
-- $error_{estimate} > error_{measurement}$ :  $KG \rightarrow 1$
-- $error_{estimate} < error_{measurement}$ :  $KG \rightarrow 0$
+- If $error_{estimate} > error_{measurement}$, then $KG \rightarrow 1$ 
+- If $error_{estimate} < error_{measurement}$, then $KG \rightarrow 0$
 
 $$
 estimate_t = estimate_{t-1} + KG(measurement_t-estimate_{t-1})
@@ -221,14 +210,11 @@ $$
 E_{estimate_t} = [1-KG]E_{estimate_{t-1}}
 $$
 
-- $KG\rightarrow1$, maka  error pada estimasinya besar, sehingga persamaan diatas akan menghasilkan $E_{estimate}$ yang kecil 
-- $KG\rightarrow0$, maka  error pada estimasinya kecil, sehingga persamaan diatas akan mempertahankan error estimasi dari waktu $t-1$
-
+- If $KG\rightarrow1$, the error on the estimation is large, resulting in a smaller $E_{estimate}$. 
+- If $KG\rightarrow0$, the error on the estimation is small, maintaining the estimation error from time $t-1$. Thus,
 - $E_{estimate_t} < E_{estimate_{t-1}}$  
 
-Note :
-
-Saat varians pada estimasi mengecil, maka mendekati nilai sebenarnya
+**Note**: As the estimation variance decreases, it approaches the true value.
 
 ### **References**
 

@@ -56,7 +56,7 @@ $$
 \end{align}
 $$
 
-Where $\bm{\Phi}\in \mathbf{R}^n$, where $i = 1, 2, 3, \cdots, n$  is selected based on intuition or derived from the system's dynamics. These dynamics may be governed by frameworks such as Newtonian, Lagrangian, or Hamiltonian mechanics, or other methodologies, like employed in [WyNDA-UAV [2]](#ref2). 
+Where $\bm{\Phi}_i\in \mathbf{R}^n$, where $i = 1, 2, 3, \cdots, n$  is selected based on intuition or derived from the system's dynamics. These dynamics may be governed by frameworks such as Newtonian, Lagrangian, or Hamiltonian mechanics, or other methodologies, like employed in [WyNDA-UAV [2]](#ref2). 
 After build the approximation function, then applied adaptive observer to estimate approximation model in [Eq. (4)](#eq45).
 
 ### **Initial Condition**
@@ -188,12 +188,25 @@ $$
 [Eq. (17)](#eq17) adjusts the parameter-to-state estimation mapping to align with system behavior.
 
 !!! info "Forgetting Factor"
-    Lower values $(\lambda \rightarrow 0)$ more adaptive to new data (more trusts to new data); 
-    higher values $(\lambda \rightarrow 1)$ smooth updates (more trusts to old data). 
+    Lower values $(\lambda \rightarrow 0)$ more sensitive to new data (more trusts to new data). 
+    Higher values $(\lambda \rightarrow 1)$ less sensitive to new data (more trusts to old data). 
     The forgetting factor $\lambda$ is trade-off between the stability and adaptability.
 
 After prediction step, convert the parameters in discrete to continunous by using $\frac{\bm{\theta}}{\Delta t}$ 
 
+### **The Presistance of Exicitation**
+
+In short, Presistance of Exicitation (PE) is concept to ensures the input to the sytems sufficiently rich and varied to allow the algorithm reaches convergance of parameters estimitation.
+In WyNDA the PE condition state as follows :
+
+$$
+\begin{align}
+0 < \kappa \bm{I} \leq \sum_{i=\kappa - \xi}^\kappa \bm{\Psi}(i)^T\bm{\Psi}(i)
+\end{align}
+$$
+
+It state to ensure approximation function $\bm{\Psi(\bm{y}_k, \bm{u}_k)}$ is rich and varied enough to estimates "real" parameters.
+If the condition satisfied, the algorithm convergenced exponentially (proven in WyNDA paper [[1]](#ref1)). 
 
 ### **References**
 

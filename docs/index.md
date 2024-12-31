@@ -25,16 +25,19 @@ hide:
 !!! tip "Next Goals"
     **Artificial Inteligences**
 
+    - Long run to all DeepSeek technical reports
     - Neural Net Scaling Laws by [Kaplan et al.](https://arxiv.org/abs/2001.08361)
-    - Wide-Array of Nonlinear Dynamics Approximation by [Agus Hasan](https://www.sciencedirect.com/science/article/pii/S2215016124000797)
     
     **Mathematics**
     
-    - Add examples and proof in each probability section 
-    - Lie Group
+    - Mathematics for Machine Learning by [Deisenroth et. al](https://mml-book.github.io/)
+    - Add examples and proof in each probability section
+    - Lie Theory
     - Hamilton's Quaternion 
     
     **Robotics**
     
+    - Lyapunov Stability Theory
+    - Quadcopter MoE (Lagrangian Mechanic, Hamiltonian Mechanics) 
     - Model Predictive Control
     - Data-Driven Control 
