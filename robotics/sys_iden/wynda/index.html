@@ -1,0 +1,3425 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Rafi Darmawan">
+      
+      
+        <link rel="canonical" href="https://drmwnrafi.github.io/notesonanything/robotics/sys_iden/wynda/">
+      
+      
+        <link rel="prev" href="../../slam/pose_graph/">
+      
+      
+      
+      <link rel="icon" href="../../../assets/media/ziczac.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>WyNDA - Notes on Anything</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Montserrat";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/css/extra.css">
+    
+      <link rel="stylesheet" href="../../../assets/css/card.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="WyNDA - Notes on Anything" >
+      
+        <meta  property="og:description"  content="None" >
+      
+        <meta  property="og:image"  content="https://drmwnrafi.github.io/notesonanything/assets/images/social/robotics/sys_iden/wynda.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://drmwnrafi.github.io/notesonanything/robotics/sys_iden/wynda/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="WyNDA - Notes on Anything" >
+      
+        <meta  name="twitter:description"  content="None" >
+      
+        <meta  name="twitter:image"  content="https://drmwnrafi.github.io/notesonanything/assets/images/social/robotics/sys_iden/wynda.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#wynda" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Notes on Anything" class="md-header__button md-logo" aria-label="Notes on Anything" data-md-component="logo">
+      
+  <img src="../../../assets/media/notesx.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Notes on Anything
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              WyNDA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M223.5 32C100 32 0 132.3 0 256s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391l-19.9 107.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121l19.9-107.9c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1l90.3-62.3c4.5-3.1 10.2-3.7 15.2-1.6M160 256a96 96 0 1 1 192 0 96 96 0 1 1-192 0m224 0a128 128 0 1 0-256 0 128 128 0 1 0 256 0"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../maths/preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../AI/preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Artificial Intelligences
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Robotics
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Notes on Anything" class="md-nav__button md-logo" aria-label="Notes on Anything" data-md-component="logo">
+      
+  <img src="../../../assets/media/notesx.png" alt="logo">
+
+    </a>
+    Notes on Anything
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mathematics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Mathematics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Probability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Probability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/intro_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Probability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/set_theory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Set Theory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binom_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial and Multinomial Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/conditional_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Conditional Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/total_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Laws of Total Probability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/bayes_theorem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bayes' Theorem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/independence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Independence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/random_var/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Random Variabels
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/bernouli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bernouli Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binomial_normal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial to Normal Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binomial_poisson/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial to Poisson Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/geo_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Geometric Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/exp_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exponential Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/poisson_proccess/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Poisson Proccess
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/gamma_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gamma Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/func_random/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Function of Random Variables
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/joint_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Joint Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/expected/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Theory of Expectation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/var_std/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variance and Standart Deviation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/markov_ieq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markov's Inequality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/chebyshev_ieq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chebyshev Inequality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/large_num/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Laws of Large Number
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/moment_func/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Moment Generating Function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/lebesgue/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lebesgue Measure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/cov_corr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Covariance and Correlation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/tail_sum/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tail Sum
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/clf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Central Limit Theorem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Optimization
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Optimization
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/lsqrt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Least Squares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/non_lsqrt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Non-Linear Least Squares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/approx_hessian/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximation of Hessian
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_4" id="__nav_2_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Optimization Procedure
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Optimization Procedure
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/grad_descent/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradient-Descent
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/newt_rapshon/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Newton-Rapshon
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/gauss_newt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gauss-Newton
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/lm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Levenberg Marquardt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Algebra
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Algebra
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/algebra/svd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Singular Value Decomposition
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/algebra/frobenius_inner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frobenius Inner Product
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Lie Theory
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Lie Theory
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/lie_groups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lie Groups
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/lie_algebra/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lie Algebra
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/adjoint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adjoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Artificial Intelligences
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Artificial Intelligences
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Attention Mechanism
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/add_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additive Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/dot_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dot Product Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/scaled_dot_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scaled-Dot Product Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/mha/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Head Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/mqa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Query Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/gqa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Grouped Query Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Models
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Large Language Models
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Large Language Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/llama2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLAMA-2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/jpeg-lm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JPEG-LM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_2" id="__nav_3_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Computer Vision
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Vision
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/u_net/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    U-Net
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/u2_net/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    U2-Net
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Tokenizers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tokenizers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/tokenizer/bpe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Byte-Pair Encoding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/spinal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SpinalNet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Robotics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Robotics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Equations of Motion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Equations of Motion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eq_of_motion/quadcopter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quadcopter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nonlinear Control
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nonlinear Control
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3_1" id="__nav_4_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Applied Nonlinear Control
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Applied Nonlinear Control
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nonlinear_control/intro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction to Nonlinear Systems
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nonlinear_control/phase_plane/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase Plane Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../nonlinear_control/geom_quadcopter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Geometric Control on SE(3)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Sensor Fusion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Sensor Fusion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_fusion/kf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kalman Filter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_fusion/ekf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extended Kalman Filter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    SLAM
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            SLAM
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/icp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Point to Point Iterative Closest Point
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/plicp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Point to Line Iterative Closest Point
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/pose_graph/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pose-Graph
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    System Identification
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            System Identification
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    WyNDA
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    WyNDA
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Algorithm
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initial-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initial Condition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gain-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gain Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Prediction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-presistance-of-exicitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Presistance of Exicitation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-algorithm" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Algorithm
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Algorithm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#initial-condition" class="md-nav__link">
+    <span class="md-ellipsis">
+      Initial Condition
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gain-update" class="md-nav__link">
+    <span class="md-ellipsis">
+      Gain Update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-prediction" class="md-nav__link">
+    <span class="md-ellipsis">
+      State Prediction
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-presistance-of-exicitation" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Presistance of Exicitation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="wynda"><strong>WyNDA</strong><a class="headerlink" href="#wynda" title="Permanent link">&para;</a></h1>
+<p>Wide-Array of Nonlinear Dynamics Approximation (WyNDA) is a method to discovering mathematical models of dynamical system given datas. 
+There are many existing approaches related to this method such as <a href="">SINDy</a>, <a href="">PINN</a>, <a href="">PySR</a>, <a href="">etc</a>. Most of them rely on optimization or Machine Learning where they need dataset to discovered the govering equations <a href="ref1">[1]</a>.</p>
+<p>On other hand, WyNDA provides an on-line discovering mathematical models of dynamical system.
+WyNDA uses an Adaptive Observer to iteratively refine the approximation of the system's dynamics and estimate the associated parameters.
+This Adaptive Observer share conceptual similarity with Kalman Filter, particularly in its use of a prediction-update framework to correct estimates based on new measurements. </p>
+<p>Expressed continuous-time dynamical systems as :</p>
+<div class="arithmatex">\[
+\newcommand{\bm}[1]{\boldsymbol{#1}}
+\newcommand\given[1][]{\:#1\vert\:}
+\begin{align}
+\dot{\bm{x}}_t &amp;= \bm{f}\left(\bm{x}_t, \bm{u}_t, \bm{\theta}\right) \\
+\bm{x}_{t_0} &amp;= \bm{x}_0 \\
+\bm{y}_k &amp;= \bm{x}_k + \bm{v}_k
+\end{align}
+\]</div>
+<p>where <span class="arithmatex">\(\bm{x}_t\)</span> is the state vector, <span class="arithmatex">\(\bm{u}_t\)</span> is the control input, and <span class="arithmatex">\(\bm{\theta}\)</span> is the parameter vector. Assume noise of sensor <span class="arithmatex">\(\bm{v}_k\)</span> with Gaussian distribution <span class="arithmatex">\(\bm{v}_k \sim \mathcal{N}\left(0, \bm{R}_k\right)\)</span>. The aim is to identify the unknown function <span class="arithmatex">\(\bm{f}\)</span> and the parameters <span class="arithmatex">\(\bm{\theta}\)</span> from sensor data. W
+here <span class="arithmatex">\(k\)</span> and <span class="arithmatex">\(t\)</span> are discrete time and continuous time, respectively.</p>
+<h2 id="the-algorithm"><strong>The Algorithm</strong><a class="headerlink" href="#the-algorithm" title="Permanent link">&para;</a></h2>
+<figure>
+  <img alt="Algorithm" src="../media/wynda_algo.png" width="700" />
+</figure>
+<p>The approximation model (step 1) <a href="#eq45">Eq. (4)</a> is expressed as follows :
+<a id="eq45"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{x}(k+1) &amp;= \bm{x}_k + \bm{\Psi}(\bm{y}_k, \bm{u}_k)\bm{\theta} \\
+\bm{x}(k+1) &amp;\equiv \bm{x}_k + \bm{f}\left(\bm{x}_t, \bm{u}_t, \bm{\theta} \right) \Delta{t}
+\end{align}
+\]</div>
+<p><a href="#eq45">Eq. (5)</a> is dynamical system represented by Euler discretization of <a href="#eq45">Eq. (4)</a>. Where <span class="arithmatex">\(\bm{\Psi}(\bm{y}_k, \bm{u}_k) \in \mathbb{R}^{n \times r}\)</span> is approximation function, given by :</p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{\Psi}(\bm{y}_k, \bm{u}_k) &amp;=
+\begin{pmatrix}
+\Phi_1(\bm{y}_k, \bm{u}_k) &amp; 0 &amp; 0 &amp; \cdots &amp; 0 \\
+0 &amp; \Phi_2(\bm{y}_k, \bm{u}_k) &amp; 0 &amp; \cdots &amp; 0 \\
+\vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \\
+0 &amp; 0 &amp; 0 &amp; \cdots &amp; \Phi_n(\bm{y}_k, \bm{u}_k)
+\end{pmatrix}\\
+\bm{\Phi}_{i}(\bm{y}_k, \bm{u}_k) &amp;= 
+\begin{pmatrix}
+1 &amp; u_{i,k} &amp; x_{i,k} &amp; y_{i,k}^2 &amp; y_{i,k} &amp; \cdots &amp; y_{i,k}^2 \sin(y_{i,k}) &amp; \cdots &amp; \cos(y_{i,k})
+\end{pmatrix}\\
+\end{align}
+\]</div>
+<p>Where <span class="arithmatex">\(\bm{\Phi}_i\in \mathbf{R}^n\)</span>, where <span class="arithmatex">\(i = 1, 2, 3, \cdots, n\)</span>  is selected based on intuition or derived from the system's dynamics. These dynamics may be governed by frameworks such as Newtonian, Lagrangian, or Hamiltonian mechanics, or other methodologies, like employed in <a href="#ref2">WyNDA-UAV [2]</a>. 
+After build the approximation function, then applied adaptive observer to estimate approximation model in <a href="#eq45">Eq. (4)</a>.</p>
+<h3 id="initial-condition"><strong>Initial Condition</strong><a class="headerlink" href="#initial-condition" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Descriptions</th>
+<th style="text-align: center;">Variabels</th>
+<th style="text-align: center;">Dimensions</th>
+<th style="text-align: center;">Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">State Gain</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{K}_{\bm{x}(k)}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;">N/A</td>
+</tr>
+<tr>
+<td style="text-align: center;">Parameter Gain</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{K}_{\bm{\theta}(k)}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{r \times n}\)</span></td>
+<td style="text-align: center;">N/A</td>
+</tr>
+<tr>
+<td style="text-align: center;">Mapping Matrix</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{\Gamma}_{k \given k}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{n \times r}\)</span></td>
+<td style="text-align: center;">N/A</td>
+</tr>
+<tr>
+<td style="text-align: center;">State Covariance</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{P}_{\bm{x}(k \given k)}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(&gt; 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">Parameter Covariance</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{P}_{\bm{\theta}(k \given k)}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{r \times r}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(&gt; 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">Noise State (Able to tuning)</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{R}_{\bm{x}(k)}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(&gt; 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">Noise Parameter (Able to tuning)</td>
+<td style="text-align: center;"><span class="arithmatex">\(\bm{R}_{\bm{\theta}(k)}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{n \times n}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(&gt; 0\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">State Forgetting Factor (Able to tuning)</td>
+<td style="text-align: center;"><span class="arithmatex">\(\lambda_{\bm{x}}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{1}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\left[0, 1\right]\)</span></td>
+</tr>
+<tr>
+<td style="text-align: center;">Parameter State Forgetting Factor (Able to tuning)</td>
+<td style="text-align: center;"><span class="arithmatex">\(\lambda_{\bm{\theta}}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\mathbb{R}^{1}\)</span></td>
+<td style="text-align: center;"><span class="arithmatex">\(\left[0, 1\right]\)</span></td>
+</tr>
+</tbody>
+</table>
+<h3 id="state-update"><strong>State Update</strong><a class="headerlink" href="#state-update" title="Permanent link">&para;</a></h3>
+<p><a id="eq8"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bar{\bm{x}}_{k|k} = \bar{\bm{x}}_{k|k-1} + \left(\bm{K}_{x(k)} + \bm{\Gamma}_{k|k} \bm{K}_{\bm{\theta}(k)}\right)\left( \bm{y}_k - \bar{\bm{x}}_{k|k-1} \right)
+\end{align}
+\]</div>
+<p><a href="#eq8">Eq. (8)</a> is the equation for estimate state <span class="arithmatex">\(\bar{\bm{x}}_{k|k}\)</span> at time <span class="arithmatex">\(k\)</span> based on predicted state estimate <span class="arithmatex">\(\bar{\bm{x}}_{k|k-1}\)</span> at time <span class="arithmatex">\(k\)</span> and current sensor measurment <span class="arithmatex">\(\bm{y}_k\)</span>. 
+The correction term is a weighted combination of the state observer gain <span class="arithmatex">\(\bm{K}_{x(k)}\)</span> and the parameter gain <span class="arithmatex">\(\bm{\Gamma}_{k|k}\bm{K}_{\bm{\theta}(k)}\)</span> for the state and parameter influence, applied to the measurement residual. 
+Where <span class="arithmatex">\(\bm{\Gamma}_{k|k}\)</span> is mapping matrix for the parameter estimates to state estimation.</p>
+<p><a id="eq9"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bar{\bm{\theta}}_{k|k} = \bar{\bm{\theta}}_{k|k-1} - \bm{K}_{\bm{\theta}(k)}\left(\bm{y}_k - \bar{\bm{x}}_{k|k-1}\right)
+\end{align}
+\]</div>
+<p><a href="#eq9">Eq. (9)</a> adjusts the parameter estimates <span class="arithmatex">\(\bar{\bm{\theta}}_{k|k}\)</span> using the measurement residual. 
+The correction is proportional to the error, and the proportionality factor is <span class="arithmatex">\(\bm{K}_{\bm{\theta}(k)}\)</span>. </p>
+<h3 id="gain-update"><strong>Gain Update</strong><a class="headerlink" href="#gain-update" title="Permanent link">&para;</a></h3>
+<p><a id="eq10"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{K}_{\bm{x}(k)} = \bm{P}_{\bm{x}_{k|k-1}}\left[\bm{P}_{\bm{x}_{k|k-1}} + \bm{R}_{\bm{x}(k)}\right]^{-1}
+\end{align}
+\]</div>
+<p><a href="#eq10">Eq. (10)</a> for updates state gain <span class="arithmatex">\(\bm{K}_{\bm{x}(k)}\)</span> computed as a ratio of the state prediction error covariance to the total uncertainty (prediction error + state noise). 
+This gain determines how much the state estimate should be adjusted based on the new measurement. A larger <span class="arithmatex">\(\bm{R}_{\bm{x}(k)}\)</span> reduces the impact of noisy measurements, more believe on predictions, vice versa.
+If the prediction is very uncertain <span class="arithmatex">\(\bm{P}_{\bm{x}_{k|k-1}}\)</span> is large, but the state noise <span class="arithmatex">\(\bm{R}_{\bm{x}(k)}\)</span> is small,
+so the algorithm more trust to sensor and adjust the estimation significantly, vice versa.</p>
+<p><a id="eq11"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{K}_{\bm{\theta}(k)} = \bm{P}_{\bm{\theta}_{k|k-1}}\bm{\Gamma}_{k|k-1}^T \left[\bm{\Gamma}_{k|k-1} \bm{P}_{\bm{\theta}(k|k-1)} \bm{\Gamma}_{k|k-1} + \bm{R}_{\bm{\theta}(k)}\right]^{-1}
+\end{align}
+\]</div>
+<p><a href="#eq11">Eq. (11)</a> for updates parameter gain <span class="arithmatex">\(\bm{K}_{\bm{\theta}(k)}\)</span> computed similarly as <a href="#eq10">Eq. (10)</a>. 
+This gain determines how much the parameter estimate should be adjusted based on the new measurement.</p>
+<p><a id="eq12"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{\Gamma}_{k|k} = \left(\mathbf{I} - \bm{K}_{\bm{x}(k)}\right)\bm{\Gamma}_{k|k-1}
+\end{align}
+\]</div>
+<p><a href="#eq12">Eq. (12)</a> for updated by scaling the previous <span class="arithmatex">\(\bm{\Gamma}\)</span> by <span class="arithmatex">\(\left(\mathbf{I} - \bm{K}_{\bm{x}(k)}\right)\)</span>. 
+This ensures that the relationship between parameter estimation and state estimation is adjusted based on the state gain.
+If the state update trusted  (<span class="arithmatex">\(\bm{K}_{\bm{x}(k)}\)</span> is large), mapping matrix becomes weaker because the estimate is already reliable, vice versa.</p>
+<h3 id="state-prediction"><strong>State Prediction</strong><a class="headerlink" href="#state-prediction" title="Permanent link">&para;</a></h3>
+<p><a id="eq13"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bar{\bm{x}}_{k+1|k} = \bar{\bm{x}(k|k)} + \Psi(\bm{y}_k, \bm{u}_k)\bar{\bm{\theta}}_{k|k}
+\end{align}
+\]</div>
+<p><a href="#eq13">Eq. (13)</a> for predicted state at the next step using the current estimates. 
+This equations incorporating the effects of control inputs and parameter estimates weighted by the parameter estimate.  </p>
+<p><a id="eq14"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bar{\bm{\theta}}_{k+1|k} = \bar{\bm{\theta}}_{k|k}
+\end{align}
+\]</div>
+<p>Assumes parameters are constant or piece-wise constant over a short time step in <a href="#eq14">Eq. (14)</a>, so the prediction is simply the current estimate.</p>
+<p><a id="eq15"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{P}_{\bm{x}(k+1|k) }= \frac{1}{\lambda_{\bm{x}}}\left(\bm{I} - \bm{K}_{\bm{x}(k)}\right)\bm{P}_{\bm{x}(k|k-1)}
+\end{align}
+\]</div>
+<p>State error covariance in <a href="#eq15">Eq. (15)</a> is updated by scaling the previous covariance
+by <span class="arithmatex">\(\left(\bm{I} - \bm{K}_{\bm{x}(k)}\right)\)</span> and applying the forgetting factor <span class="arithmatex">\(\lambda_{\bm{x}}\)</span>.</p>
+<p><a id="eq16"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{P}_{\bm{\theta}(k+1|k)} = \frac{1}{\lambda_{\bm{\theta}}}\left(\bm{I} - \bm{K}_{\bm{\theta}(k)}\bm{\Gamma}_{k|k-1}\right)\bm{P}_{\theta(k|k-1)}
+\end{align}
+\]</div>
+<p><a href="#eq16">Eq. (16)</a> updates parameter error covariance similar to <a href="#eq15">Eq. (15)</a> but different forgetting factor.</p>
+<p><a id="eq17"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\bm{\Gamma_{k+1|k}} = \bm{\Gamma}_{k|k} - \bm{\Psi}(\bm{y}_k, \bm{u}_k)
+\end{align}
+\]</div>
+<p><a href="#eq17">Eq. (17)</a> adjusts the parameter-to-state estimation mapping to align with system behavior.</p>
+<div class="admonition info">
+<p class="admonition-title">Forgetting Factor</p>
+<p>Lower values <span class="arithmatex">\((\lambda \rightarrow 0)\)</span> more sensitive to new data (more trusts to new data). 
+Higher values <span class="arithmatex">\((\lambda \rightarrow 1)\)</span> less sensitive to new data (more trusts to old data). 
+The forgetting factor <span class="arithmatex">\(\lambda\)</span> is trade-off between the stability and adaptability.</p>
+</div>
+<p>After prediction step, convert the parameters in discrete to continunous by using <span class="arithmatex">\(\frac{\bm{\theta}}{\Delta t}\)</span> </p>
+<h3 id="the-presistance-of-exicitation"><strong>The Presistance of Exicitation</strong><a class="headerlink" href="#the-presistance-of-exicitation" title="Permanent link">&para;</a></h3>
+<p>In short, Presistance of Exicitation (PE) is concept to ensures the input to the sytems sufficiently rich and varied to allow the algorithm reaches convergance of parameters estimitation.
+In WyNDA the PE condition state as follows :</p>
+<div class="arithmatex">\[
+\begin{align}
+0 &lt; \kappa \bm{I} \leq \sum_{i=\kappa - \xi}^\kappa \bm{\Psi}(i)^T\bm{\Psi}(i)
+\end{align}
+\]</div>
+<p>It state to ensure approximation function <span class="arithmatex">\(\bm{\Psi(\bm{y}_k, \bm{u}_k)}\)</span> is rich and varied enough to estimates "real" parameters.
+If the condition satisfied, the algorithm convergenced exponentially (proven in WyNDA paper <a href="#ref1">[1]</a>). </p>
+<h3 id="references"><strong>References</strong><a class="headerlink" href="#references" title="Permanent link">&para;</a></h3>
+<p><a id="ref1">[1] <a href="https://www.sciencedirect.com/science/article/pii/S2215016124000797">WyNDA: A method to discover mathematical models of dynamical systems from data
+</a></a></p>
+<p><a id="ref2">[2] <a href="https://www.researchgate.net/publication/380186714_Data-Driven_Discovery_of_Unmanned_Aerial_Vehicles_Dynamics">Data-Driven Discovery of Unmanned Aerial Vehicles Dynamics
+</a></a></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../slam/pose_graph/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Pose-Graph">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Pose-Graph
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright" style="color: gray;">
+    Found any misexplanations? Report or PR on this
+    <a href="https://github.com/drmwnrafi/notesonanything" target="_blank" rel="noopener noreferrer" style="color: #4051b5;">&nbsp;repo</a>
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/drmwnrafi" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.kaggle.com/drmwnnrafi" target="_blank" rel="noopener" title="www.kaggle.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M304.2 501.5 158.4 320.3 298.2 185c2.6-2.7 1.7-10.5-5.3-10.5h-69.2c-3.5 0-7 1.8-10.5 5.3L80.9 313.5V7.5q0-7.5-7.5-7.5H21.5Q14 0 14 7.5v497q0 7.5 7.5 7.5h51.9q7.5 0 7.5-7.5v-109l30.8-29.3 110.5 140.6c3 3.5 6.5 5.3 10.5 5.3h66.9q5.25 0 6-3z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/drmwnnrafi/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss", "header.autohide", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../../../assets/js/mathjax-config.js"></script>
+      
+        <script src="../../../assets/js/card.js"></script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      
+    
+  </body>
+</html>

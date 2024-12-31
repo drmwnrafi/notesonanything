@@ -1,0 +1,3621 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Rafi Darmawan">
+      
+      
+        <link rel="canonical" href="https://drmwnrafi.github.io/notesonanything/robotics/nonlinear_control/geom_quadcopter/">
+      
+      
+        <link rel="prev" href="../phase_plane/">
+      
+      
+        <link rel="next" href="../../sensor_fusion/kf/">
+      
+      
+      <link rel="icon" href="../../../assets/media/ziczac.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Geometric Control on SE(3) - Notes on Anything</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Montserrat";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/css/extra.css">
+    
+      <link rel="stylesheet" href="../../../assets/css/card.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Geometric Control on SE(3) - Notes on Anything" >
+      
+        <meta  property="og:description"  content="None" >
+      
+        <meta  property="og:image"  content="https://drmwnrafi.github.io/notesonanything/assets/images/social/robotics/nonlinear_control/geom_quadcopter.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://drmwnrafi.github.io/notesonanything/robotics/nonlinear_control/geom_quadcopter/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Geometric Control on SE(3) - Notes on Anything" >
+      
+        <meta  name="twitter:description"  content="None" >
+      
+        <meta  name="twitter:image"  content="https://drmwnrafi.github.io/notesonanything/assets/images/social/robotics/nonlinear_control/geom_quadcopter.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#geometric-control-of-quadrotor-on-se3" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Notes on Anything" class="md-header__button md-logo" aria-label="Notes on Anything" data-md-component="logo">
+      
+  <img src="../../../assets/media/notesx.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Notes on Anything
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Geometric Control on SE(3)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M223.5 32C100 32 0 132.3 0 256s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391l-19.9 107.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121l19.9-107.9c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1l90.3-62.3c4.5-3.1 10.2-3.7 15.2-1.6M160 256a96 96 0 1 1 192 0 96 96 0 1 1-192 0m224 0a128 128 0 1 0-256 0 128 128 0 1 0 256 0"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../maths/preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../AI/preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Artificial Intelligences
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Robotics
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Notes on Anything" class="md-nav__button md-logo" aria-label="Notes on Anything" data-md-component="logo">
+      
+  <img src="../../../assets/media/notesx.png" alt="logo">
+
+    </a>
+    Notes on Anything
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mathematics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Mathematics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Probability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Probability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/intro_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Probability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/set_theory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Set Theory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binom_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial and Multinomial Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/conditional_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Conditional Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/total_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Laws of Total Probability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/bayes_theorem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bayes' Theorem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/independence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Independence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/random_var/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Random Variabels
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/bernouli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bernouli Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binomial_normal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial to Normal Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binomial_poisson/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial to Poisson Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/geo_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Geometric Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/exp_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exponential Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/poisson_proccess/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Poisson Proccess
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/gamma_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gamma Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/func_random/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Function of Random Variables
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/joint_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Joint Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/expected/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Theory of Expectation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/var_std/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variance and Standart Deviation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/markov_ieq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markov's Inequality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/chebyshev_ieq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chebyshev Inequality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/large_num/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Laws of Large Number
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/moment_func/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Moment Generating Function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/lebesgue/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lebesgue Measure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/cov_corr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Covariance and Correlation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/tail_sum/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tail Sum
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/clf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Central Limit Theorem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Optimization
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Optimization
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/lsqrt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Least Squares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/non_lsqrt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Non-Linear Least Squares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/approx_hessian/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximation of Hessian
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_4" id="__nav_2_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Optimization Procedure
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Optimization Procedure
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/grad_descent/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradient-Descent
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/newt_rapshon/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Newton-Rapshon
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/gauss_newt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gauss-Newton
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/lm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Levenberg Marquardt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Algebra
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Algebra
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/algebra/svd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Singular Value Decomposition
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/algebra/frobenius_inner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frobenius Inner Product
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Lie Theory
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Lie Theory
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/lie_groups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lie Groups
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/lie_algebra/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lie Algebra
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/adjoint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adjoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Artificial Intelligences
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Artificial Intelligences
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Attention Mechanism
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/add_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additive Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/dot_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dot Product Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/scaled_dot_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scaled-Dot Product Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/mha/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Head Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/mqa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Query Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/gqa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Grouped Query Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Models
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Large Language Models
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Large Language Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/llama2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLAMA-2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/jpeg-lm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JPEG-LM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_2" id="__nav_3_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Computer Vision
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Vision
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/u_net/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    U-Net
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/u2_net/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    U2-Net
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Tokenizers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tokenizers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/tokenizer/bpe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Byte-Pair Encoding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/spinal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SpinalNet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Robotics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Robotics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Equations of Motion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Equations of Motion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eq_of_motion/quadcopter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quadcopter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nonlinear Control
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nonlinear Control
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_3_1" id="__nav_4_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Applied Nonlinear Control
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Applied Nonlinear Control
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../intro/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Introduction to Nonlinear Systems
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase_plane/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase Plane Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Geometric Control on SE(3)
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Geometric Control on SE(3)
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-error-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Error Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Error Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attitude-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attitude Error
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#position-and-velocity-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Position and Velocity Errors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Law
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Control Law">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attitude-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attitude Control
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#position-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Position Control
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#velocity-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Velocity Control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Velocity Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Sensor Fusion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Sensor Fusion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_fusion/kf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kalman Filter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_fusion/ekf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extended Kalman Filter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    SLAM
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            SLAM
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/icp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Point to Point Iterative Closest Point
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/plicp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Point to Line Iterative Closest Point
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/pose_graph/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pose-Graph
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    System Identification
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            System Identification
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sys_iden/wynda/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WyNDA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-error-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      The Error Functions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="The Error Functions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attitude-error" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attitude Error
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#position-and-velocity-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Position and Velocity Errors
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#control-law" class="md-nav__link">
+    <span class="md-ellipsis">
+      Control Law
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Control Law">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#attitude-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Attitude Control
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#position-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Position Control
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#velocity-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Velocity Control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Velocity Control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="geometric-control-of-quadrotor-on-se3"><strong>Geometric Control of Quadrotor on SE(3)</strong><a class="headerlink" href="#geometric-control-of-quadrotor-on-se3" title="Permanent link">&para;</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">This page is under construction</p>
+</div>
+<p>Nonlinear dynamics naturally evolve on non-flat spaces, and controlling them using flat-space representations often introduces singularities and global instability. For systems like quadcopters, whose dynamics lie on the manifold <span class="arithmatex">\(SE(3)\)</span>, geometric control offers a framework to design controllers that intrinsically respect the manifold’s structure. </p>
+<p>Euler angle-based controllers exhibit singularities (gimbal lock) when representing complex rotational maneuvers. Quaternion-based controllers can avoid singularities, but they represent attitude by double-covering the configuration of special orthogonal group <span class="arithmatex">\(SO(3)\)</span>. Geometric control, based on Lie theory, avoids complexities, discontinuities, and ambiguities <a href="#ref1">[1]</a>.</p>
+<p>Although quadcopters are underactuated systems with four inputs and six degrees of freedom, geometric control achieves asymptotic tracking of a subset of outputs, such as position or attitude, while maintaining stability in other degrees of freedom <a href="#ref1">[1]</a>.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>This page focuses on derivation of the error equations from <a href="#ref1">[1]</a> and providing some intuition behind them. We don't explain the dynamics of quadcopters here; for that, you can refer to <a href="../../models_sys/quadcopter/">Quadcopter Dynamics</a> for details on quadcopter equations of motion.</p>
+</div>
+<p>Quadcopters equations of motion in short, 
+<a id="eq1234"></a></p>
+<div class="arithmatex">\[
+\begin{gather}
+\dot{x} = v \\
+\dot{v} = gz_W-\frac{f}{m}Rz_B \\
+\dot{R} = R \hat{\Omega} \\
+J\dot{\Omega} + \Omega \times J \Omega = M \\
+\end{gather}
+\]</div>
+<p>where :</p>
+<ul>
+<li><span class="arithmatex">\(m \in \mathbb{R}\)</span> is the total mass  </li>
+<li><span class="arithmatex">\(J \in \mathbb{R}^{3 \times 3}\)</span> is the inertia matrix with respect to the body-fixed frame  </li>
+<li><span class="arithmatex">\(R \in SO(3)\)</span> is the rotation matrix from the body frame to the inertial frame</li>
+<li><span class="arithmatex">\(\dot{x}\)</span> is the position derivative (velocity) in the inertial frame</li>
+<li><span class="arithmatex">\(\dot{v}\)</span> is the acceleration in the inertial frame</li>
+<li><span class="arithmatex">\(\hat{\Omega}\)</span> is the skew-symmetric matrix of angular velocity <span class="arithmatex">\(\Omega\)</span>  </li>
+<li><span class="arithmatex">\(f\)</span> is the total thrust force</li>
+<li><span class="arithmatex">\(M\)</span> is the moment vector applied to the body-fixed frame</li>
+<li><span class="arithmatex">\(z_W\)</span> is z-axis in inertial reference frame</li>
+<li><span class="arithmatex">\(z_B\)</span> is z-axis in body frame</li>
+</ul>
+<details class="note">
+<summary>Lie Algebra <span class="arithmatex">\(\mathfrak{g}\)</span> <span class="arithmatex">\(\leftrightharpoons\)</span> Euclidean Space <span class="arithmatex">\(\mathbb{R}\)</span></summary>
+<ul>
+<li><em>Hat map</em> <span class="arithmatex">\((\hat{\cdot}) : \mathbb{R}^3 \rightarrow \mathfrak{so}(3)\)</span> for mapping vector in <span class="arithmatex">\(\mathbb{R}^3\)</span> to lie algebra of <span class="arithmatex">\(SO(3)\)</span>.</li>
+<li><em>Vee map</em> <span class="arithmatex">\(({\cdot}^\vee) : \mathfrak{so}(3) \rightarrow \mathbb{R}^3\)</span> is the inverse of <em>hat map</em>.</li>
+</ul>
+<p>Lie Theory for robotics explain more <a href="../../../maths/lie_theory/preface/">here</a>.</p>
+</details>
+<h2 id="the-error-functions"><strong>The Error Functions</strong><a class="headerlink" href="#the-error-functions" title="Permanent link">&para;</a></h2>
+<p><a href="#ref1">Lee, et. al</a> use multiple controller to achieve asymptotic output tracking of both attitude and position; attitude control, position control, and velocity control. 
+Complex flight maneuver can be defined by specifying a concatenation of flight modes together with conditions for switching between them.</p>
+<h3 id="attitude-error"><strong>Attitude Error</strong><a class="headerlink" href="#attitude-error" title="Permanent link">&para;</a></h3>
+<p>This type of control mode requires desired attitude <span class="arithmatex">\(R_d(t) \in SO(3)\)</span> and current attitude <span class="arithmatex">\(R(t) \in SO(3)\)</span> are function of time, where represented as <span class="arithmatex">\(R_d\)</span> and <span class="arithmatex">\(R\)</span> for simplified the derivation. Then, they choose the error function on <span class="arithmatex">\(SO(3) \times SO(3)\)</span> as follows :</p>
+<div class="arithmatex">\[
+\begin{align}
+\Gamma(R, R_d) = \frac{1}{2}\mathrm{tr} \left[I_3-R_d^TR \right] 
+\end{align}
+\]</div>
+<p><span class="arithmatex">\(R_d^TR\)</span> is relative attitude that transforms a vector from the current frame to the desired frame. 
+If current attitude <span class="arithmatex">\(R\)</span> align to <span class="arithmatex">\(R_d\)</span> it makes <span class="arithmatex">\(R_d^TR\)</span> equals the identity matrix <span class="arithmatex">\(I\)</span>, and the error function <span class="arithmatex">\(\Gamma(R, R_d)\)</span> becomes zero. </p>
+<details class="question">
+<summary>How <span class="arithmatex">\(R_d^TR=I\)</span>?</summary>
+<p>This follows from the fundamental axiom of groups, which states that the product of an element and its inverse is the identity element: </p>
+<div class="arithmatex">\[
+AA^{-1}=I
+\]</div>
+<p>For <span class="arithmatex">\(R \in SO(3)\)</span>, where <span class="arithmatex">\(R^{-1}=R^T\)</span> because of rotation matrices are orthogonal. Therefore, the product of a rotation matrix and its inverse is:</p>
+<div class="arithmatex">\[
+R^{-1}R=R^TR=I
+\]</div>
+<p>So, if <span class="arithmatex">\(R_d=R\)</span> it will leads to identity. </p>
+</details>
+<p>Analyze <strong>Eq. (5)</strong>, </p>
+<div class="arithmatex">\[
+\begin{align}
+\Gamma(R, R_d) &amp;= \frac{1}{2}\left[\mathrm{tr}(I_3)-\mathrm{tr}(R_d^TR)\right]\\
+&amp;= \frac{1}{2}\left[ 3-1-2\cos(\theta) \right]\\
+&amp;= 1-\cos(\theta)\\
+\end{align}
+\]</div>
+<p>where <span class="arithmatex">\(\theta\)</span> is angle of rotation. The function <span class="arithmatex">\(\Gamma\)</span> is locally positive definite <span class="arithmatex">\((\Gamma \ge 0)\)</span> when relative angle less than <span class="arithmatex">\(180^\circ\)</span>. </p>
+<ul>
+<li>The <span class="arithmatex">\(\cos(\theta) \in [−1, 1]\)</span> for <span class="arithmatex">\(\theta \in [0, \pi]\)</span>.</li>
+<li><span class="arithmatex">\(\Gamma(R, R_d)=0\)</span>, if <span class="arithmatex">\(\theta=0^\circ\)</span>. </li>
+<li><span class="arithmatex">\(\Gamma(R, R_d) &gt; 0\)</span>, for <span class="arithmatex">\(0^\circ &lt; \theta &lt; 180^\circ\)</span>.</li>
+</ul>
+<details class="question">
+<summary>Why exclude <span class="arithmatex">\(\theta = 180^\circ\)</span>?</summary>
+</details>
+<p>Based on <a href="#ref2">[2] (Chapter 11)</a>, we can take attitude error <span class="arithmatex">\(e_R\)</span> by take derivative of error function <span class="arithmatex">\(\Gamma \in SO(3) \times SO(3)\)</span> 
+with variation of rotation matrix expressed as <span class="arithmatex">\(\partial R = R\hat{\omega}\)</span> for <span class="arithmatex">\(\omega \in \mathbb{R}^3\)</span>.
+Then, the variational derivative when dealing with variation of rotation expressed as follows :</p>
+<div class="arithmatex">\[
+\begin{align}
+D_R\Gamma(R, R_d) \cdot \partial R 
+\end{align}
+\]</div>
+<p>By using <span class="arithmatex">\(\frac{\partial}{\partial X} \mathrm{tr}(XA) = A^T\)</span> <a href="#ref3">[3]</a></p>
+<div class="arithmatex">\[
+\begin{align}
+D_R \Gamma(R, R_d) = \frac{\partial \Gamma (R, R_d)}{\partial R} = -\frac{1}{2}R_d 
+\end{align}
+\]</div>
+<p>Then, apply <a href="../../../maths/">Frobenius inner product</a> for both <span class="arithmatex">\(D_R \Gamma\)</span> and <span class="arithmatex">\(\partial R\)</span> 
+, <span class="arithmatex">\(\left&lt; A, B \right&gt; = \mathrm{tr}(A^TB)\)</span></p>
+<div class="arithmatex">\[
+\begin{align}
+\left&lt; D_R\Gamma(R, R_d), \partial R \right&gt; &amp;= \mathrm{tr}\left(\left( -\frac{1}{2}R_d \right)^T \partial R \right) \\
+&amp;= \mathrm{tr}\left(-\frac{1}{2}R_d^T \partial R \right) \\
+&amp;= -\frac{1}{2} \mathrm{tr}\left(R_d^T \partial R \right) \\
+&amp;= -\frac{1}{2} \mathrm{tr}\left(R_d^T R\hat{\omega} \right) \\
+\end{align}
+\]</div>
+<p>Use property of hat map, <span class="arithmatex">\(-\frac{1}{2}\mathrm{tr}\left(\hat{x}\hat{y}\right) = x^Ty = x\cdot y\)</span>, where <span class="arithmatex">\((\cdot)\)</span> is a vector dot product. 
+To construct the skew-symmetric, we can use <span class="arithmatex">\(\hat{a} = \frac{1}{2}(A-A^T)\)</span> for <span class="arithmatex">\(A \in  G\)</span> where <span class="arithmatex">\(G\)</span> is Lie groups, </p>
+<div class="arithmatex">\[
+\begin{align}
+\left&lt; D_R\Gamma(R, R_d), \partial R \right&gt; &amp;= -\frac{1}{2}\cdot \frac{1}{2} \mathrm{tr}\left(\left(R_d^T R \right)\hat{\omega} \right) \\
+&amp;= -\frac{1}{2} \cdot \frac{1}{2}\mathrm{tr}\left(\left(R_d^T R - \left(R_d^T R\right)^T \right)\hat{\omega} \right) \\
+&amp;= \frac{1}{2} \left( -\frac{1}{2} \mathrm{tr}\left(\left[R_d^T R - R^TR_d\right]\hat{\omega}\right) \right) \\
+&amp;= \frac{1}{2}\left(R_d^T R - R^TR_d\right)^\vee \cdot \omega \\
+\end{align}
+\]</div>
+<p>Then, rotation error <span class="arithmatex">\(e_R \in \mathbb{R}^3\)</span> expressed as follows :</p>
+<div class="arithmatex">\[
+\begin{align}
+e_R = \frac{1}{2}\left(R_d^T R - R^TR_d\right)^\vee 
+\end{align}
+\]</div>
+<details class="info">
+<summary>Related to geodesic distance on <span class="arithmatex">\(SO(3)\)</span></summary>
+<p>Geodesic distance in the special orthogonal group <span class="arithmatex">\(SO(3)\)</span> <a href="#ref4">[4]</a> is given by:</p>
+<div class="arithmatex">\[
+\begin{align}
+d_{\text{geo}}(R, R_d) = ||\log(R_d^TR)||_F 
+\end{align}
+\]</div>
+<p>Where logarithm of <span class="arithmatex">\(R \in SO(3)\)</span> is defined as:</p>
+<div class="arithmatex">\[
+\begin{equation}
+\log R = \begin{cases}
+    0 &amp; \text{if} &amp; \theta = 0 \\
+    \frac{\theta}{2 \sin (\theta)} [R - R^T] &amp;\text{if}&amp;\theta \neq 0
+\end{cases} 
+\end{equation}
+\]</div>
+<p>with <span class="arithmatex">\(\theta = \cos^{-1} \left( \frac{\mathrm{tr}(R) - 1}{2} \right)\)</span>.</p>
+<p>Starting from <strong>Eq.(20)</strong>, we derive the geodesic distance, where <span class="arithmatex">\(||\cdot||_F\)</span> is Frobenius norm.</p>
+<div class="arithmatex">\[
+\begin{align}
+\log (R_d^TR) = \frac{\theta}{2 \sin (\theta)} [R_d^TR - R^TR_d] 
+\end{align}
+\]</div>
+<p>Subtitute <strong>Eq.(22)</strong> to <strong>Eq.(20),</strong> where <span class="arithmatex">\(||A||_F = \sqrt{\left&lt; A, A\right&gt;} = \sqrt{\mathrm{tr}(A^TA)}\)</span></p>
+<div class="arithmatex">\[
+\begin{align}
+d_{\text{geo}}(R, R_d) &amp;= \sqrt{\mathrm{tr}\left[\log(R_{d}^{T}R)^{T}\log(R_{d}^{T}R)\right]} \\
+&amp;= \sqrt{\mathrm{tr}\left[\left(\frac{\theta}{2\sin(\theta)}\left(R_{d}^{T}R - R^{T}R_{d}\right)\right)^{T} \frac{\theta}{2\sin(\theta)}\left(R_{d}^{T}R - R^{T}R_{d}\right)\right]} \\
+&amp;= \frac{\theta}{2\sin(\theta)} \sqrt{\mathrm{tr}\left[\left(\left(R_{d}^{T}R - R^{T}R_{d}\right)\right)^{T} \left(R_{d}^{T}R - R^{T}R_{d}\right)\right]} \\
+\end{align}
+\]</div>
+<p>Since the Frobenius norm is always non-negative, the minus sign <span class="arithmatex">\(\mathrm{tr}[\hat{x}\hat{y}] = -2x \cdot y\)</span> is irrelevant. Frobenious norm take <span class="arithmatex">\(\sqrt{\|\cdot \|^2}\)</span> <a href="#ref5">[5]</a> for rotation matrix makes minus sign irrelevant.</p>
+<div class="arithmatex">\[
+\begin{align}
+d_{\text{geo}}(R, R_d) = \frac{\theta}{\sin(\theta)}\left\|\left(R_d^TR - R^TR_d\right)^\vee \right\| \\
+\end{align}
+\]</div>
+</details>
+<p>From dynamics of quadrotor we can get <span class="arithmatex">\(\dot{R} = R\hat{\Omega}\)</span> and <span class="arithmatex">\(\dot{R}_d = R_d\hat{\Omega}_d\)</span>. To compare angular velocity we have to calculate in same tangent space either <span class="arithmatex">\(\mathsf{T}_RSO(3)\)</span> or <span class="arithmatex">\(\mathsf{T}_{R_d}SO(3)\)</span>. 
+Thus, the different of time derivative of rotation <span class="arithmatex">\(R\)</span> and <span class="arithmatex">\(R\)</span> equivalent to <span class="arithmatex">\(R\hat{e}_\Omega\)</span>.</p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{R} - \dot{R}_d(R_d^TR) &amp;= R\hat{\Omega} -R_d\hat{\Omega}_dR_d^TR \\
+&amp;= R\hat{\Omega} -(RR^T)R_d\hat{\Omega}_dR_d^TR \\
+&amp;= R\hat{\Omega} - R(R^TR_d\hat{\Omega}_dR_d^TR)^\hat \\
+\end{align}
+\]</div>
+<p>Where <span class="arithmatex">\(RR^T=I\)</span>. Then, re-arrange <strong>Eq. (29)</strong> to match with <span class="arithmatex">\(R\hat{e}_\Omega\)</span>.</p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{R} - \dot{R}_d(R_d^TR) = R(\hat{\Omega} - R^TR_d\hat{\Omega}_dR_d^TR) 
+\end{align}
+\]</div>
+<p>Thus, we can get <span class="arithmatex">\(\hat{e}_\Omega\)</span></p>
+<div class="arithmatex">\[
+\begin{align}
+\hat{e}_\Omega = \hat{\Omega} - R^TR_d\hat{\Omega}_dR_d^TR 
+\end{align}
+\]</div>
+<p>In vector space <span class="arithmatex">\(e_\Omega \in \mathbb{R}^3\)</span>,
+<a id="eq39"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+e_\Omega = \Omega - R^TR_d{\Omega}_d 
+\end{align}
+\]</div>
+<details class="info">
+<summary>Angular Velocity Error <span class="arithmatex">\(e_\Omega\)</span> from Lie Groups Adjoint Action</summary>
+<p>Since tangent <span class="arithmatex">\(\dot{R}\in \mathsf{T}_RSO(3)\)</span> and <span class="arithmatex">\(\dot{R}_d \mathsf{T}_{R_d}SO(3)\)</span> are "live" on different tangent spaces, so we need "transform" one of them. Thanks to <a href="../../../maths/lie_theory/adjoint/">adjoint action</a>, a distinguished operator on the Lie algebra, this transformation can be achieved.</p>
+<p>We have to "transform" <span class="arithmatex">\(\dot{R}_d\)</span> to <span class="arithmatex">\(\mathsf{T}_RSO(3)\)</span>. The relative rotation <span class="arithmatex">\(R_{rel}\)</span> of it expressed as <span class="arithmatex">\(R^TR_d\)</span> to rotate the vector from <span class="arithmatex">\(R_d\)</span>-frame to <span class="arithmatex">\(R\)</span>-frame. Where <span class="arithmatex">\(R_{rel}\)</span> is an element of <span class="arithmatex">\(SO(3)\)</span>, then</p>
+<div class="arithmatex">\[
+\begin{align}
+\mathsf{Adj}_{R_{rel}}\left(\hat{\Omega}_d\right)&amp;= R_{rel}\hat{\Omega}_d\left(R_{rel}\right)^{-1} \in \mathfrak{so}(3) \\
+&amp;= \widehat{R_{rel}\Omega} \\
+\mathsf{Adj}_{R_{rel}} &amp;= R_{rel}
+\end{align}
+\]</div>
+<p>So, we can applied directly to tangent vector, where <span class="arithmatex">\(\hat{\Omega}, \hat{\Omega}_d \in \mathfrak{so}(3)\)</span> and <span class="arithmatex">\(\Omega, \Omega_d \in \mathbb{R}^3\)</span></p>
+<div class="arithmatex">\[
+\begin{align}
+\Omega_d = R^TR_d\Omega_d \in \mathsf{T}_RSO(3) 
+\end{align}
+\]</div>
+<p>Thus,</p>
+<div class="arithmatex">\[
+\begin{align}
+e_\Omega = \Omega - R^TR_d\Omega_d
+\end{align}
+\]</div>
+</details>
+<h3 id="position-and-velocity-errors"><strong>Position and Velocity Errors</strong><a class="headerlink" href="#position-and-velocity-errors" title="Permanent link">&para;</a></h3>
+<p>Error on position control <span class="arithmatex">\(e_p\)</span> pretty straightforward, we need desired position <span class="arithmatex">\(p_d \in \mathbb{R}^3\)</span>, current position <span class="arithmatex">\(p_d \in \mathbb{R}^3\)</span>, 
+desired linear velocity <span class="arithmatex">\(\dot{p}_d \in \mathbb{R}^3\)</span>, and current velocity <span class="arithmatex">\(v \in \mathbb{R}^3\)</span>. </p>
+<div class="arithmatex">\[
+\begin{align}
+e_p = p - p_d \\
+e_v = v - \dot{p}_d 
+\end{align}
+\]</div>
+<h2 id="control-law"><strong>Control Law</strong><a class="headerlink" href="#control-law" title="Permanent link">&para;</a></h2>
+<p>Three different types of control modes derive different control law. 
+We derived thrust <span class="arithmatex">\(f\)</span> and total moment <span class="arithmatex">\(M\)</span> control law by using Eq. <a href="#eq1234">(2)</a> and Eq. <a href="#eq1234">(4)</a>, respectively. 
+To recall those,</p>
+<div class="arithmatex">\[
+\begin{align*}
+\dot{v} = gz_W-\frac{f}{m}Rz_B \tag{2}\\
+J\dot{\Omega} + \Omega \times J \Omega = M \tag{4}\\
+\end{align*}
+\]</div>
+<h3 id="attitude-control"><strong>Attitude Control</strong><a class="headerlink" href="#attitude-control" title="Permanent link">&para;</a></h3>
+<p>In this mode, it is possible to neglected translation equation of motion <a href="#eq1234">Eq. (2)</a>.
+Then, we need to define gain <span class="arithmatex">\(k_R \in \mathbb{R}^{3}_+\)</span> for rotation and <span class="arithmatex">\(k_\Omega \in \mathbb{R}^3_+\)</span> for angular velocity.
+Chosen <span class="arithmatex">\(f\)</span> and <span class="arithmatex">\(M\)</span> input control : 
+<a id="eq38"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+M = -k_Re_R -k_\Omega e_\Omega + \Omega \times J\Omega - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) 
+\end{align}
+\]</div>
+<p>Subtitute <a href="#eq38">Eq. (38)</a> to <a href="#eq1234">Eq. (4)</a>,
+<a id="eq3940"></a></p>
+<div class="arithmatex">\[
+\require{cancel}
+\begin{align}
+J\dot{\Omega} + \cancel{\Omega \times J \Omega} &amp;= -k_Re_R -k_\Omega e_\Omega + \cancel{\Omega \times J \Omega} - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) \\
+J\dot{\Omega} &amp;= -k_Re_R -k_\Omega e_\Omega - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) 
+\end{align}
+\]</div>
+<p>Take derivative of time of angular velocity error <a href="#eq39"><span class="arithmatex">\(\dot{e}_\Omega\)</span></a> to analyze moments for quadcopter <span class="arithmatex">\(M\)</span>.
+<a id="eq4144"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{e}_\Omega &amp;= \frac{d}{dt} \Omega-R^TR_d\Omega_d \\
+&amp;= \dot{\Omega}-\dot{R}^TR_d\Omega_d - R^T\dot{R}_d\Omega_d - RR_d^T\dot{\Omega}_d  \\ 
+&amp;= \dot{\Omega}-(R\hat{\Omega})^TR_d\Omega_d - R^T(R_d\hat{\Omega}_d)\Omega_d - RR_d^T\dot{\Omega}_d \\ 
+&amp;= \dot{\Omega}+\hat{\Omega}R^TR_d\Omega_d - RR_d^T\dot{\Omega}_d \\ 
+\end{align}
+\]</div>
+<p>Note that <span class="arithmatex">\(\hat{\Omega}^T=-\hat{\Omega}\)</span>, <span class="arithmatex">\(\dot{R}=R\hat{\Omega}\)</span> and <span class="arithmatex">\(\hat{x}x = 0\)</span>. Subtitute <a href="#eq3940">Eq. (40)</a> to <a href="#eq4144">Eq. (44)</a>. It leads to,</p>
+<div class="arithmatex">\[
+\begin{align}
+J\dot{e}_\Omega &amp;= J\dot{\Omega}+J \left(\hat{\Omega}R^TR_d\Omega_d - RR_d^T\dot{\Omega}_d\right)   \\
+J\dot{e}_\Omega &amp;= -k_Re_R -k_\Omega e_\Omega - J\left( \hat{\Omega}R^TR_d\Omega_d-R^TR_d\dot{\Omega}_d\right) + J(\hat{\Omega}R^TR_d\Omega_d - R^TR_d\dot{\Omega}_d)   \\
+J\dot{e}_\Omega &amp;= -k_Re_R -k_\Omega e_\Omega \\
+\end{align}
+\]</div>
+<p>To find error attitude dynamics of <span class="arithmatex">\(\Gamma, e_R, e_\Omega\)</span>. We take time derivative of error configuration <span class="arithmatex">\(\Gamma\)</span>.</p>
+<div class="arithmatex">\[
+\Gamma(R, R_d) = \frac{1}{2}\mathrm{tr} \left[I_3-R_d^TR \right] \\
+\]</div>
+<p>Terms <span class="arithmatex">\(R_d^TR\)</span> is the function in time. 
+<a id="eq5053"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\frac{d}{dt}(R_d^TR) &amp;= \dot{R}^T_dR + R_d^T\dot{R} \\
+&amp;= \left(R_d\hat{\Omega}_d\right)^TR + R_d^TR\hat{\Omega} \\
+&amp;= \hat{\Omega}_d^TR_d^T R + R_d^TR\hat{\Omega} \\
+&amp;= -\hat{\Omega}_dR_d^T R + R_d^TR\hat{\Omega}
+\end{align}
+\]</div>
+<p>Where <span class="arithmatex">\(\dot{R} = R\hat{\Omega}\)</span>, <span class="arithmatex">\(\dot{R}_d = R_d\hat{\Omega}_d\)</span>, and <span class="arithmatex">\(-\hat{A}=\hat{A}^T\)</span>. Simplified <a href="#eq5053">Eq. (53)</a> as follows :
+<a id="eq5455"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\frac{d}{dt}(R_d^TR) &amp;= R_d^TR\left(\hat{\Omega}-R^TR_d\hat{\Omega}_dR_d^T R\right)\\
+&amp;= (R_d^TR)\hat{e}_\Omega
+\end{align}
+\]</div>
+<p>Then, take the time derivative of <span class="arithmatex">\(\Gamma\)</span>,
+<a id="eq5657"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{\Gamma}(R, R_d) &amp;= -\frac{1}{2}\left( \frac{d}{dt}(R_d^TR) \right)\\
+&amp;= -\frac{1}{2}\left((R_d^TR)\hat{e}_\Omega\right)\\
+\end{align}
+\]</div>
+<p>Applied hat map property <span class="arithmatex">\(\mathrm{tr}\left[ A\hat{x}\right] = -x^T\left(A-A^T\right)^\vee\)</span> to <a href="#eq5657">Eq. 57</a>. Thus, error attitude dynamics of <span class="arithmatex">\(\Gamma(R_d, R)\)</span> donated by :</p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{\Gamma}(R, R_d) &amp;= \frac{1}{2}{e}_\Omega^T\left(R_d^TR-R^TR_d \right)^\vee\\
+&amp;=e_R \cdot {e}_\Omega\\
+\end{align}
+\]</div>
+<p>Then, we need to find error attitude dynamics of <span class="arithmatex">\(e_R\)</span>. Given rotation error <span class="arithmatex">\(e_R\)</span>, </p>
+<div class="arithmatex">\[
+e_R = \frac{1}{2}\left(R_d^T R - R^TR_d\right)^\vee 
+\]</div>
+<p>The derivative of <span class="arithmatex">\(e_R\)</span> as follows :
+<a id="eq60"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{e}_R &amp;= \frac{1}{2}\left(\frac{d}{dt}\left(R_d^T R\right) - \frac{d}{dt}\left(R^TR_d\right)\right)^\vee \\
+\end{align}
+\]</div>
+<p>Subtitute <a href="#eq5455">Eq. (55)</a> to <a href="#eq60">Eq. (60)</a>. Note that <span class="arithmatex">\(RR_d^T = \left(\frac{d}{dt}\left(R_d^TR\right)\right)^T\)</span>.
+<a id="eq6162"></a></p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{e}_R &amp;= \frac{1}{2}\left(\frac{d}{dt}\left(R_d^T R\right) - \left(\frac{d}{dt}\left(R_d^TR\right)\right)^T\right)^\vee \\
+&amp;= \frac{1}{2}\left(R_d^TR\hat{e}_\Omega + \hat{e}_\Omega R^TR_d\right)^\vee
+\end{align}
+\]</div>
+<p>Applied <span class="arithmatex">\(\hat{x}A + A^T \hat{x} = ([\mathrm{tr}[A]I-A]x)^\wedge\)</span> to <a href="#eq6162">Eq. [62]</a>, and the hat map <span class="arithmatex">\((\cdot)^\wedge\)</span> dissapear due to <span class="arithmatex">\((\hat{A})^\vee = A\)</span> where <span class="arithmatex">\(A \in \mathbb{R}^n\)</span>.</p>
+<div class="arithmatex">\[
+\begin{align}
+\dot{e}_R &amp;= \frac{1}{2}\left(\mathrm{tr}\left[R^TR_d\right]I-R^TR_d\right)e_\Omega \\
+&amp;\equiv C(R^TR)e_\Omega
+\end{align}
+\]</div>
+<p>Assume <span class="arithmatex">\(R^TR_d = \exp{\hat{x}} \in SO(3)\)</span> by using Rodrigues formuka for <span class="arithmatex">\(x \in \mathbb{R}^3\)</span>. Then, <span class="arithmatex">\(\|C(R^TR)\|_2 \leq 1\)</span> it occurs from eigenvalues of <span class="arithmatex">\(\left(C(\exp{\hat{x}})\right)^T C(\exp{\hat{x}})\)</span>. It eigenvalues is <span class="arithmatex">\(\cos^2(\|x\|), \frac{1}{2}(1+\cos(\|x\|))\)</span>, and <span class="arithmatex">\(\frac{1}{2}(1+\cos(\|x\|))\)</span> <a href="#ref1">[1]</a>, which the three of them are less or equal to 1.</p>
+<details class="question">
+<summary>How are the eigenvalues like that?</summary>
+<p>I’m not entirely sure how they compute the eigenvalues of <span class="arithmatex">\(\left(C(\exp{\hat{x}})\right)^T C(\exp{\hat{x}})\)</span>. So, it still a open question for me.</p>
+</details>
+<h3 id="position-control"><strong>Position Control</strong><a class="headerlink" href="#position-control" title="Permanent link">&para;</a></h3>
+<h3 id="velocity-control"><strong>Velocity Control</strong><a class="headerlink" href="#velocity-control" title="Permanent link">&para;</a></h3>
+<h4 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h4>
+<p><a id="ref1">[1] <a href="https://arxiv.org/pdf/1003.2005v4">Control of Complex Maneuvers for a Quadrotor UAV using Geometric Methods on SE(3) (v4)
+</a></a></p>
+<p><a id="ref2">[2] <a href="https://link.springer.com/book/10.1007/978-1-4899-7276-7">Geometric control of mechanical systems
+</a></a></p>
+<p><a id="ref3">[3] <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">Matrix Cookbook
+</a></a></p>
+<p><a id="ref4">[4] <a href="https://en.wikipedia.org/wiki/Axis%E2%80%93angle_representation">Axis–angle Representation
+</a></a></p>
+<p><a id="ref5">[5] <a href="https://arxiv.org/pdf/2404.11735v1">Learning with 3D rotations, a hitchhiker’s guide to SO(3)
+</a></a></p>
+<p><a id="ref6">[6] <a href="https://arxiv.org/pdf/1812.01537">A micro Lie theory for state estimation in robotics
+</a></a></p>
+<p><a id="ref7">[7] <a href="https://ieeexplore.ieee.org/document/5980409">Minimum snap trajectory generation and control for quadrotors
+</a></a></p>
+<p><a id="ref8">[8] <a href="https://arxiv.org/pdf/1003.2005v3">Control of Complex Maneuvers for a Quadrotor UAV using Geometric Methods on SE(3) (v3)
+</a></a></p>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../phase_plane/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Phase Plane Analysis">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Phase Plane Analysis
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../sensor_fusion/kf/" class="md-footer__link md-footer__link--next" aria-label="Next: Kalman Filter">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Kalman Filter
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright" style="color: gray;">
+    Found any misexplanations? Report or PR on this
+    <a href="https://github.com/drmwnrafi/notesonanything" target="_blank" rel="noopener noreferrer" style="color: #4051b5;">&nbsp;repo</a>
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/drmwnrafi" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.kaggle.com/drmwnnrafi" target="_blank" rel="noopener" title="www.kaggle.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M304.2 501.5 158.4 320.3 298.2 185c2.6-2.7 1.7-10.5-5.3-10.5h-69.2c-3.5 0-7 1.8-10.5 5.3L80.9 313.5V7.5q0-7.5-7.5-7.5H21.5Q14 0 14 7.5v497q0 7.5 7.5 7.5h51.9q7.5 0 7.5-7.5v-109l30.8-29.3 110.5 140.6c3 3.5 6.5 5.3 10.5 5.3h66.9q5.25 0 6-3z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/drmwnnrafi/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss", "header.autohide", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../../../assets/js/mathjax-config.js"></script>
+      
+        <script src="../../../assets/js/card.js"></script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      
+    
+  </body>
+</html>

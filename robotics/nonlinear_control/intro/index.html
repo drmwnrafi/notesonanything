@@ -1,0 +1,3640 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+        <meta name="author" content="Rafi Darmawan">
+      
+      
+        <link rel="canonical" href="https://drmwnrafi.github.io/notesonanything/robotics/nonlinear_control/intro/">
+      
+      
+        <link rel="prev" href="../../eq_of_motion/quadcopter/">
+      
+      
+        <link rel="next" href="../phase_plane/">
+      
+      
+      <link rel="icon" href="../../../assets/media/ziczac.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.49">
+    
+    
+      
+        <title>Introduction to Nonlinear Systems - Notes on Anything</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.6f8fc17f.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Montserrat";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/css/extra.css">
+    
+      <link rel="stylesheet" href="../../../assets/css/card.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+      
+        <meta  property="og:type"  content="website" >
+      
+        <meta  property="og:title"  content="Introduction to Nonlinear Systems - Notes on Anything" >
+      
+        <meta  property="og:description"  content="None" >
+      
+        <meta  property="og:image"  content="https://drmwnrafi.github.io/notesonanything/assets/images/social/robotics/nonlinear_control/intro.png" >
+      
+        <meta  property="og:image:type"  content="image/png" >
+      
+        <meta  property="og:image:width"  content="1200" >
+      
+        <meta  property="og:image:height"  content="630" >
+      
+        <meta  property="og:url"  content="https://drmwnrafi.github.io/notesonanything/robotics/nonlinear_control/intro/" >
+      
+        <meta  name="twitter:card"  content="summary_large_image" >
+      
+        <meta  name="twitter:title"  content="Introduction to Nonlinear Systems - Notes on Anything" >
+      
+        <meta  name="twitter:description"  content="None" >
+      
+        <meta  name="twitter:image"  content="https://drmwnrafi.github.io/notesonanything/assets/images/social/robotics/nonlinear_control/intro.png" >
+      
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#introduction-to-nonlinear-systems" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Notes on Anything" class="md-header__button md-logo" aria-label="Notes on Anything" data-md-component="logo">
+      
+  <img src="../../../assets/media/notesx.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Notes on Anything
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Introduction to Nonlinear Systems
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="white" data-md-color-accent="deep-orange"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M223.5 32C100 32 0 132.3 0 256s100 224 223.5 224c60.6 0 115.5-24.2 155.8-63.4 5-4.9 6.3-12.5 3.1-18.7s-10.1-9.7-17-8.5c-9.8 1.7-19.8 2.6-30.1 2.6-96.9 0-175.5-78.8-175.5-176 0-65.8 36-123.1 89.3-153.3 6.1-3.5 9.2-10.5 7.7-17.3s-7.3-11.9-14.3-12.5c-6.3-.5-12.6-.8-19-.8z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="lime"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M361.5 1.2c5 2.1 8.6 6.6 9.6 11.9L391 121l107.9 19.8c5.3 1 9.8 4.6 11.9 9.6s1.5 10.7-1.6 15.2L446.9 256l62.3 90.3c3.1 4.5 3.7 10.2 1.6 15.2s-6.6 8.6-11.9 9.6L391 391l-19.9 107.9c-1 5.3-4.6 9.8-9.6 11.9s-10.7 1.5-15.2-1.6L256 446.9l-90.3 62.3c-4.5 3.1-10.2 3.7-15.2 1.6s-8.6-6.6-9.6-11.9L121 391 13.1 371.1c-5.3-1-9.8-4.6-11.9-9.6s-1.5-10.7 1.6-15.2L65.1 256 2.8 165.7c-3.1-4.5-3.7-10.2-1.6-15.2s6.6-8.6 11.9-9.6L121 121l19.9-107.9c1-5.3 4.6-9.8 9.6-11.9s10.7-1.5 15.2 1.6L256 65.1l90.3-62.3c4.5-3.1 10.2-3.7 15.2-1.6M160 256a96 96 0 1 1 192 0 96 96 0 1 1-192 0m224 0a128 128 0 1 0-256 0 128 128 0 1 0 256 0"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../maths/preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Mathematics
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../AI/preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Artificial Intelligences
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../preface/" class="md-tabs__link">
+          
+  
+    
+  
+  Robotics
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Notes on Anything" class="md-nav__button md-logo" aria-label="Notes on Anything" data-md-component="logo">
+      
+  <img src="../../../assets/media/notesx.png" alt="logo">
+
+    </a>
+    Notes on Anything
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Mathematics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Mathematics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Probability
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            Probability
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/intro_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Intro to Probability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/set_theory/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Set Theory
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binom_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial and Multinomial Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/conditional_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Conditional Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/total_probs/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Laws of Total Probability
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/bayes_theorem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bayes' Theorem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/independence/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Independence
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/random_var/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Random Variabels
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/bernouli/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bernouli Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binomial_normal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial to Normal Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/binomial_poisson/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Binomial to Poisson Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/geo_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Geometric Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/exp_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Exponential Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/poisson_proccess/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Poisson Proccess
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/gamma_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gamma Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/func_random/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Function of Random Variables
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/joint_dist/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Joint Distribution
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/expected/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Theory of Expectation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/var_std/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variance and Standart Deviation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/markov_ieq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Markov's Inequality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/chebyshev_ieq/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Chebyshev Inequality
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/large_num/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Laws of Large Number
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/moment_func/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Moment Generating Function
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/lebesgue/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lebesgue Measure
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/cov_corr/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Covariance and Correlation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/tail_sum/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Tail Sum
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/probability/clf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Central Limit Theorem
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Optimization
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3">
+            <span class="md-nav__icon md-icon"></span>
+            Optimization
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/lsqrt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Least Squares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/non_lsqrt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Non-Linear Least Squares
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/approx_hessian/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Approximation of Hessian
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_3_4" id="__nav_2_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Optimization Procedure
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_2_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Optimization Procedure
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/grad_descent/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gradient-Descent
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/newt_rapshon/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Newton-Rapshon
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/gauss_newt/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Gauss-Newton
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/optimization/lm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Levenberg Marquardt
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Algebra
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_4">
+            <span class="md-nav__icon md-icon"></span>
+            Algebra
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/algebra/svd/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Singular Value Decomposition
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/algebra/frobenius_inner/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Frobenius Inner Product
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Lie Theory
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_5">
+            <span class="md-nav__icon md-icon"></span>
+            Lie Theory
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/lie_groups/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lie Groups
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/lie_algebra/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Lie Algebra
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../maths/lie_theory/adjoint/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Adjoint
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Artificial Intelligences
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Artificial Intelligences
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Attention Mechanism
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Attention Mechanism
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/add_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Additive Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/dot_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Dot Product Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/scaled_dot_att/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scaled-Dot Product Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/mha/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Head Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/mqa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Multi Query Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/attention/gqa/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Grouped Query Attention
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Models
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_1" id="__nav_3_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Large Language Models
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Large Language Models
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/llama2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    LLAMA-2
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/jpeg-lm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    JPEG-LM
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_3_2" id="__nav_3_3_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Computer Vision
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_3_3_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_3_2">
+            <span class="md-nav__icon md-icon"></span>
+            Computer Vision
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/u_net/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    U-Net
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/model/u2_net/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    U2-Net
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_3_4" id="__nav_3_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Tokenizers
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_4">
+            <span class="md-nav__icon md-icon"></span>
+            Tokenizers
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/tokenizer/bpe/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Byte-Pair Encoding
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../AI/spinal/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SpinalNet
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Robotics
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Robotics
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../preface/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Preface
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_2" id="__nav_4_2_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Equations of Motion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_2">
+            <span class="md-nav__icon md-icon"></span>
+            Equations of Motion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../eq_of_motion/quadcopter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Quadcopter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3" id="__nav_4_3_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Nonlinear Control
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_3">
+            <span class="md-nav__icon md-icon"></span>
+            Nonlinear Control
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_3_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4_3_1" id="__nav_4_3_1_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Applied Nonlinear Control
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_3_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_3_1">
+            <span class="md-nav__icon md-icon"></span>
+            Applied Nonlinear Control
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Introduction to Nonlinear Systems
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Introduction to Nonlinear Systems
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-nonlinear-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Nonlinear Control?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nonlinear-system-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      Nonlinear System Behaviour
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nonlinear System Behaviour">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nonlinearities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Nonlinearities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linear Systems
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#superposition-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Superposition Principle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-example-of-nonlinear-system-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      An Example Of Nonlinear System Behaviour
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-common-nonlinear-systems-behaviours" class="md-nav__link">
+    <span class="md-ellipsis">
+      Some Common Nonlinear Systems Behaviours
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Some Common Nonlinear Systems Behaviours">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-equilibrium-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Equilibrium Points
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limit-cycles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limit Cycles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bifurcations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bifurcations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chaos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chaos
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../phase_plane/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Phase Plane Analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../geom_quadcopter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Geometric Control on SE(3)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_4" id="__nav_4_4_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    Sensor Fusion
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_4">
+            <span class="md-nav__icon md-icon"></span>
+            Sensor Fusion
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_fusion/kf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Kalman Filter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sensor_fusion/ekf/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Extended Kalman Filter
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_5" id="__nav_4_5_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    SLAM
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_5">
+            <span class="md-nav__icon md-icon"></span>
+            SLAM
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/icp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Point to Point Iterative Closest Point
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/plicp/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Point to Line Iterative Closest Point
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../slam/pose_graph/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Pose-Graph
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_4_6" id="__nav_4_6_label" tabindex="">
+            
+  
+  <span class="md-ellipsis">
+    System Identification
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4_6">
+            <span class="md-nav__icon md-icon"></span>
+            System Identification
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../sys_iden/wynda/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    WyNDA
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#why-nonlinear-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Why Nonlinear Control?
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#nonlinear-system-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      Nonlinear System Behaviour
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Nonlinear System Behaviour">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nonlinearities" class="md-nav__link">
+    <span class="md-ellipsis">
+      Nonlinearities
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#linear-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      Linear Systems
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#superposition-principle" class="md-nav__link">
+    <span class="md-ellipsis">
+      Superposition Principle
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#an-example-of-nonlinear-system-behaviour" class="md-nav__link">
+    <span class="md-ellipsis">
+      An Example Of Nonlinear System Behaviour
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#some-common-nonlinear-systems-behaviours" class="md-nav__link">
+    <span class="md-ellipsis">
+      Some Common Nonlinear Systems Behaviours
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Some Common Nonlinear Systems Behaviours">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multiple-equilibrium-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multiple Equilibrium Points
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#limit-cycles" class="md-nav__link">
+    <span class="md-ellipsis">
+      Limit Cycles
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#bifurcations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Bifurcations
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chaos" class="md-nav__link">
+    <span class="md-ellipsis">
+      Chaos
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="introduction-to-nonlinear-systems"><strong>Introduction to Nonlinear Systems</strong><a class="headerlink" href="#introduction-to-nonlinear-systems" title="Permanent link">&para;</a></h1>
+<p>Nonlinear control often involves an iterative process in the analysis and design of its systems.</p>
+<h2 id="why-nonlinear-control"><strong>Why Nonlinear Control?</strong><a class="headerlink" href="#why-nonlinear-control" title="Permanent link">&para;</a></h2>
+<ol>
+<li>
+<p><strong>Improvement of Existing Control Systems</strong></p>
+<ul>
+<li><strong>Linear Control</strong> : It can only work on small changes in the stable point to keep the linear system valid. Large changes in the system make it unstable because the nonlinearity in the system cannot be controlled by a linear model.</li>
+<li><strong>Nonlinear Control</strong> : It can operate on significant changes around the stable point.</li>
+</ul>
+</li>
+<li>
+<p><strong>Hard Nonlinearities</strong></p>
+<p>In <strong>Linear Control</strong>, the system model must be able to determine its linear function. However, in general, control systems have a discontinuous nature. This means that the system will experience a sudden change in state. This is what is called <strong><em>hard nonlinearities</em></strong>.</p>
+</li>
+<li>
+<p><strong>Dealing with Model Uncertainties</strong></p>
+<p>In the linear model, the system parameters are completely known. However, in fact, in the case of a control system, there is uncertainty in the parameters used in the system. Linear Control uses exact values for its parameters without considering measurement uncertainty, which can result in a decrease in the level of stability or even become unstable.</p>
+</li>
+<li>
+<p><strong>Simplicity</strong></p>
+<p>System models with nonlinearity are based on physical principles by modeling controlled processes. This is because the system to be controlled exhibits nonlinear characteristics related to the underlying physical principles.</p>
+</li>
+</ol>
+<h2 id="nonlinear-system-behaviour"><strong>Nonlinear System Behaviour</strong><a class="headerlink" href="#nonlinear-system-behaviour" title="Permanent link">&para;</a></h2>
+<p><strong>Nonlinear Control</strong> systems can be described in differential equations. If the system operates within small variations and the role of uncertainty is not too large, then the system can be estimated with a linear model.</p>
+<h3 id="nonlinearities"><strong>Nonlinearities</strong><a class="headerlink" href="#nonlinearities" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Inherent (Natural): uncertainty of the <em>hardware</em> or <em>motion</em> of the system</li>
+<li>Intentional (Artificial): uncertainty that is deliberately introduced into the control system</li>
+</ul>
+<h3 id="linear-systems"><strong>Linear Systems</strong><a class="headerlink" href="#linear-systems" title="Permanent link">&para;</a></h3>
+<p>Linear Time Invariant (LTI) :</p>
+<div class="arithmatex">\[\dot x = Ax \\
+\text{x = vector state} \\
+\text{A = coefficent matrix of system}\]</div>
+<p>Properties of LTI (Linear Time-Invariant) Systems:</p>
+<ol>
+<li>
+<p>The system has an equilibrium point if the matrix <em>A</em> is nonsingular (determinant value <span class="arithmatex">\(\neq\)</span> 0).</p>
+</li>
+<li>
+<p>The equilibrium point is stable if all eigenvalues of matrix <em>A</em> are negative real numbers.</p>
+</li>
+<li>
+<p>The transient response consists of the natural modes of the system. Transient response refers to the system's response to initial changes or disturbances. Natural modes are the patterns of vibration or oscillation that naturally arise from the system.</p>
+</li>
+<li>
+<p>Adding an external input <span class="arithmatex">\(u(t)\)</span> to the LTI equation results in:</p>
+</li>
+</ol>
+<div class="arithmatex">\[
+\dot x = Ax + Bu
+\]</div>
+<ul>
+<li>The response of the LTI system satisfies the principle of superposition.</li>
+<li>If the system input is bounded, then the output of the system is also bounded.</li>
+<li>If the system input is a sinusoidal wave, then the output will also be a sinusoidal wave.</li>
+</ul>
+<h3 id="superposition-principle"><strong>Superposition Principle</strong><a class="headerlink" href="#superposition-principle" title="Permanent link">&para;</a></h3>
+<p>A system can satisfy the superposition principle if the system can exist in multiple states at any given time, and the state of the system at that time is the result of a linear combination of individual states.</p>
+<div class="arithmatex">\[F(x_1 + x_2) = F(x_1) + F(x_2)\\
+\text{and}\\
+F(ax) = aF(x),\;a \;\text{is scalar}\]</div>
+<h3 id="an-example-of-nonlinear-system-behaviour"><strong>An Example Of Nonlinear System Behaviour</strong><a class="headerlink" href="#an-example-of-nonlinear-system-behaviour" title="Permanent link">&para;</a></h3>
+<p>Model for <em>Underwater Vehicle</em></p>
+<div class="arithmatex">\[\dot v + |v|v = u\\
+\dot v = u - |v|v\\
+\text{u = thrust on the propeller}\\
+\text{v = velocity of the R.O.V (remotely-operated underwater vehicle)}\]</div>
+<p>The equation <span class="arithmatex">\(|v|v\)</span> represents the nonlinearity of the system. This equation states that the change in velocity <span class="arithmatex">\(\dot v\)</span> depends on the control parameter <span class="arithmatex">\(u\)</span> and the quadratic term of the R.O.V velocity <span class="arithmatex">\(|v|v\)</span>, also known as the <strong>DRAG FORCE</strong> <span class="arithmatex">\(F_D \propto v^2\)</span>.</p>
+<p><strong>DRAG FORCE</strong> is the force that acts in the opposite direction to the relative motion of an object with respect to the surrounding fluid.</p>
+<p>Below is an experiment using the <strong>First-Order Euler Method</strong>:</p>
+<div class="arithmatex">\[
+y_{i+1} = y_i + \Delta t \cdot f(t_i, y_i);\quad \text{given}\;t_0, \; y_0 \\
+y_{i+1} = \text{output at the next time step}\;(i+1) \\
+y_{i} = \text{output at time}\;i \\
+\Delta t = \text{time step} \\
+f(t_i, y_i) = \text{function determining the rate of change of y w.r.t t}
+\]</div>
+<figure>
+<img alt="" src="../../media/underwater_1.png" width="800" />
+</figure>
+<figure>
+<img alt="" src="../../media/underwater_2.png" width="800" />
+</figure>
+<p>In both graphs above, the system demonstrates that at high velocities, the coefficient of the "drag effect" produced by <span class="arithmatex">\(|v|\)</span> becomes larger, causing the system to reach equilibrium faster compared to when no thrust <em>u</em> is applied (or when <span class="arithmatex">\(t &gt; 5\;s\)</span>), which takes longer to reach a velocity of 0.</p>
+<p>In the second graph, the thrust is increased tenfold. As mentioned earlier, at high velocities, the system will reach equilibrium faster compared to low velocities. However, when the thrust is increased tenfold from the first experiment where thrust = 1 unit step, the equilibrium velocity <span class="arithmatex">\(v_s\)</span> is not ten times larger than in the first experiment.</p>
+<p>Nonlinear systems tend to exhibit more complex responses to large input changes and do not scale linearly as in linear systems. Changes in control <em>u</em> can trigger significant nonlinear effects on the system's response.</p>
+<div class="arithmatex">\[
+u=1 =&gt; 0 + |v_s|v_s = 1 =&gt; v_s = 1\\
+u=10 =&gt; 0 + |v_s|v_s = 10 =&gt; v_s = \sqrt{10} \approx 3.16
+\]</div>
+<h2 id="some-common-nonlinear-systems-behaviours"><strong>Some Common Nonlinear Systems Behaviours</strong><a class="headerlink" href="#some-common-nonlinear-systems-behaviours" title="Permanent link">&para;</a></h2>
+<h3 id="multiple-equilibrium-points"><strong>Multiple Equilibrium Points</strong><a class="headerlink" href="#multiple-equilibrium-points" title="Permanent link">&para;</a></h3>
+<p>Equilibrium Point is a condition where the system undergoes no change over time.</p>
+<p><em>Example :</em>
+​
+In a nonlinear system <span class="arithmatex">\(\dot x = f(x)\)</span>, where <span class="arithmatex">\(f(x)\)</span> is a nonlinear function.</p>
+<div class="arithmatex">\[\dot x = -x + x^2\]</div>
+<p>Linearizing <span class="arithmatex">\(\dot x\)</span> around <span class="arithmatex">\(\dot x = 0\)</span>:</p>
+<div class="arithmatex">\[ 0 = -x + x^2\\
+\text{Obtained 2 equilibrium points : }\\
+\bar x = 0 \quad \text{and} \quad \bar x = 1\]</div>
+<p>For the linear system (<span class="arithmatex">\(\dot x = Ax\)</span>), we can obtain a linear system from the nonlinear system using <strong>First Order Taylor Expansion</strong>:
+​
+<span class="arithmatex">\(\text{Taylor Expansion : }\)</span></p>
+<div class="arithmatex">\[f(x) = f(\bar x) + f'(\bar x) (x-\bar x)+\frac {1}{2!}f''(\bar x)(x-\bar x)^2 + ...\]</div>
+<p>So,</p>
+<div class="arithmatex">\[f(x) = -x+x^2\\
+f'(x)=-1+2x\]</div>
+<p>If <span class="arithmatex">\(\bar x = 0\)</span>, then:</p>
+<div class="arithmatex">\[f(0) = -(0) + 0^2 = 0\\
+f'(0)=-1+2(0) = -1\\
+f(x) = f(0) + f'(0) (x-0)\\
+f(x) = 0 + -1(x-0)\\
+f(x)=-x\]</div>
+<p>Thus obtained:</p>
+<div class="arithmatex">\[\dot x =  -x\]</div>
+<p>The solution to the above linear equation is:</p>
+<div class="arithmatex">\[\dot x = -x\\
+\frac{dx}{dt} = -x\\
+\frac{1}{x}\;dx = - dt\\
+\int \frac{1}{x}\;dx = \int -1\;dt$\\
+\ln|x|=-t+C\]</div>
+<p>If <span class="arithmatex">\(x(0)=x_0\)</span>, then</p>
+<div class="arithmatex">\[\ln|x_0|=0+C\\
+\ln|x_0|=C\]</div>
+<p>Substitute <span class="arithmatex">\(C\)</span> into the equation <span class="arithmatex">\(\ln|x|=-t+C\)</span>,</p>
+<div class="arithmatex">\[\ln|x|=-t+\ln|x_0|\\
+\ln|x|-\ln|x_0|=-t\\
+\ln \left|\frac{x}{x_0}\right| = -t\\
+\frac{x}{x_0} = \pm e^{-t}\]</div>
+<p>so,</p>
+<div class="arithmatex">\[x(t) = x_0e^{-t}\]</div>
+<figure>
+<img alt="" src="../../media/multiple_equil.gif" width="800" />
+</figure>
+<p>If we directly use the response from the equation <span class="arithmatex">\(\dot x = -x+x^2\)</span>, then:</p>
+<div class="arithmatex">\[\frac {dx}{-x+x^2} = dt\\
+-\frac {dx}{x(1-x)}= dt\\
+\int \frac {dx}{x(1-x)} = \int-1 dt\\
+\ln |x| - \ln|1-x| = -t +C\\
+\ln \left|\frac{x}{1-x}\right|=-t+C\\
+\frac{x}{1-x} = \pm e^{-t+C}\]</div>
+<p>If <span class="arithmatex">\(x(0) = x_0\)</span>, then</p>
+<div class="arithmatex">\[\frac{x_0}{1-x_0} = \pm e^{C}\\
+\ln \left|\frac{x_0}{1-x_0}\right| = C\]</div>
+<p>Substitute the value of <span class="arithmatex">\(C\)</span> into <span class="arithmatex">\(\frac{x}{1-x} = \pm e^{-t+C}\)</span></p>
+<div class="arithmatex">\[\frac{x}{1-x}=e^{-t+\ln \left|\frac{x_0}{1-x_0}\right|}\\
+\frac{x}{1-x}=e^{-t} \cdot \left(\frac{x_0}{1-x_0}\right)\\
+x=e^{-t} \cdot (1-x) \cdot \left(\frac{x_0}{1-x_0}\right)\\
+x\cdot(1-x_0)=e^{-t} \cdot (1-x) \cdot x_0\\
+x\cdot(1-x_0)=e^{-t}\cdot x_0 - e^{-t}\cdot x \cdot x_0\\
+x\left(1-x_0\right)+e^{-t}\cdot x\cdot x_0=e^{-t}x_0\\
+x\left(1-x_0+e^{-t}\cdot x_0\right)=e^{-t}x_0\]</div>
+<p>thus obtained,</p>
+<div class="arithmatex">\[x(t)=\frac{x_0e^{-t}}{1-x_0+x_0e^{-t}}\]</div>
+<figure>
+<img alt="" src="../../media/multiple_equil_2.gif" width="800" />
+</figure>
+<p>In the graph of the linearized system <span class="arithmatex">\(x(t)=x_0e^{-t}\)</span>, regardless of its initial conditions, the system will eventually reach a stable state (<span class="arithmatex">\(x = 0\)</span>) over time.</p>
+<p>In the graph of the nonlinear system without linearization <span class="arithmatex">\(x(t)=\frac{x_0e^{-t}}{1-x_0+x_0e^{-t}}\)</span>, it can be observed that at time step 1, the system with an initial condition <span class="arithmatex">\(&lt; 1\)</span> will reach the equilibrium point <span class="arithmatex">\(x = 0\)</span>, but for initial conditions <span class="arithmatex">\(&gt; 1\)</span>, the state <span class="arithmatex">\(x\)</span> will tend towards infinity in a finite time, which is known as a <strong><em>finite escape time</em></strong>.</p>
+<p>The experiment above concludes that stability in nonlinear systems depends on their initial conditions.</p>
+<h2 id="limit-cycles"><strong>Limit Cycles</strong><a class="headerlink" href="#limit-cycles" title="Permanent link">&para;</a></h2>
+<p><strong>Limit Cycles</strong> are isolated closed trajectories that form periodic and regular motion over time. "Isolated" means that the trajectory does not intersect with other trajectories, and "closed" means that the trajectory is a closed path.</p>
+<p><strong>Example:</strong></p>
+<p>The Van der Pol Oscillator Equation is a second-order ordinary differential equation that models the oscillation of an electrical circuit in a vacuum tube. The Van der Pol equation is a non-conservative model, meaning that the system modeled can gain or lose energy over time.
+<span class="arithmatex">\(<span class="arithmatex">\(\ddot x + \mu (1-x^2) \dot x + x = 0\)</span>\)</span>
+where:
+- <span class="arithmatex">\(x\)</span>: initial condition coordinate
+- <span class="arithmatex">\(\mu\)</span>: damping strength (non-linearity)</p>
+<p><strong>Liénard Theorem</strong> can prove that the Van der Pol equation has Limit Cycles.</p>
+<p><strong>Liénard Equation:</strong></p>
+<div class="arithmatex">\[\frac{d^2}{dt^2}x + F(x)\frac{d}{dt}x+G(x) = 0 \]</div>
+<p><strong>Liénard Theorem:</strong></p>
+<ol>
+<li>
+<p><span class="arithmatex">\(F\)</span> and <span class="arithmatex">\(G\)</span> are continuous functions and their derivatives are also continuous <span class="arithmatex">\(f,g \in C^1(\mathbb R)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(G\)</span> is an odd function, i.e., <span class="arithmatex">\(G(-x)=-G(x)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(G(x) &gt; 0\)</span>, for <span class="arithmatex">\(x &gt; 0\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(F\)</span> is an even function, i.e., <span class="arithmatex">\(F(-x)=F(x)\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(F(x)=\int _0^x f(x)\;dx\)</span>, and</p>
+<ul>
+<li><span class="arithmatex">\(F(x) &lt; 0\)</span> for <span class="arithmatex">\(0&lt;x&lt;a\)</span></li>
+<li><span class="arithmatex">\(F(x) &gt; 0\)</span> for <span class="arithmatex">\(x&gt;a\)</span></li>
+<li><span class="arithmatex">\(F(0) = F(\pm a) = 0\)</span></li>
+</ul>
+</li>
+</ol>
+<p>If the <em>Liénard Equation</em> satisfies these theorems, then the equation has a <strong>Stable Limit Cycle</strong> surrounding the origin point. The Van der Pol equation is an example of a <em>Liénard Equation</em>.</p>
+<p>Applying the <em>Liénard Theorem</em> to the <em>Van der Pol Oscillator Equation</em> with <span class="arithmatex">\(\mu &gt; 0\)</span>:</p>
+<p>Based on the <em>Liénard Equation</em>:</p>
+<div class="arithmatex">\[F(x) = \mu (1-x^2)\\
+G(x) = x\]</div>
+<ol>
+<li>
+<p><span class="arithmatex">\(F\)</span> and <span class="arithmatex">\(G\)</span> belong to the class <span class="arithmatex">\(C^1\)</span> (continuously differentiable)</p>
+</li>
+<li>
+<p><span class="arithmatex">\(G(-x)=-x\)</span> so <span class="arithmatex">\(G(x)\)</span> is an odd function</p>
+</li>
+<li>
+<p><span class="arithmatex">\(G(x) &gt; 0\)</span> if <span class="arithmatex">\(x &gt; 0\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(F(-x) = \mu (1-(-x)^2) = \mu (1-x^2) = F(x)\)</span>, so <span class="arithmatex">\(F(x)\)</span> is an even function</p>
+</li>
+<li>
+<p><span class="arithmatex">\(F(x) = \mu \int _0 ^x (1-x^2)\;dx = \mu (x-\frac{1}{3}x^3)\)</span>,</p>
+</li>
+</ol>
+<p>thus, roots are obtained as <span class="arithmatex">\(x=0, x=-\sqrt 3, x=\sqrt 3\)</span></p>
+<ul>
+<li>
+<p><span class="arithmatex">\(F(x) = \mu (x-\frac{1}{3}x^3) &lt; 0\)</span> for <span class="arithmatex">\(0&lt;x&lt;\sqrt 3\)</span></p>
+</li>
+<li>
+<p><span class="arithmatex">\(F(x) = \mu (x-\frac{1}{3}x^3) &gt; 0\)</span> for <span class="arithmatex">\(x&gt;\sqrt 3\)</span></p>
+</li>
+<li>
+<p>$F(0) = F\left(-\sqrt 3\right) = F\left(\sqrt 3\right) = 0 $</p>
+</li>
+</ul>
+<p>The <em>Van der Pol Equation</em> <strong>satisfies</strong> all the Liénard theorem, so it can be concluded that the Van der Pol equation has a <strong>Stable Limit Cycle</strong> surrounding the origin.</p>
+<p>The Van der Pol equation can be written in 2 sets of <em>First-Order ODE</em> (<em>state space system</em>) with <span class="arithmatex">\(y = \dot x\)</span>, thus</p>
+<div class="arithmatex">\[\dot x = y\\
+\dot y = \ddot x = -x + \mu (1-x^2)y\]</div>
+<p>The <em>state space system</em> equation is visualized in the code below.</p>
+<figure>
+<img alt="" src="../../media/van_der_pol.gif" width="800" />
+</figure>
+<p>In the animation of the Van der Pol equation, there are <strong>limit cycles</strong> surrounding the origin point (0, 0) (equilibrium point).</p>
+<p>When the state has a small value, the damping factor <span class="arithmatex">\(\mu(1-x^2)\)</span> increases, causing the oscillation's amplitude to approach the <strong>limit cycles</strong>. Conversely, when the state has a large value, the damping factor decreases, causing the oscillation's amplitude to decrease until the state is around the <strong>limit cycles</strong>.</p>
+<p>This phenomenon occurs when the damping constant <span class="arithmatex">\(\mu &gt; 0\)</span>. When <span class="arithmatex">\(\mu = 0\)</span>, the Van der Pol equation becomes the equation of Simple Harmonic Motion <span class="arithmatex">\(\ddot x + x =0\)</span> (i.e., sine and cosine functions), and it becomes a linear equation (no <strong>limit cycles</strong>).</p>
+<h2 id="bifurcations"><strong>Bifurcations</strong><a class="headerlink" href="#bifurcations" title="Permanent link">&para;</a></h2>
+<p><em>Bifurcations</em> are situations where small changes in the parameters of a system result in changes in the behavior (qualitative properties) of the system. <em>Bifurcation values</em> are the values of the system parameters that cause the system to transition from one type of behavior to another, such as from stability to another stability or to instability.</p>
+<p><strong>Example:</strong></p>
+<p>The undamped Duffing equation is a second-order ordinary differential equation given by:</p>
+<div class="arithmatex">\[\ddot x + \alpha x + x^3 = 0\]</div>
+<p>where <span class="arithmatex">\(\alpha\)</span> is a changing parameter.</p>
+<p>Let <span class="arithmatex">\(\dot x = y\)</span>, then</p>
+<div class="arithmatex">\[\begin{cases}
+\dot{x} = y \\
+\dot{y} = -\alpha x - x^3
+\end{cases}
+\]</div>
+<p>The fixed points of this equation are obtained when <span class="arithmatex">\(\dot{x} = 0\)</span> and <span class="arithmatex">\(\dot y=0\)</span>, resulting in</p>
+<div class="arithmatex">\[\dot x = y\\
+y = 0\\
+\dot{y} = -\alpha x - x^3\\
+-\alpha x - x^3 = 0\\
+-x(\alpha + x^2) = 0\\
+-x=0\\
+x_1 = 0\]</div>
+<p>Next, we find the fixed points when <span class="arithmatex">\(\alpha &gt; 0, \alpha = 0,\)</span> and <span class="arithmatex">\(\alpha &lt; 0\)</span>,</p>
+<p>When <span class="arithmatex">\(\alpha &gt; 0\)</span>,</p>
+<div class="arithmatex">\[\alpha + x^2 = 0\\
+x^2=-\alpha\\
+x_2 = i\sqrt \alpha, x_3 = -i\sqrt \alpha\]</div>
+<p>Since <span class="arithmatex">\(\alpha + x^2\)</span> cannot be factored using real numbers, there is only 1 fixed point when <span class="arithmatex">\(\alpha &gt; 0\)</span>, which is <span class="arithmatex">\(x_1 = 0\)</span>.</p>
+<p>When <span class="arithmatex">\(\alpha = 0\)</span>,</p>
+<div class="arithmatex">\[\alpha + x^2 = 0\\
+x^2=0\\
+x_1 = 0\]</div>
+<p>The fixed point obtained is <span class="arithmatex">\(x_1 = 0\)</span>.</p>
+<p>When <span class="arithmatex">\(\alpha &lt; 0\)</span>,</p>
+<div class="arithmatex">\[\alpha + x^2 = 0\\
+x^2=-(-\alpha)\\
+x_2 = \sqrt {-\alpha}, x_3 = -\sqrt {-\alpha}\]</div>
+<p>Thus, 3 fixed points are obtained,</p>
+<div class="arithmatex">\[ p_1 (0, 0) \text{ for all values of} \; \alpha\\
+ p_{2,3} \left( \pm\sqrt{-\alpha}, 0 \right) \text{for} \; \alpha &lt; 0\]</div>
+<p>The Jacobian of 2 set first-order ODE undamped Duffing equation with <span class="arithmatex">\(f(x,y)=(\dot x, \dot y)\)</span> is:</p>
+<div class="arithmatex">\[
+\mathbb J(f(x,y))=\begin{bmatrix}
+\frac{\partial \dot{x}}{\partial x} &amp; \frac{\partial \dot{y}}{\partial x} \\
+\frac{\partial \dot{x}}{\partial y} &amp; \frac{\partial \dot{y}}{\partial y}
+\end{bmatrix} = \begin{bmatrix}
+0 &amp; 1 \\
+-a-3x^2 &amp; 0
+\end{bmatrix}
+\]</div>
+<div class="arithmatex">\[
+\mathbb J_{(0,0)}= \begin{bmatrix}
+0 &amp; 1 \\
+-a &amp; 0
+\end{bmatrix}\\
+\text {Tr } \mathbb J_{(0,0)} = 0\\
+\det \mathbb J_{(0,0)} = a\\
+\mathbb J_{\left(\sqrt{-\alpha},0\right)}= \begin{bmatrix}
+0 &amp; 1 \\
+2a &amp; 0
+\end{bmatrix}
+\\
+\text {Tr } \mathbb J_{\left(\sqrt{-\alpha},0\right)} = 0\\
+\det \mathbb J_{\left(\sqrt{-\alpha},0\right)} = -2a\\
+\mathbb J_{\left(-\sqrt{-\alpha},0\right)}= \begin{bmatrix}
+0 &amp; 1 \\
+2a &amp; 0
+\end{bmatrix}\\
+\text {Tr } \mathbb J_{\left(-\sqrt{-\alpha},0\right)} = 0\\
+\det \mathbb J_{\left(-\sqrt{-\alpha},0\right)} = -2a\\
+p_1(0,0)\text{ stable for }a&lt;0\text{ and unstable for }a&gt;0\\
+p_{2,3} \left( \pm\sqrt{-\alpha}, 0 \right)\text{ unstable for }a&lt;0\]</div>
+<figure>
+<img alt="" src="../../media/bifurcations.png" width="800" />
+</figure>
+<h2 id="chaos"><strong>Chaos</strong><a class="headerlink" href="#chaos" title="Permanent link">&para;</a></h2>
+<p><em>Chaos</em>, also known as the <em>butterfly effect</em>, is a phenomenon where nonlinear systems are sensitive to initial conditions. Small changes in initial conditions can lead to significant differences in the long-term behavior of the system, or in other words, initial conditions will diverge significantly from the final state.</p>
+<p><em>Example:</em></p>
+<div class="arithmatex">\[\ddot x + 0.1\dot x + x^5 = 6 \sin t\]</div>
+<p>With initial conditions:
+- For <span class="arithmatex">\(x_1(0) = 2\)</span> and <span class="arithmatex">\(\dot{x}_1(0) = 3\)</span>
+- For <span class="arithmatex">\(x_2(0) = 2.01\)</span> and <span class="arithmatex">\(\dot{x}_2(0) = 3.01\)</span></p>
+<p>In this example, even a small difference in the initial conditions (<span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span>) leads to vastly different trajectories over time. This illustrates the sensitivity of chaotic systems to initial conditions, where tiny differences can lead to divergent behaviors.</p>
+<figure>
+<img alt="" src="../../media/chaos.png" width="800" />
+</figure>
+<p>In the graph, it is evident that the plot of the initial condition <span class="arithmatex">\(x_1\)</span> over time and the initial condition <span class="arithmatex">\(x_2\)</span> over time exhibit only slight differences in the values of <span class="arithmatex">\(x\)</span> for <span class="arithmatex">\(t&lt;\pm21 \;s\)</span>. However, for <span class="arithmatex">\(t&gt;\pm 21\;s\)</span>, the system displays chaotic behavior, and the values of <span class="arithmatex">\(x(t)\)</span> for both initial conditions diverge significantly.</p>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>Most of this section are my notes from <a href = "https://www.amazon.com/Applied-Nonlinear-Control-Jean-Jacques-Slotine/dp/0130408905">Applied Nonlinear Systems by Jean-Jacques Slotine and Weiping Li </a>.</p>
+</div>
+
+
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../../eq_of_motion/quadcopter/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Quadcopter">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Quadcopter
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../phase_plane/" class="md-footer__link md-footer__link--next" aria-label="Next: Phase Plane Analysis">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Phase Plane Analysis
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright" style="color: gray;">
+    Found any misexplanations? Report or PR on this
+    <a href="https://github.com/drmwnrafi/notesonanything" target="_blank" rel="noopener noreferrer" style="color: #4051b5;">&nbsp;repo</a>
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/drmwnrafi" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1M480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2m-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3m-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.kaggle.com/drmwnnrafi" target="_blank" rel="noopener" title="www.kaggle.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M304.2 501.5 158.4 320.3 298.2 185c2.6-2.7 1.7-10.5-5.3-10.5h-69.2c-3.5 0-7 1.8-10.5 5.3L80.9 313.5V7.5q0-7.5-7.5-7.5H21.5Q14 0 14 7.5v497q0 7.5 7.5 7.5h51.9q7.5 0 7.5-7.5v-109l30.8-29.3 110.5 140.6c3 3.5 6.5 5.3 10.5 5.3h66.9q5.25 0 6-3z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://www.linkedin.com/in/drmwnnrafi/" target="_blank" rel="noopener" title="www.linkedin.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3M135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5m282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["announce.dismiss", "header.autohide", "navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.indexes", "navigation.footer", "search.suggest", "search.highlight", "content.tabs.link", "content.code.annotation", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.88dd0f4e.min.js"></script>
+      
+        <script src="../../../assets/js/mathjax-config.js"></script>
+      
+        <script src="../../../assets/js/card.js"></script>
+      
+        <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+      
+    
+  </body>
+</html>
